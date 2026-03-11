@@ -1,0 +1,97 @@
+[%
+out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>AEB HAZOP</title>");
+out.print("<style>");
+out.print("body{font-family:Arial,sans-serif;font-size:11px;margin:10px;background:#f5f5f5;}");
+out.print("h1{color:#004d40;font-size:16px;border-bottom:2px solid #004d40;padding-bottom:5px;}");
+out.print(".sub{color:#546e7a;font-size:10px;margin-bottom:15px;}");
+out.print("table{border-collapse:collapse;width:100%;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.2);margin-bottom:20px;}");
+out.print("th{background:#004d40;color:white;padding:6px 8px;text-align:left;font-size:10px;font-weight:bold;}");
+out.print("td{padding:5px 8px;border:1px solid #e0e0e0;vertical-align:top;font-size:10px;}");
+out.print("tr:nth-child(even){background:#f9f9f9;}");
+out.print(".risk-critical{background:#ffcdd2;color:#b71c1c;font-weight:bold;text-align:center;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".risk-high{background:#ffe0b2;color:#e65100;font-weight:bold;text-align:center;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".risk-medium{background:#fff9c4;color:#f57f17;font-weight:bold;text-align:center;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".asil-d{background:#b71c1c;color:white;font-weight:bold;padding:1px 5px;border-radius:3px;font-size:9px;display:inline-block;}");
+out.print(".asil-c{background:#e65100;color:white;font-weight:bold;padding:1px 5px;border-radius:3px;font-size:9px;display:inline-block;}");
+out.print(".asil-b{background:#f57f17;color:white;font-weight:bold;padding:1px 5px;border-radius:3px;font-size:9px;display:inline-block;}");
+out.print(".gw{background:#e0f2f1;color:#004d40;font-weight:bold;padding:2px 6px;border-radius:10px;font-size:9px;display:inline-block;}");
+out.print(".summary{background:white;border:1px solid #ccc;padding:10px;margin-bottom:15px;border-radius:3px;font-size:10px;}");
+out.print(".note{color:#78909c;font-style:italic;font-size:9px;margin-top:10px;}");
+out.print("</style></head><body>");
+out.print("<h1>AEB HAZOP - Hazard and Operability Study</h1>");
+out.print("<p class='sub'>Method: IEC 61882:2016 | Guide Word Analysis | AEB Subsystem Functions | ISO 26262:2018</p>");
+
+var items = hazopAnalysis.malfunctioningBehaviors;
+var critCount = 0; var highCount = 0; var medCount = 0;
+for (item in items) {
+  var desc = item.description;
+  if (desc.indexOf("RISK:CRITICAL") >= 0) { critCount = critCount + 1; }
+  else if (desc.indexOf("RISK:HIGH") >= 0) { highCount = highCount + 1; }
+  else { medCount = medCount + 1; }
+}
+
+out.print("<div class='summary'>");
+out.print("<strong>HAZOP Summary:</strong> " + items.size() + " deviations analyzed &nbsp;|&nbsp;");
+out.print("<span style='color:#b71c1c;font-weight:bold;'>" + critCount + " CRITICAL</span> &nbsp;|&nbsp;");
+out.print("<span style='color:#e65100;font-weight:bold;'>" + highCount + " HIGH</span> &nbsp;|&nbsp;");
+out.print("<span style='color:#f57f17;font-weight:bold;'>" + medCount + " MEDIUM</span>");
+out.print("</div>");
+
+out.print("<table><thead><tr>");
+out.print("<th>#</th><th>Node / Parameter</th><th>Guide Word</th><th>Deviation</th>");
+out.print("<th>Cause</th><th>Consequence</th><th>Safeguard</th><th>Risk</th><th>ASIL</th><th>Recommended Action</th>");
+out.print("</tr></thead><tbody>");
+
+var rowNum = 1;
+for (item in items) {
+  var desc = item.description;
+  var node  = extractField(desc, "NODE:");
+  var param = extractField(desc, "PARAMETER:");
+  var gw    = extractField(desc, "GUIDEWORD:");
+  var dev   = extractField(desc, "DEVIATION:");
+  var cause = extractField(desc, "CAUSE:");
+  var consq = extractField(desc, "CONSEQUENCE:");
+  var safe  = extractField(desc, "SAFEGUARD:");
+  var risk  = extractField(desc, "RISK:");
+  var asil  = extractField(desc, "ASIL:");
+  var action= extractField(desc, "ACTION:");
+
+  var riskCls = "risk-medium";
+  if (risk = "CRITICAL") { riskCls = "risk-critical"; }
+  else if (risk = "HIGH") { riskCls = "risk-high"; }
+
+  var asilCls = "asil-b";
+  if (asil = "D") { asilCls = "asil-d"; }
+  else if (asil = "C") { asilCls = "asil-c"; }
+
+  out.print("<tr>");
+  out.print("<td><strong>" + rowNum + "</strong><br/><span style='color:#78909c;font-size:9px'>" + item.id + "</span></td>");
+  out.print("<td><strong>" + node + "</strong><br/><span style='font-size:9px;color:#546e7a'>" + param + "</span></td>");
+  out.print("<td><span class='gw'>" + gw + "</span></td>");
+  out.print("<td>" + dev + "</td>");
+  out.print("<td style='font-size:9px'>" + cause + "</td>");
+  out.print("<td style='font-size:9px'>" + consq + "</td>");
+  out.print("<td style='font-size:9px;color:#1565c0'>" + safe + "</td>");
+  out.print("<td><span class='" + riskCls + "'>" + risk + "</span></td>");
+  out.print("<td style='text-align:center'><span class='" + asilCls + "'>" + asil + "</span></td>");
+  out.print("<td style='font-size:9px;color:#2e7d32'>" + action + "</td>");
+  out.print("</tr>");
+  rowNum = rowNum + 1;
+}
+out.print("</tbody></table>");
+out.print("<p class='note'>IEC 61882:2016 HAZOP | ISO 26262:2018 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1</p>");
+out.print("</body></html>");
+
+operation extractField(desc : String, key : String) : String {
+  var result = "";
+  var idx = desc.indexOf(key);
+  if (idx >= 0) {
+    var start = idx + key.length();
+    var rest = desc.substring(start);
+    var pipeIdx = rest.indexOf("|");
+    if (pipeIdx >= 0) { result = rest.substring(0, pipeIdx).trim(); }
+    else { result = rest.trim(); }
+  }
+  return result;
+}
+%]

@@ -1,0 +1,11 @@
+rule FTAOverview
+    transform fta : raaml!FTA {
+
+    template : "fta_tree.egl"
+
+    parameters : Map {
+        "fta"   = fta,
+        "title" = "AEB FTA - " + fta.name,
+        "icon"  = "diagram"
+    }
+}

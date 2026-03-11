@@ -1,0 +1,8 @@
+<?nsuri picto?>
+<picto format="graphviz-dot" transformation="fta_tree.egl" standalone="true">
+    <model type="EMF">
+        <parameter name="name" value="M"/>
+        <parameter name="metamodelFile" file="raaml.ecore"/>
+        <parameter name="modelFile" file="aeb_fta.xmi"/>
+    </model>
+</picto>

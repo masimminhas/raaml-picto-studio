@@ -1,0 +1,13 @@
+rule DebugAll
+    transform obj : M!NamedElement {
+
+    guard : true
+
+    template : "debug.egl"
+
+    parameters : Map {
+        "obj" = obj,
+        "cls" = obj.eClass().name,
+        "pkg" = obj.eClass().ePackage.name
+    }
+}

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.fmea="http://edu.kit.sdq/dsis/metamodels/raaml/fmea"
+    id="SA_AEB_FMEA_001"
+    name="AEB FMEA Safety Analysis"
+    description="FMEA for Autonomous Emergency Braking System per ISO 26262:2018 and AIAG FMEA-4.">
+  <analyses
+      xsi:type="raaml.fmea:FMEA"
+      id="FMEA_AEB_001"
+      name="AEB System FMEA"
+      description="Bottom-up failure mode analysis for AEB subsystems. SEV x OCC x DET = RPN. RPN over 100 requires action per AIAG FMEA-4.">
+    <elements
+        xsi:type="raaml.fmea:FMEAItem">
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="EF_010"
+          name="EFFECT"
+          description="Sample loss of function to check picto update"/>
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          name="[FM] Total loss of radar detection - transceiver failure"/>
+      <rpnCalculation
+          id="RPN_010"
+          name="TOTAL FAILURE DUMMY"
+          SEV="8.0"
+          OCC="10.0"
+          DET="2.0"/>
+    </elements>
+	
+    <fmeaItems
+        id="FI_001"
+        name="FMEA-01: Radar Sensor - Total Signal Loss"
+        description="Complete loss of radar return signal. No obstacle detected. SEV=10, OCC=4, DET=7, RPN=280. CAUSE: Radar transceiver hardware failure (IEC 62380 lambda=2.1e-7/h). EFFECT: No collision warning, no emergency braking - potential fatality (ASIL-D HE-01/HE-02). Source: Singh and Gabbar 2019 FM-1, MDPI AEB Hardware 2021."
+        RPN="280.0">
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="FM_001"
+          name="[FM] Total loss of radar detection - transceiver failure"
+          description="Radar transceiver failure - no obstacle return signal. LossOfFunction. IEC 62380:2004 lambda=2.1e-7/h."
+          detectability="7.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="EFF_001"
+          name="[EFFECT] No collision warning no emergency braking - SEV=10 ASIL-D"
+          description="Vehicle does not brake before rear-end collision. Severity 10 - hazardous without warning. Corresponds to HE-01/HE-02 ASIL-D."
+          detectability="7.0"/>
+      <cause
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="CAUSE_001"
+          name="[CAUSE] Radar transceiver hardware failure - OCC=4"
+          description="Electronic failure of radar transmitter/receiver. Occurrence 4. IEC 62380:2004 lambda=2.1e-7/h."
+          detectability="4.0"/>
+      <rpnCalculation
+          id="RPN_001"
+          name="RPN-01: Radar Total Failure"
+          description="SEV=10, OCC=4, DET=7. RPN=280. Action required. AIAG FMEA-4."
+          RPN="280.0"
+          SEV="10.0"
+          OCC="4.0"
+          DET="7.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_002"
+        name="FMEA-02: Radar Sensor - Degraded Detection Range"
+        description="Radar detection range reduced below minimum (100m for highway AEB). SEV=8, OCC=4, DET=6, RPN=192. CAUSE: Radar radome contamination or antenna degradation (ice/dirt). EFFECT: Late detection, insufficient TTC for highway braking. Source: Euro NCAP AEB C2C v4.3.1, Singh and Gabbar 2019 FM-3."
+        RPN="192.0">
+      <failureMode
+          xsi:type="raaml.fmea:DegradationOfFunction"
+          id="FM_002"
+          name="[FM] Reduced radar detection range below 60m"
+          description="Radar sensitivity degraded, effective range below 60m. Insufficient for highway TTC."
+          detectability="6.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:DelayedFunction"
+          id="EFF_002"
+          name="[EFFECT] Late obstacle detection - insufficient TTC for highway - SEV=8"
+          description="Late detection results in TTC insufficient for emergency braking. Severity 8."
+          detectability="6.0"/>
+      <cause
+          xsi:type="raaml.fmea:DegradationOfFunction"
+          id="CAUSE_002"
+          name="[CAUSE] Radar radome contamination or antenna degradation - OCC=4"
+          description="Ice, dirt, or physical damage to radar radome. Occurrence 4."
+          detectability="4.0"/>
+      <rpnCalculation
+          id="RPN_002"
+          name="RPN-02: Radar Degraded Range"
+          description="SEV=8, OCC=4, DET=6. RPN=192."
+          RPN="192.0"
+          SEV="8.0"
+          OCC="4.0"
+          DET="6.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_003"
+        name="FMEA-03: Radar Sensor - False Target Detection"
+        description="Radar reports obstacle where none exists (ghost target from multipath). SEV=9, OCC=3, DET=7, RPN=189. CAUSE: Multipath reflections from highway infrastructure (OCC=3). EFFECT: Unintended emergency braking - following vehicle collision risk. Source: Singh and Gabbar 2019 FM-2, Euro NCAP false activation."
+        RPN="189.0">
+      <failureMode
+          xsi:type="raaml.fmea:UnintendedFunction"
+          id="FM_003"
+          name="[FM] False positive obstacle detection from multipath reflection"
+          description="Multipath radar reflections from road surface/bridges create ghost targets. Leads to false AEB activation."
+          detectability="7.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:UnintendedFunction"
+          id="EFF_003"
+          name="[EFFECT] Unintended emergency braking - following vehicle collision risk - SEV=9"
+          description="False AEB activation on highway causes sudden deceleration. Following vehicle may collide. ASIL-C HE-03. Severity 9."
+          detectability="7.0"/>
+      <cause
+          xsi:type="raaml.fmea:UnintendedFunction"
+          id="CAUSE_003"
+          name="[CAUSE] Multipath radar reflection from highway infrastructure - OCC=3"
+          description="Highway overpasses, metal guardrails, wet road cause spurious returns. Occurrence 3."
+          detectability="3.0"/>
+      <rpnCalculation
+          id="RPN_003"
+          name="RPN-03: Radar False Target"
+          description="SEV=9, OCC=3, DET=7. RPN=189."
+          RPN="189.0"
+          SEV="9.0"
+          OCC="3.0"
+          DET="7.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_004"
+        name="FMEA-04: AEB ECU - Processing Unit Failure"
+        description="AEB ECU microprocessor failure prevents TTC calculation and braking decision. SEV=10, OCC=3, DET=6, RPN=180. CAUSE: MCU permanent hardware fault (IEC 62380 lambda=1.5e-7/h, OCC=3). EFFECT: Complete AEB function loss, no collision avoidance. Source: MDPI AEB Hardware 2021."
+        RPN="180.0">
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="FM_004"
+          name="[FM] Loss of AEB computation - MCU failure"
+          description="Microcontroller/DSP failure halts obstacle tracking and collision prediction. IEC 62380 MCU lambda=1.5e-7/h."
+          detectability="6.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="EFF_004"
+          name="[EFFECT] Complete AEB function loss - no collision avoidance - SEV=10"
+          description="AEB system unavailable. No warning, no automated braking. Severity 10."
+          detectability="6.0"/>
+      <cause
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="CAUSE_004"
+          name="[CAUSE] ECU microcontroller permanent hardware fault - OCC=3"
+          description="Random hardware failure of automotive MCU. Occurrence 3. IEC 62380 lambda=1.5e-7/h."
+          detectability="3.0"/>
+      <rpnCalculation
+          id="RPN_004"
+          name="RPN-04: ECU Processing Failure"
+          description="SEV=10, OCC=3, DET=6. RPN=180."
+          RPN="180.0"
+          SEV="10.0"
+          OCC="3.0"
+          DET="6.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_005"
+        name="FMEA-05: AEB ECU - Software Memory Corruption"
+        description="RAM or flash corruption causing incorrect algorithm parameters. SEV=9, OCC=3, DET=5, RPN=135. CAUSE: Single-event upset or write failure in SRAM (OCC=3). EFFECT: Unpredictable AEB - missed or false activations. Source: ISO 26262:2018 Part 6, MDPI AEB Hardware 2021."
+        RPN="135.0">
+      <failureMode
+          xsi:type="raaml.fmea:IntermittentFunction"
+          id="FM_005"
+          name="[FM] Intermittent AEB errors from corrupted TTC threshold"
+          description="Bit-flip in TTC threshold parameter causes intermittent false or missed activations."
+          detectability="5.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:IntermittentFunction"
+          id="EFF_005"
+          name="[EFFECT] Unpredictable AEB activation - missed or false activations - SEV=9"
+          description="Corrupted TTC thresholds cause missed braking or false activations. Severity 9."
+          detectability="5.0"/>
+      <cause
+          xsi:type="raaml.fmea:IntermittentFunction"
+          id="CAUSE_005"
+          name="[CAUSE] Single-event upset or write failure in SRAM - OCC=3"
+          description="Cosmic ray SEU or power transient causes bit-flip. Occurrence 3. Mitigated by ECC per ISO 26262 Part 6."
+          detectability="3.0"/>
+      <rpnCalculation
+          id="RPN_005"
+          name="RPN-05: Memory Corruption"
+          description="SEV=9, OCC=3, DET=5. RPN=135."
+          RPN="135.0"
+          SEV="9.0"
+          OCC="3.0"
+          DET="5.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_006"
+        name="FMEA-06: Camera - Pedestrian Non-Detection at Night"
+        description="Camera fails to classify pedestrian in low-light. SEV=10, OCC=4, DET=8, RPN=320 HIGHEST. CAUSE: Insufficient camera sensitivity in low-light without IR illumination (OCC=4). EFFECT: Pedestrian fatality - no AEB response. Source: Euro NCAP VRU Protocol v4.5.1 CPNA-night, Singh and Gabbar 2019 FM-4."
+        RPN="320.0">
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="FM_006"
+          name="[FM] Loss of pedestrian detection in nighttime conditions"
+          description="Camera image quality insufficient for pedestrian classification below illumination threshold. Corresponds to HE-05 ASIL-D."
+          detectability="8.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="EFF_006"
+          name="[EFFECT] Pedestrian fatality - no AEB response - SEV=10"
+          description="No braking initiated for pedestrian collision. Maximum severity 10. Euro NCAP CPNA-night."
+          detectability="8.0"/>
+      <cause
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="CAUSE_006"
+          name="[CAUSE] Insufficient camera sensitivity in low-light without IR - OCC=4"
+          description="Standard visible-light camera cannot detect pedestrian below 1 lux. Occurrence 4."
+          detectability="4.0"/>
+      <rpnCalculation
+          id="RPN_006"
+          name="RPN-06: Camera Night Pedestrian Miss"
+          description="SEV=10, OCC=4, DET=8. RPN=320. HIGHEST. Immediate action required."
+          RPN="320.0"
+          SEV="10.0"
+          OCC="4.0"
+          DET="8.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_007"
+        name="FMEA-07: Brake Actuator - Valve Stuck Closed"
+        description="Hydraulic brake actuator solenoid valve stuck closed - no brake pressure. SEV=10, OCC=3, DET=5, RPN=150. CAUSE: Solenoid coil burnout or mechanical seizure (IEC 62380 lambda=3.0e-7/h, OCC=3). EFFECT: AEB activation with no deceleration - silent failure. Source: IBBWS FMEA, MDPI AEB Hardware 2021."
+        RPN="150.0">
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="FM_007"
+          name="[FM] Loss of brake pressure application - valve stuck closed"
+          description="Solenoid valve stuck-closed prevents hydraulic pressure to brake calipers. IEC 62380 lambda=3.0e-7/h."
+          detectability="5.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="EFF_007"
+          name="[EFFECT] AEB activation with no deceleration - silent failure - SEV=10"
+          description="System appears to activate but produces no braking. Silent failure. Severity 10."
+          detectability="5.0"/>
+      <cause
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="CAUSE_007"
+          name="[CAUSE] Hydraulic solenoid valve coil burnout or mechanical seizure - OCC=3"
+          description="Coil electrical failure or mechanical seizure of valve spool. Occurrence 3. IEC 62380 lambda=3.0e-7/h."
+          detectability="3.0"/>
+      <rpnCalculation
+          id="RPN_007"
+          name="RPN-07: Brake Valve Stuck Closed"
+          description="SEV=10, OCC=3, DET=5. RPN=150."
+          RPN="150.0"
+          SEV="10.0"
+          OCC="3.0"
+          DET="5.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_008"
+        name="FMEA-08: Brake Actuator - Stuck Active Brakes Locked"
+        description="Actuator applies brakes continuously after AEB command withdrawn. SEV=9, OCC=4, DET=5, RPN=180. CAUSE: Solenoid valve stuck open (OCC=4). EFFECT: Vehicle instability - loss of control at highway speed. Source: IBBWS FMEA, ISO 26262:2018 Part 5."
+        RPN="180.0">
+      <failureMode
+          xsi:type="raaml.fmea:UnintendedFunction"
+          id="FM_008"
+          name="[FM] Unintended continuous braking - brake lock after AEB deactivation"
+          description="Valve stuck open maintains brake pressure after AEB deactivation. UnintendedFunction."
+          detectability="5.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:UnintendedFunction"
+          id="EFF_008"
+          name="[EFFECT] Vehicle instability - loss of control at highway speed - SEV=9"
+          description="Continuous braking at 130 km/h causes wheel lock, vehicle spin, potential rollover. Severity 9."
+          detectability="5.0"/>
+      <cause
+          xsi:type="raaml.fmea:UnintendedFunction"
+          id="CAUSE_008"
+          name="[CAUSE] Solenoid valve stuck open - mechanical failure in open position - OCC=4"
+          description="Mechanical seizure of valve in open position. Occurrence 4."
+          detectability="4.0"/>
+      <rpnCalculation
+          id="RPN_008"
+          name="RPN-08: Brake Stuck Active"
+          description="SEV=9, OCC=4, DET=5. RPN=180."
+          RPN="180.0"
+          SEV="9.0"
+          OCC="4.0"
+          DET="5.0"/>
+    </fmeaItems>
+    <fmeaItems
+        id="FI_009"
+        name="FMEA-09: CAN Bus - Communication Loss Radar to ECU"
+        description="Loss of CAN bus messages from radar to AEB ECU. SEV=8, OCC=3, DET=2, RPN=48 LOW RISK. CAUSE: CAN transceiver failure or bus wiring fault (OCC=3). EFFECT: AEB unavailable - safe state triggered (good E2E detectability). Source: MDPI AEB Hardware 2021, ISO 26262:2018 Part 6."
+        RPN="48.0">
+      <failureMode
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="FM_009"
+          name="[FM] Loss of radar-to-ECU data communication via CAN"
+          description="CAN bus error causing complete loss of radar target data. ECU cannot compute TTC."
+          detectability="2.0"/>
+      <finalEffect
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="EFF_009"
+          name="[EFFECT] AEB unavailable - safe state triggered - SEV=8"
+          description="No radar input, AEB enters safe state if E2E detects communication loss. Severity 8."
+          detectability="2.0"/>
+      <cause
+          xsi:type="raaml.fmea:LossOfFunction"
+          id="CAUSE_009"
+          name="[CAUSE] CAN transceiver failure or bus wiring fault - OCC=3"
+          description="Short circuit, open circuit, or transceiver IC failure. Occurrence 3."
+          detectability="3.0"/>
+      <rpnCalculation
+          id="RPN_009"
+          name="RPN-09: CAN Communication Loss"
+          description="SEV=8, OCC=3, DET=2. RPN=48. LOW RISK - good detectability via E2E."
+          RPN="48.0"
+          SEV="8.0"
+          OCC="3.0"
+          DET="2.0"/>
+    </fmeaItems>
+  </analyses>
+</raaml:SafetyAnalysis>

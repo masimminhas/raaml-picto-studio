@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.req="http://edu.kit.sdq/dsis/metamodels/raaml/req"
+    id="SA_AEB_REQ_001"
+    name="AEB Requirements Safety Analysis Full Traceability"
+    description="Complete requirements model showing full ISO 26262:2018 traceability chain SG to FSR to TSR to SSR/HSR.">
+  <requirements
+      xmi:id="REQ_MODEL_AEB"
+      id="REQ_MODEL_AEB"
+      name="AEB ISO 26262 Requirements Hierarchy"
+      description="Full requirements traceability per ISO 26262:2018 Parts 4 5 6.">
+    <requirements
+        xsi:type="raaml.req:SafetyGoal"
+        xmi:id="SG_01"
+        id="SG_01"
+        name="SG-01: Prevent Unmitigated Rear-End Collision"
+        description="Derived from HARA HE-01 ASIL-D urban and HE-02 ASIL-D highway. Source: Singh and Gabbar 2019; ISO 26262:2018 Part 3 Table 4."
+        text="The AEB system shall prevent unmitigated rear-end collisions with lead vehicles by initiating emergency braking when TTC falls below system threshold."
+        type="SafetyGoal"
+        priority="high"
+        status="approved">
+      <childRequirements
+          xsi:type="raaml.req:FunctionalSafetyRequirement"
+          xmi:id="FSR_01_01"
+          id="FSR_01_01"
+          name="FSR-01.01: Radar Forward Detection Range and Resolution"
+          description="Derived from SG-01. Euro NCAP AEB C2C Protocol v4.3.1 Section 2. ASIL-D."
+          text="The AEB system shall detect vehicles ahead with range up to 150m and relative velocity resolution of 0.5 km/h at all operational speeds."
+          type="FunctionalSafetyRequirement"
+          priority="high"
+          status="approved">
+        <parentRequirement href="#SG_01"/>
+        <childRequirements
+            xsi:type="raaml.req:TechnicalSafetyRequirement"
+            xmi:id="TSR_02"
+            id="TSR_02"
+            name="TSR-02: PMHF Target Specification"
+            description="Derived from FSR-01.01. PMHF targets from ISO 26262:2018 Part 5 Table 6. Reference architecture achieves 3.2e-9/h per MDPI AEB Hardware 2021 Table 3."
+            text="The AEB system hardware architecture shall achieve PMHF less than 1e-8/h for ASIL-D SGs and less than 1e-7/h for ASIL-C SGs."
+            type="TechnicalSafetyRequirement"
+            priority="high"
+            status="approved">
+          <parentRequirement href="#FSR_01_01"/>
+          <childRequirements
+              xsi:type="raaml.req:HardwareSafetyRequirement"
+              xmi:id="HSR_01"
+              id="HSR_01"
+              name="HSR-01: Dual-Channel Sensor Architecture HFT=1"
+              description="Derived from TSR-02. HFT=1 required for ASIL-D per ISO 26262:2018 Part 5 Table 4. MDPI AEB Hardware 2021 PMHF 3.2e-9/h."
+              text="The AEB sensing system shall implement hardware fault tolerance HFT=1 by means of independent radar and camera sensor channels with independent power supplies."
+              type="HardwareSafetyRequirement"
+              priority="high"
+              status="approved">
+            <parentRequirement href="#TSR_02"/>
+          </childRequirements>
+          <childRequirements
+              xsi:type="raaml.req:HardwareSafetyRequirement"
+              xmi:id="HSR_02"
+              id="HSR_02"
+              name="HSR-02: Radar Component Failure Rate per IEC 62380"
+              description="Derived from TSR-02. IEC 62380:2004. Source: MDPI AEB Hardware 2021 Table 3."
+              text="The radar sensor module shall be selected with failure rate lambda less than 2.5e-7/h per IEC 62380:2004 for automotive-grade transceivers at -40C to +85C."
+              type="HardwareSafetyRequirement"
+              priority="high"
+              status="approved">
+            <parentRequirement href="#TSR_02"/>
+          </childRequirements>
+        </childRequirements>
+      </childRequirements>
+      <childRequirements
+          xsi:type="raaml.req:FunctionalSafetyRequirement"
+          xmi:id="FSR_01_02"
+          id="FSR_01_02"
+          name="FSR-01.02: Braking Initiation Within FTTI"
+          description="Derived from SG-01 and SG-04. FTTI values from MDPI AEB Hardware 2021. ASIL-D. ISO 26262:2018 Part 4 Clause 8.4.6."
+          text="The AEB system shall initiate emergency braking within FTTI of 150ms at highway speeds and 300ms at urban speeds after obstacle detection confirmation."
+          type="FunctionalSafetyRequirement"
+          priority="high"
+          status="approved">
+        <parentRequirement href="#SG_01"/>
+        <childRequirements
+            xsi:type="raaml.req:TechnicalSafetyRequirement"
+            xmi:id="TSR_01"
+            id="TSR_01"
+            name="TSR-01: TTC Threshold Specification"
+            description="Derived from FSR-01.02. TTC thresholds from Euro NCAP AEB C2C Protocol v4.3.1 and Singh and Gabbar 2019 Section 4.2."
+            text="The AEB system shall activate pre-warning at TTC less than 2.5s urban / 3.0s highway, and emergency braking at TTC less than 1.5s urban / 2.0s highway."
+            type="TechnicalSafetyRequirement"
+            priority="high"
+            status="approved">
+          <parentRequirement href="#FSR_01_02"/>
+        </childRequirements>
+        <childRequirements
+            xsi:type="raaml.req:TechnicalSafetyRequirement"
+            xmi:id="TSR_03"
+            id="TSR_03"
+            name="TSR-03: Safe State Definition and Transition"
+            description="Derived from FSR-01.02. ISO 26262:2018 Part 4 Clause 8.4.5. UN ECE Regulation No. 152 AEBS."
+            text="On detection of AEB failure the system shall transition to safe state within 150ms: amber AEB warning lamp, audible warning, deactivate AEB, retain manual braking."
+            type="TechnicalSafetyRequirement"
+            priority="high"
+            status="approved">
+          <parentRequirement href="#FSR_01_02"/>
+        </childRequirements>
+        <childRequirements
+            xsi:type="raaml.req:SoftwareSafetyRequirement"
+            xmi:id="SSR_02"
+            id="SSR_02"
+            name="SSR-02: Watchdog and CAN E2E Health Monitoring"
+            description="Derived from FSR-01.02. E2E per ISO 26262:2018 Part 6 Annex D Table D.2 CAN E2E library profile. MDPI AEB Hardware 2021."
+            text="The AEB software shall implement a hardware watchdog with 50ms timeout. Health status communicated at 20Hz via CAN message with E2E CRC plus sequence counter."
+            type="SoftwareSafetyRequirement"
+            priority="high"
+            status="approved">
+          <parentRequirement href="#FSR_01_02"/>
+        </childRequirements>
+      </childRequirements>
+      <childRequirements
+          xsi:type="raaml.req:FunctionalSafetyRequirement"
+          xmi:id="FSR_01_03"
+          id="FSR_01_03"
+          name="FSR-01.03: Minimum Braking Deceleration"
+          description="Derived from SG-01. Euro NCAP AEB C2C Protocol v4.3.1 Section 4.2 minimum performance criteria."
+          text="The AEB system shall achieve minimum deceleration of 0.5g (4.9 m/s2) in urban and 0.7g (6.9 m/s2) in highway scenarios within respective FTTI windows."
+          type="FunctionalSafetyRequirement"
+          priority="high"
+          status="approved">
+        <parentRequirement href="#SG_01"/>
+      </childRequirements>
+    </requirements>
+    <requirements
+        xsi:type="raaml.req:SafetyGoal"
+        xmi:id="SG_02"
+        id="SG_02"
+        name="SG-02: Prevent Unintended Emergency Braking at Highway Speed"
+        description="Derived from HARA HE-03 ASIL-C. ISO 26262:2018 Part 3; Euro NCAP false activation criteria."
+        text="The AEB system shall not apply emergency braking in absence of a confirmed obstacle with sensor fusion confidence above defined threshold, particularly above 80 km/h."
+        type="SafetyGoal"
+        priority="high"
+        status="approved">
+      <childRequirements
+          xsi:type="raaml.req:FunctionalSafetyRequirement"
+          xmi:id="FSR_02_01"
+          id="FSR_02_01"
+          name="FSR-02.01: Dual Sensor Confirmation at Highway Speed"
+          description="Derived from SG-02. ISO 26262:2018 Part 9 independence requirements, MDPI AEB Hardware 2021 dual-channel architecture. ASIL-C."
+          text="The AEB system shall require independent confirmation from both radar AND camera before initiating emergency braking at speeds above 80 km/h."
+          type="FunctionalSafetyRequirement"
+          priority="high"
+          status="approved">
+        <parentRequirement href="#SG_02"/>
+        <childRequirements
+            xsi:type="raaml.req:SoftwareSafetyRequirement"
+            xmi:id="SSR_01"
+            id="SSR_01"
+            name="SSR-01: Sensor Fusion Independence ASIL-B"
+            description="Derived from FSR-02.01. Independence for ASIL decomposition per ISO 26262:2018 Part 6 and Part 9. MDPI AEB Hardware 2021."
+            text="The radar processing channel and camera processing channel shall be implemented as independent software partitions with no shared data structures in the obstacle detection path."
+            type="SoftwareSafetyRequirement"
+            priority="high"
+            status="approved">
+          <parentRequirement href="#FSR_02_01"/>
+        </childRequirements>
+      </childRequirements>
+    </requirements>
+    <requirements
+        xsi:type="raaml.req:SafetyGoal"
+        xmi:id="SG_03"
+        id="SG_03"
+        name="SG-03: Prevent Pedestrian Fatality"
+        description="Derived from HARA HE-04 ASIL-D pedestrian day and HE-05 ASIL-D pedestrian night. Euro NCAP VRU Protocol v4.5.1."
+        text="The AEB system shall detect pedestrians on a collision course and initiate emergency braking in both daytime and nighttime conditions."
+        type="SafetyGoal"
+        priority="high"
+        status="approved">
+      <childRequirements
+          xsi:type="raaml.req:FunctionalSafetyRequirement"
+          xmi:id="FSR_03_01"
+          id="FSR_03_01"
+          name="FSR-03.01: Pedestrian Detection Range Day and Night"
+          description="Derived from SG-03. Euro NCAP VRU Protocol v4.5.1 Sections 3.4 and 3.5. ASIL-D."
+          text="The AEB system shall detect pedestrians at ranges up to 40m in daylight greater than 2000 lux and up to 20m in nighttime less than 10 lux with camera-infrared fusion."
+          type="FunctionalSafetyRequirement"
+          priority="high"
+          status="approved">
+        <parentRequirement href="#SG_03"/>
+      </childRequirements>
+    </requirements>
+    <requirements
+        xsi:type="raaml.req:SafetyGoal"
+        xmi:id="SG_04"
+        id="SG_04"
+        name="SG-04: Ensure Braking Within Fault Tolerant Time Interval"
+        description="Derived from HARA HE-08 ASIL-D. FTTI from MDPI AEB Hardware 2021. ISO 26262:2018 Part 4 Clause 8.4.6."
+        text="The AEB system shall initiate braking response within FTTI of 150ms at highway speeds and 300ms at urban speeds."
+        type="SafetyGoal"
+        priority="high"
+        status="approved"/>
+    <requirements
+        xsi:type="raaml.req:SafetyGoal"
+        xmi:id="SG_05"
+        id="SG_05"
+        name="SG-05: Maintain AEB Operation in Adverse Weather"
+        description="Derived from HARA HE-09 ASIL-C. Singh and Gabbar 2019; Euro NCAP sensor performance requirements."
+        text="The AEB system shall maintain at least degraded braking function in adverse weather conditions with appropriate driver warning."
+        type="SafetyGoal"
+        priority="medium"
+        status="approved"/>
+    <derivations
+        xsi:type="raaml.req:ASILDecompose"
+        xmi:id="ASILDECOMP_SG01"
+        id="ASILDECOMP_SG01"
+        name="ASIL-D Decomposition SG-01 to dual channel HSR-01"
+        description="ASIL-D(SG-01) decomposed to ASIL-B(D) radar + ASIL-B(D) camera per ISO 26262:2018 Part 9 Table 5. Independence by SSR-01. MDPI AEB Hardware 2021.">
+      <source href="#SG_01"/>
+      <target href="#HSR_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_01" id="DRV_01" name="SG-01 to FSR-01.01">
+      <source href="#SG_01"/>
+      <target href="#FSR_01_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_02" id="DRV_02" name="SG-01 to FSR-01.02">
+      <source href="#SG_01"/>
+      <target href="#FSR_01_02"/>
+    </derivations>
+    <derivations xmi:id="DRV_03" id="DRV_03" name="SG-01 to FSR-01.03">
+      <source href="#SG_01"/>
+      <target href="#FSR_01_03"/>
+    </derivations>
+    <derivations xmi:id="DRV_04" id="DRV_04" name="SG-02 to FSR-02.01">
+      <source href="#SG_02"/>
+      <target href="#FSR_02_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_05" id="DRV_05" name="SG-03 to FSR-03.01">
+      <source href="#SG_03"/>
+      <target href="#FSR_03_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_06" id="DRV_06" name="FSR-01.02 to TSR-01">
+      <source href="#FSR_01_02"/>
+      <target href="#TSR_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_07" id="DRV_07" name="FSR-01.01 to TSR-02">
+      <source href="#FSR_01_01"/>
+      <target href="#TSR_02"/>
+    </derivations>
+    <derivations xmi:id="DRV_08" id="DRV_08" name="FSR-01.02 to TSR-03">
+      <source href="#FSR_01_02"/>
+      <target href="#TSR_03"/>
+    </derivations>
+    <derivations xmi:id="DRV_09" id="DRV_09" name="FSR-02.01 to SSR-01">
+      <source href="#FSR_02_01"/>
+      <target href="#SSR_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_10" id="DRV_10" name="FSR-01.02 to SSR-02">
+      <source href="#FSR_01_02"/>
+      <target href="#SSR_02"/>
+    </derivations>
+    <derivations xmi:id="DRV_11" id="DRV_11" name="TSR-02 to HSR-01">
+      <source href="#TSR_02"/>
+      <target href="#HSR_01"/>
+    </derivations>
+    <derivations xmi:id="DRV_12" id="DRV_12" name="TSR-02 to HSR-02">
+      <source href="#TSR_02"/>
+      <target href="#HSR_02"/>
+    </derivations>
+    <dependencies
+        xsi:type="raaml.req:SafeState"
+        xmi:id="SS_01"
+        id="SS_01"
+        name="SafeState-01: AEB Deactivated with Warning"
+        description="Safe state: AEB deactivated, driver warned by amber lamp and audible alert, manual braking intact. ISO 26262:2018 Part 4 Clause 8.4.5; UN ECE R152.">
+      <source href="#SG_01"/>
+      <target href="#TSR_03"/>
+    </dependencies>
+    <dependencies
+        xsi:type="raaml.req:OperatingMode"
+        xmi:id="OM_01"
+        id="OM_01"
+        name="OM-01: Normal AEB Operation Full ASIL-D"
+        description="Normal mode: both sensor channels active, full TTC monitoring, full ASIL-D coverage.">
+      <source href="#SG_01"/>
+      <target href="#FSR_01_01"/>
+    </dependencies>
+    <dependencies
+        xsi:type="raaml.req:OperatingMode"
+        xmi:id="OM_02"
+        id="OM_02"
+        name="OM-02: Degraded Single-Sensor Mode ASIL-B"
+        description="Degraded mode on single sensor failure: urban speeds only, ASIL-B coverage, driver alert. Euro NCAP degraded mode criteria.">
+      <source href="#TSR_03"/>
+      <target href="#HSR_01"/>
+    </dependencies>
+  </requirements>
+</raaml:SafetyAnalysis>

@@ -1,0 +1,176 @@
+[%
+out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>AEB GSN Safety Case</title>");
+out.print("<style>");
+out.print("body{font-family:Arial,sans-serif;font-size:11px;margin:10px;background:#fafafa;}");
+out.print("h1{color:#1b5e20;font-size:16px;border-bottom:2px solid #1b5e20;padding-bottom:5px;}");
+out.print("h2{color:#37474f;font-size:13px;margin-top:20px;border-left:4px solid #1b5e20;padding-left:8px;}");
+out.print(".sub{color:#546e7a;font-size:10px;margin-bottom:15px;}");
+// GSN node shapes via CSS
+out.print(".gsn-goal{border:2px solid #1b5e20;border-radius:3px;padding:8px 12px;margin:3px;background:#e8f5e9;display:inline-block;min-width:160px;max-width:220px;vertical-align:top;}");
+out.print(".gsn-strategy{border:2px solid #e65100;padding:8px 12px;margin:3px;background:#fff3e0;display:inline-block;min-width:160px;max-width:220px;vertical-align:top;transform:skewX(-10deg);}");
+out.print(".gsn-strategy-inner{transform:skewX(10deg);}");
+out.print(".gsn-solution{border:2px solid #1565c0;border-radius:50%;padding:8px;margin:3px;background:#e3f2fd;display:inline-block;width:140px;height:auto;text-align:center;vertical-align:top;}");
+out.print(".gsn-context{border:2px solid #546e7a;border-radius:12px;padding:6px 10px;margin:3px;background:#eceff1;display:inline-block;min-width:120px;max-width:180px;vertical-align:top;}");
+out.print(".gsn-justification{border:2px dashed #78909c;border-radius:50%;padding:6px 10px;margin:3px;background:#fafafa;display:inline-block;min-width:100px;max-width:160px;vertical-align:top;text-align:center;}");
+out.print(".gsn-assumption{border:2px dashed #6a1b9a;border-radius:50%;padding:6px 10px;margin:3px;background:#f3e5f5;display:inline-block;min-width:100px;max-width:160px;vertical-align:top;text-align:center;}");
+out.print(".node-id{font-weight:bold;font-size:10px;color:#37474f;}");
+out.print(".node-text{font-size:9px;color:#546e7a;margin-top:3px;}");
+out.print(".status-ok{font-size:8px;color:#1b5e20;font-weight:bold;}");
+out.print(".supported-section{margin-left:20px;border-left:2px solid #e0e0e0;padding-left:10px;margin-top:5px;}");
+out.print("table{border-collapse:collapse;width:100%;background:white;margin-bottom:15px;}");
+out.print("th{background:#1b5e20;color:white;padding:5px 8px;text-align:left;font-size:10px;}");
+out.print("td{padding:4px 8px;border:1px solid #e0e0e0;font-size:10px;vertical-align:top;}");
+out.print("tr:nth-child(even){background:#f9f9f9;}");
+out.print(".g-badge{background:#1b5e20;color:white;font-size:9px;padding:1px 5px;border-radius:3px;}");
+out.print(".s-badge{background:#e65100;color:white;font-size:9px;padding:1px 5px;border-radius:3px;}");
+out.print(".sn-badge{background:#1565c0;color:white;font-size:9px;padding:1px 5px;border-radius:3px;}");
+out.print(".c-badge{background:#546e7a;color:white;font-size:9px;padding:1px 5px;border-radius:3px;}");
+out.print(".note{color:#78909c;font-style:italic;font-size:9px;margin-top:15px;border-top:1px solid #e0e0e0;padding-top:8px;}");
+out.print("</style></head><body>");
+out.print("<h1>AEB GSN Safety Case</h1>");
+out.print("<p class='sub'>Goal Structuring Notation | GSN Community Standard v3 2021 | ISO 26262:2018 ASIL-D</p>");
+
+// Summary counts
+var goals = gsnModel.gsnNodes.select(n | n.eClass().name = "Goal");
+var strategies = gsnModel.gsnNodes.select(n | n.eClass().name = "Strategy");
+var solutions = gsnModel.gsnNodes.select(n | n.eClass().name = "Solution");
+var contexts = gsnModel.contextualInformation.select(c | c.eClass().name = "Context");
+var justifications = gsnModel.contextualInformation.select(c | c.eClass().name = "Justification");
+var assumptions = gsnModel.contextualInformation.select(c | c.eClass().name = "Assumption");
+
+out.print("<div style='background:white;border:1px solid #ccc;padding:10px;margin-bottom:15px;border-radius:3px;font-size:10px;'>");
+out.print("<strong>GSN Summary:</strong> ");
+out.print("<span class='g-badge'>G</span> " + goals.size() + " Goals &nbsp;");
+out.print("<span class='s-badge'>S</span> " + strategies.size() + " Strategies &nbsp;");
+out.print("<span class='sn-badge'>Sn</span> " + solutions.size() + " Solutions &nbsp;");
+out.print("<span class='c-badge'>C</span> " + contexts.size() + " Contexts &nbsp;");
+out.print(justifications.size() + " Justifications &nbsp;" + assumptions.size() + " Assumptions");
+out.print("</div>");
+
+// Visual GSN tree - top level
+out.print("<h2>Safety Argument Structure</h2>");
+out.print("<div style='overflow-x:auto;'>");
+
+// Render top-level goal
+for (g in goals) {
+  var level = extractGSNField(g.description, "LEVEL:");
+  var status = extractGSNField(g.description, "STATUS:");
+  if (level = "1") {
+    out.print("<div class='gsn-goal'>");
+    out.print("<div class='node-id'><span class='g-badge'>" + g.nodeId + "</span></div>");
+    out.print("<div class='node-text'>" + g.name + "</div>");
+    if (status = "Supported") { out.print("<div class='status-ok'>&#x2714; Supported</div>"); }
+    out.print("</div>");
+    out.print("<div class='supported-section'>");
+  }
+}
+
+// Strategies
+for (s in strategies) {
+  var level = extractGSNField(s.description, "LEVEL:");
+  if (level = "1") {
+    out.print("<div class='gsn-strategy'><div class='gsn-strategy-inner'>");
+    out.print("<div class='node-id'><span class='s-badge'>" + s.nodeId + "</span></div>");
+    out.print("<div class='node-text'>" + s.name + "</div>");
+    out.print("</div></div>");
+    out.print("<div class='supported-section'>");
+  }
+}
+
+// Level-2 goals
+for (g in goals) {
+  var level = extractGSNField(g.description, "LEVEL:");
+  var status = extractGSNField(g.description, "STATUS:");
+  if (level = "2") {
+    out.print("<div class='gsn-goal'>");
+    out.print("<div class='node-id'><span class='g-badge'>" + g.nodeId + "</span></div>");
+    out.print("<div class='node-text'>" + g.name + "</div>");
+    if (status = "Supported") { out.print("<div class='status-ok'>&#x2714; Supported</div>"); }
+    out.print("</div>");
+  }
+}
+out.print("</div>"); // close level-1 strategy supported section
+
+// Level-3 goals
+out.print("<div class='supported-section'>");
+for (g in goals) {
+  var level = extractGSNField(g.description, "LEVEL:");
+  var status = extractGSNField(g.description, "STATUS:");
+  if (level = "3") {
+    out.print("<div class='gsn-goal'>");
+    out.print("<div class='node-id'><span class='g-badge'>" + g.nodeId + "</span></div>");
+    out.print("<div class='node-text'>" + g.name + "</div>");
+    if (status = "Supported") { out.print("<div class='status-ok'>&#x2714; Supported</div>"); }
+    out.print("</div>");
+  }
+}
+out.print("</div>");
+
+out.print("</div>"); // close top-level supported section
+out.print("</div>"); // close overflow div
+
+// Solutions table
+out.print("<h2>Evidence (Solutions)</h2>");
+out.print("<table><thead><tr><th>Node ID</th><th>Solution</th><th>Evidence</th></tr></thead><tbody>");
+for (sn in solutions) {
+  var evidence = extractGSNField(sn.description, "EVIDENCE:");
+  out.print("<tr>");
+  out.print("<td><span class='sn-badge'>" + sn.nodeId + "</span></td>");
+  out.print("<td><strong>" + sn.name + "</strong></td>");
+  out.print("<td style='font-size:9px'>" + evidence + "</td>");
+  out.print("</tr>");
+}
+out.print("</tbody></table>");
+
+// Context, Justification, Assumption table
+out.print("<h2>Context, Justifications and Assumptions</h2>");
+out.print("<table><thead><tr><th>ID</th><th>Type</th><th>Name</th><th>Description</th></tr></thead><tbody>");
+for (ci in gsnModel.contextualInformation) {
+  var typeName = ci.eClass().name;
+  var typeBadge = "c-badge";
+  out.print("<tr>");
+  out.print("<td><span class='" + typeBadge + "'>" + ci.contextId + "</span></td>");
+  out.print("<td style='font-size:9px;font-weight:bold'>" + typeName + "</td>");
+  out.print("<td><strong>" + ci.name + "</strong></td>");
+  out.print("<td style='font-size:9px'>" + stripGSNMeta(ci.description) + "</td>");
+  out.print("</tr>");
+}
+out.print("</tbody></table>");
+
+// SupportedBy relationships
+out.print("<h2>SupportedBy Relationships (" + gsnModel.supportedBy.size() + " links)</h2>");
+out.print("<table><thead><tr><th>#</th><th>Relationship</th></tr></thead><tbody>");
+var supNum = 1;
+for (sup in gsnModel.supportedBy) {
+  out.print("<tr><td>" + supNum + "</td><td style='font-size:9px'>" + sup.name + "</td></tr>");
+  supNum = supNum + 1;
+}
+out.print("</tbody></table>");
+
+out.print("<p class='note'>GSN Community Standard v3 2021 | ISO 26262:2018 | STPA Handbook 2018 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1</p>");
+out.print("</body></html>");
+
+operation extractGSNField(desc : String, key : String) : String {
+  var result = "";
+  var idx = desc.indexOf(key);
+  if (idx >= 0) {
+    var start = idx + key.length();
+    var rest = desc.substring(start);
+    var pipeIdx = rest.indexOf("|");
+    if (pipeIdx >= 0) { result = rest.substring(0, pipeIdx).trim(); }
+    else { result = rest.trim(); }
+  }
+  return result;
+}
+
+operation stripGSNMeta(desc : String) : String {
+  var idx = desc.indexOf("|");
+  if (idx >= 0) {
+    var rest = desc.substring(idx + 1);
+    var idx2 = rest.indexOf("|");
+    if (idx2 >= 0) { return rest.substring(idx2 + 1).trim(); }
+    return rest.trim();
+  }
+  return desc;
+}
+%]

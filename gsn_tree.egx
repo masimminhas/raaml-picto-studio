@@ -1,0 +1,11 @@
+rule GSNOverview
+    transform obj : M!GSN {
+
+    template : "gsn_tree.egl"
+
+    parameters : Map {
+        "gsnModel" = obj,
+        "title"    = "AEB GSN Safety Case - " + obj.name,
+        "icon"     = "diagram"
+    }
+}

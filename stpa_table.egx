@@ -1,0 +1,11 @@
+rule STPAOverview
+    transform obj : M!STPA {
+
+    template : "stpa_table.egl"
+
+    parameters : Map {
+        "stpaModel" = obj,
+        "title"     = "AEB STPA - " + obj.name,
+        "icon"      = "table"
+    }
+}

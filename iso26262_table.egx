@@ -1,0 +1,11 @@
+rule ISO26262Overview
+    transform obj : M!ISO26262 {
+
+    template : "iso26262_table.egl"
+
+    parameters : Map {
+        "isoModel" = obj,
+        "title"    = "AEB ISO 26262 - " + obj.name,
+        "icon"     = "table"
+    }
+}

@@ -1,0 +1,144 @@
+[%
+out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>AEB Requirements</title>");
+out.print("<style>");
+out.print("body{font-family:Arial,sans-serif;font-size:11px;margin:10px;background:#fafafa;}");
+out.print("h1{color:#1a237e;font-size:16px;border-bottom:2px solid #1a237e;padding-bottom:5px;}");
+out.print("h2{color:#37474f;font-size:13px;margin-top:20px;border-left:4px solid #546e7a;padding-left:8px;}");
+out.print(".sub{color:#546e7a;font-size:10px;margin-bottom:15px;}");
+out.print(".card{border:1px solid #e0e0e0;border-radius:4px;padding:8px 12px;margin:4px 0;background:white;}");
+out.print(".sg{border-left:4px solid #b71c1c;}");
+out.print(".fsr{border-left:4px solid #e65100;margin-left:20px;}");
+out.print(".tsr{border-left:4px solid #f57f17;margin-left:40px;}");
+out.print(".ssr{border-left:4px solid #1565c0;margin-left:60px;}");
+out.print(".hsr{border-left:4px solid #1b5e20;margin-left:60px;}");
+out.print(".oth{border-left:4px solid #78909c;margin-left:20px;}");
+out.print(".badge{font-size:9px;font-weight:bold;padding:1px 5px;border-radius:10px;margin-right:5px;}");
+out.print(".b-sg{background:#ffcdd2;color:#b71c1c;}");
+out.print(".b-fsr{background:#ffe0b2;color:#e65100;}");
+out.print(".b-tsr{background:#fff3e0;color:#f57f17;}");
+out.print(".b-ssr{background:#e3f2fd;color:#1565c0;}");
+out.print(".b-hsr{background:#e8f5e9;color:#1b5e20;}");
+out.print(".b-oth{background:#eceff1;color:#546e7a;}");
+out.print(".aD{font-size:9px;font-weight:bold;padding:1px 5px;border-radius:3px;margin-left:5px;background:#b71c1c;color:white;}");
+out.print(".aB{font-size:9px;font-weight:bold;padding:1px 5px;border-radius:3px;margin-left:5px;background:#f57f17;color:white;}");
+out.print(".ok{font-size:9px;color:#2e7d32;margin-left:8px;}");
+out.print(".pend{font-size:9px;color:#f57f17;margin-left:8px;}");
+out.print(".txt{color:#37474f;margin-top:4px;font-size:10px;}");
+out.print(".arr{color:#90a4ae;font-size:14px;margin-left:15px;}");
+out.print("table{border-collapse:collapse;width:100%;background:white;font-size:10px;margin-bottom:15px;}");
+out.print("th{background:#37474f;color:white;padding:5px 8px;text-align:left;}");
+out.print("td{padding:4px 8px;border:1px solid #e0e0e0;}");
+out.print(".note{color:#78909c;font-style:italic;font-size:9px;margin-top:15px;border-top:1px solid #e0e0e0;padding-top:8px;}");
+out.print("</style></head><body>");
+out.print("<h1>AEB ISO 26262 Requirements Hierarchy</h1>");
+out.print("<p class='sub'>SG to FSR to TSR to SSR/HSR | ISO 26262:2018 Parts 3,4,5,6</p>");
+
+for (req in reqModel.requirements) {
+  var rc = req.eClass().name;
+  var cardCls = "card oth";
+  var typeLbl = rc;
+  var badgeCls = "badge b-oth";
+  var asilLvl = "";
+  var arrow = false;
+
+  if (rc = "SafetyGoal") {
+    cardCls = "card sg"; typeLbl = "Safety Goal";
+    badgeCls = "badge b-sg"; asilLvl = "D"; arrow = false;
+  }
+  if (rc = "FunctionalSafetyRequirement") {
+    cardCls = "card fsr"; typeLbl = "FSR";
+    badgeCls = "badge b-fsr"; asilLvl = "D"; arrow = true;
+  }
+  if (rc = "TechnicalSafetyRequirement") {
+    cardCls = "card tsr"; typeLbl = "TSR";
+    badgeCls = "badge b-tsr"; asilLvl = "D"; arrow = true;
+  }
+  if (rc = "SoftwareSafetyRequirement") {
+    cardCls = "card ssr"; typeLbl = "SSR";
+    badgeCls = "badge b-ssr"; asilLvl = "B"; arrow = true;
+  }
+  if (rc = "HardwareSafetyRequirement") {
+    cardCls = "card hsr"; typeLbl = "HSR";
+    badgeCls = "badge b-hsr"; asilLvl = "B"; arrow = true;
+  }
+
+  var asilHtml = "";
+  if (asilLvl = "D") { asilHtml = "<span class='aD'>ASIL-D</span>"; }
+  if (asilLvl = "B") { asilHtml = "<span class='aB'>ASIL-B</span>"; }
+
+  var statHtml = "";
+  if (req.status <> null) {
+    var sc = "pend";
+    if (req.status = "approved") { sc = "ok"; }
+    statHtml = "<span class='" + sc + "'>" + req.status.toUpperCase() + "</span>";
+  }
+
+  var txt = "";
+  if (req.text <> null) { txt = req.text; }
+
+  if (arrow = true) { out.print("<div class='arr'>&#x21B3;</div>"); }
+
+  out.print("<div class='" + cardCls + "'>");
+  out.print("<span class='" + badgeCls + "'>" + typeLbl + "</span> ");
+  out.print("<strong>" + req.id + ": " + req.name + "</strong>");
+  out.print(asilHtml);
+  out.print(statHtml);
+  out.print("<div class='txt'>" + txt + "</div>");
+  out.print("</div>");
+}
+
+out.print("<h2>Derivation Relationships</h2>");
+out.print("<table><thead><tr>");
+out.print("<th>ID</th><th>Type</th><th>Source</th><th>Target</th>");
+out.print("</tr></thead><tbody>");
+
+for (drv in reqModel.derivations) {
+  var dt = drv.eClass().name;
+  var sid = "(unresolved)";
+  var tid = "(unresolved)";
+  if (drv.source <> null and not drv.source.eIsProxy()) {
+    sid = drv.source.id;
+  }
+  if (drv.target <> null and not drv.target.eIsProxy()) {
+    tid = drv.target.id;
+  }
+  var dc = "#546e7a";
+  if (dt = "ASILDecompose") { dc = "#b71c1c"; }
+  out.print("<tr>");
+  out.print("<td>" + drv.id + "</td>");
+  out.print("<td style='color:" + dc + ";font-weight:bold;font-size:9px'>" + dt + "</td>");
+  out.print("<td>" + sid + "</td>");
+  out.print("<td>" + tid + "</td>");
+  out.print("</tr>");
+}
+out.print("</tbody></table>");
+
+if (reqModel.dependencies.size() > 0) {
+  out.print("<h2>Dependencies</h2>");
+  out.print("<table><thead><tr>");
+  out.print("<th>ID</th><th>Type</th><th>Name</th><th>Source</th><th>Target</th>");
+  out.print("</tr></thead><tbody>");
+  for (dep in reqModel.dependencies) {
+    var dt = dep.eClass().name;
+    var sid = "(unresolved)";
+    var tid = "(unresolved)";
+    if (dep.source <> null and not dep.source.eIsProxy()) {
+      sid = dep.source.id;
+    }
+    if (dep.target <> null and not dep.target.eIsProxy()) {
+      tid = dep.target.id;
+    }
+    out.print("<tr>");
+    out.print("<td>" + dep.id + "</td>");
+    out.print("<td style='font-weight:bold;font-size:9px'>" + dt + "</td>");
+    out.print("<td>" + dep.name + "</td>");
+    out.print("<td>" + sid + "</td>");
+    out.print("<td>" + tid + "</td>");
+    out.print("</tr>");
+  }
+  out.print("</tbody></table>");
+}
+
+out.print("<p class='note'>ISO 26262:2018 Parts 3,4,5,6 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1 | SAE J2980:2018</p>");
+out.print("</body></html>");
+%]

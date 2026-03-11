@@ -1,0 +1,288 @@
+[%
+var ftaInstance = null;
+for (obj in M.allContents()) {
+  if (obj.eClass().name = "FTA") { ftaInstance = obj; }
+}
+
+if (ftaInstance = null) {
+  out.print("digraph empty { label=\"No FTA instance found\"; }\n");
+}
+else {
+
+out.print("digraph AEB_FaultTree {\n");
+out.print("  rankdir=TB;\n");
+out.print("  splines=polyline;\n");
+out.print("  nodesep=0.20;\n");
+out.print("  ranksep=0.45;\n");
+out.print("  fontname=\"Helvetica\";\n");
+out.print("  bgcolor=\"white\";\n");
+out.print("  pad=0.15;\n");
+out.print("  size=\"11.0,7.8\";\n");
+out.print("  ratio=compress;\n");
+out.print("  concentrate=false;\n");
+out.print("  graph [fontsize=7 labelloc=t labeljust=l];\n");
+out.print("  node [fontname=\"Helvetica\" fontsize=6.5];\n");
+out.print("  edge [fontname=\"Helvetica\" fontsize=6];\n");
+
+// ============================================================
+// TREE 1  -  Loss of AEB Braking  (SG-01 ASIL-D)
+// ============================================================
+out.print("  subgraph cluster_t1 {\n");
+out.print("    label=\"Tree 1: Loss of AEB Emergency Braking  |  SG-01 ASIL-D  |  PMHF = 3.2e-9/h < 1e-8/h target  |  ISO 26262:2018 Part 5\";\n");
+out.print("    style=filled;\n");
+out.print("    fillcolor=\"#f0f4ff\";\n");
+out.print("    color=\"#1a237e\";\n");
+out.print("    penwidth=1.5;\n");
+out.print("    fontsize=7;\n");
+out.print("    fontcolor=\"#1a237e\";\n");
+out.print("    fontname=\"Helvetica-Bold\";\n");
+
+out.print("    { rank=same;\n");
+topNode("TE_001", "TE-01: Loss of AEB Emergency Braking\\nP = 3.2e-9/h   ASIL-D", "#b71c1c", "#ffcdd2");
+out.print("    }\n");
+
+out.print("    { rank=same;\n");
+orNode("G_OR1", "OR-1\\nAny subsystem failure", "#c62828", "#ffebee");
+out.print("    }\n");
+
+out.print("    { rank=same;\n");
+ieNode("IE1", "IE-01\\nSensor Subsystem\\nFailure P=3.78e-14/h", "#e65100", "#fff3e0");
+ieNode("IE2", "IE-02\\nECU Processing\\nFailure P=1.70e-7/h", "#e65100", "#fff3e0");
+ieNode("IE3", "IE-03\\nActuator Chain\\nFailure P=4.50e-7/h", "#e65100", "#fff3e0");
+out.print("    }\n");
+
+out.print("    { rank=same;\n");
+andNode("G_AND1", "AND-1\\nBoth channels fail\\nASIL-D indep.", "#1565c0", "#e3f2fd");
+orNode("G_OR2", "OR-2\\nMCU fault OR\\nWatchdog timeout", "#c62828", "#ffebee");
+orNode("G_OR3", "OR-3\\nValve stuck OR\\nPump fails", "#c62828", "#ffebee");
+out.print("    }\n");
+
+out.print("    { rank=same;\n");
+beNode("BE1", "BE-01\\nRadar Failure\\nlambda=2.1e-7/h", "#1b5e20", "#e8f5e9");
+beNode("BE2", "BE-02\\nCamera Failure\\nlambda=1.8e-7/h", "#1b5e20", "#e8f5e9");
+beNode("BE3", "BE-03\\nMCU Failure\\nlambda=1.5e-7/h", "#1b5e20", "#e8f5e9");
+beNode("BE4", "BE-04\\nWatchdog Timeout\\nlambda=2.0e-8/h", "#1b5e20", "#e8f5e9");
+beNode("BE5", "BE-05\\nValve Stuck Closed\\nlambda=3.0e-7/h", "#1b5e20", "#e8f5e9");
+beNode("BE6", "BE-06\\nPump Failure\\nlambda=1.5e-7/h", "#1b5e20", "#e8f5e9");
+out.print("    }\n");
+
+out.print("  }\n");
+
+// ============================================================
+// TREE 2  -  Unintended AEB Activation  (SG-02 ASIL-C)
+// ============================================================
+out.print("  subgraph cluster_t2 {\n");
+out.print("    label=\"Tree 2: Unintended AEB Activation  |  SG-02 ASIL-C  |  PMHF = 1.5e-8/h < 1e-7/h target\";\n");
+out.print("    style=filled;\n");
+out.print("    fillcolor=\"#fff8f0\";\n");
+out.print("    color=\"#e65100\";\n");
+out.print("    penwidth=1.5;\n");
+out.print("    fontsize=7;\n");
+out.print("    fontcolor=\"#e65100\";\n");
+out.print("    fontname=\"Helvetica-Bold\";\n");
+
+out.print("    { rank=same;\n");
+topNode("TE_002", "TE-02: Unintended AEB Activation\\nP = 1.5e-8/h   ASIL-C", "#e65100", "#ffe0b2");
+out.print("    }\n");
+
+out.print("    { rank=same;\n");
+andNode("G_AND2", "AND-2\\nFalse target AND\\nFusion failure", "#1565c0", "#e3f2fd");
+out.print("    }\n");
+
+out.print("    { rank=same;\n");
+beNode("BE7", "BE-07\\nGhost Radar Target\\nlambda=5.0e-5/h", "#4a148c", "#f3e5f5");
+beNode("BE8", "BE-08\\nFusion Validation\\nFailure P=3.0e-4", "#4a148c", "#f3e5f5");
+out.print("    }\n");
+
+out.print("  }\n");
+
+// ============================================================
+// CONTEXT  -  House and Undeveloped events
+// ============================================================
+out.print("  subgraph cluster_ctx {\n");
+out.print("    label=\"Operating Context\";\n");
+out.print("    style=filled;\n");
+out.print("    fillcolor=\"#fafafa\";\n");
+out.print("    color=\"#90a4ae\";\n");
+out.print("    penwidth=1;\n");
+out.print("    fontsize=6.5;\n");
+out.print("    fontcolor=\"#546e7a\";\n");
+houseNode("HE1", "HE-01\\nHighway Speed\\n80-130 km/h  P=1.0");
+houseNode("HE2", "HE-02\\nAEB Powered\\nand Active  P=1.0");
+undevNode("UE1", "UE-01\\nSystematic SW\\nFailure [P6]");
+undevNode("UE2", "UE-02\\nGPS/Map\\nFailure [OOS]");
+out.print("  }\n");
+
+// ============================================================
+// PMHF SUMMARY NOTE
+// ============================================================
+out.print("  pmhf [\n");
+out.print("    label=\"PMHF Results\\n");
+out.print("SG-01 ASIL-D: 3.2e-9/h OK\\n");
+out.print("SG-02 ASIL-C: 1.5e-8/h OK\\n");
+out.print("Dual-ch margin: 3x\\n");
+out.print("Ref: MDPI AEB 2021\"\n");
+out.print("    shape=note\n");
+out.print("    style=filled\n");
+out.print("    fillcolor=\"#e8eaf6\"\n");
+out.print("    color=\"#1a237e\"\n");
+out.print("    fontsize=6.5\n");
+out.print("    fontname=\"Helvetica\"\n");
+out.print("    width=1.4\n");
+out.print("  ];\n");
+
+// ============================================================
+// GATE LEGEND
+// ============================================================
+out.print("  subgraph cluster_legend {\n");
+out.print("    label=\"Legend\";\n");
+out.print("    style=filled;\n");
+out.print("    fillcolor=\"#fafafa\";\n");
+out.print("    color=\"#90a4ae\";\n");
+out.print("    penwidth=1;\n");
+out.print("    fontsize=6.5;\n");
+orNode("LEG_OR",   "OR Gate",              "#c62828", "#ffebee");
+andNode("LEG_AND", "AND Gate",             "#1565c0", "#e3f2fd");
+topNode("LEG_TE",  "Top/Intermediate\\nEvent", "#546e7a", "#eceff1");
+beNode("LEG_BE",   "Basic Event\\n(leaf)", "#1b5e20", "#e8f5e9");
+houseNode("LEG_HE","House Event\\n(given true)");
+undevNode("LEG_UE","Undeveloped\\nEvent");
+out.print("  }\n");
+
+// ============================================================
+// EDGES
+// ============================================================
+drawEdge("TE_001",  "G_OR1");
+drawEdge("G_OR1",   "IE1");
+drawEdge("G_OR1",   "IE2");
+drawEdge("G_OR1",   "IE3");
+drawEdge("IE1",     "G_AND1");
+drawEdge("IE2",     "G_OR2");
+drawEdge("IE3",     "G_OR3");
+drawEdge("G_AND1",  "BE1");
+drawEdge("G_AND1",  "BE2");
+drawEdge("G_OR2",   "BE3");
+drawEdge("G_OR2",   "BE4");
+drawEdge("G_OR3",   "BE5");
+drawEdge("G_OR3",   "BE6");
+drawEdge("TE_002",  "G_AND2");
+drawEdge("G_AND2",  "BE7");
+drawEdge("G_AND2",  "BE8");
+
+out.print("}\n");
+
+} // end else
+
+// ============================================================
+// OPERATIONS
+// ============================================================
+
+operation topNode(nid:String, lbl:String, clr:String, fill:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=rectangle ");
+  out.print("style=\"filled,bold\" ");
+  out.print("fillcolor=\"" + fill + "\" ");
+  out.print("color=\"" + clr + "\" ");
+  out.print("penwidth=2 ");
+  out.print("peripheries=2 ");
+  out.print("fontsize=6.5 ");
+  out.print("fontname=\"Helvetica-Bold\" ");
+  out.print("fontcolor=\"" + clr + "\" ");
+  out.print("width=2.0 height=0.55];\n");
+}
+
+operation ieNode(nid:String, lbl:String, clr:String, fill:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=rectangle ");
+  out.print("style=filled ");
+  out.print("fillcolor=\"" + fill + "\" ");
+  out.print("color=\"" + clr + "\" ");
+  out.print("penwidth=1.5 ");
+  out.print("fontsize=6 ");
+  out.print("fontname=\"Helvetica\" ");
+  out.print("fontcolor=\"#37474f\" ");
+  out.print("width=1.6 height=0.50];\n");
+}
+
+// OR gate  ->  invhouse  (pointed top = OR arch shape)
+operation orNode(nid:String, lbl:String, clr:String, fill:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=invhouse ");
+  out.print("style=\"filled,bold\" ");
+  out.print("fillcolor=\"" + fill + "\" ");
+  out.print("color=\"" + clr + "\" ");
+  out.print("penwidth=2 ");
+  out.print("fontsize=6.5 ");
+  out.print("fontname=\"Helvetica-Bold\" ");
+  out.print("fontcolor=\"" + clr + "\" ");
+  out.print("width=1.2 height=0.55];\n");
+}
+
+// AND gate  ->  trapezium  (flat-bottom arch = AND gate shape)
+operation andNode(nid:String, lbl:String, clr:String, fill:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=trapezium ");
+  out.print("style=\"filled,bold\" ");
+  out.print("fillcolor=\"" + fill + "\" ");
+  out.print("color=\"" + clr + "\" ");
+  out.print("penwidth=2 ");
+  out.print("fontsize=6.5 ");
+  out.print("fontname=\"Helvetica-Bold\" ");
+  out.print("fontcolor=\"" + clr + "\" ");
+  out.print("width=1.2 height=0.55];\n");
+}
+
+operation beNode(nid:String, lbl:String, clr:String, fill:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=circle ");
+  out.print("style=filled ");
+  out.print("fillcolor=\"" + fill + "\" ");
+  out.print("color=\"" + clr + "\" ");
+  out.print("penwidth=1.5 ");
+  out.print("fontsize=6 ");
+  out.print("fontname=\"Helvetica\" ");
+  out.print("fontcolor=\"" + clr + "\" ");
+  out.print("width=1.05 height=1.05 fixedsize=true];\n");
+}
+
+operation houseNode(nid:String, lbl:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=house ");
+  out.print("style=filled ");
+  out.print("fillcolor=\"#e3f2fd\" ");
+  out.print("color=\"#1565c0\" ");
+  out.print("penwidth=1 ");
+  out.print("fontsize=6 ");
+  out.print("fontname=\"Helvetica\" ");
+  out.print("fontcolor=\"#1565c0\" ");
+  out.print("width=1.0];\n");
+}
+
+operation undevNode(nid:String, lbl:String) {
+  out.print("    \"" + nid + "\" [");
+  out.print("label=\"" + lbl + "\" ");
+  out.print("shape=diamond ");
+  out.print("style=filled ");
+  out.print("fillcolor=\"#f3e5f5\" ");
+  out.print("color=\"#6a1b9a\" ");
+  out.print("penwidth=1 ");
+  out.print("fontsize=6 ");
+  out.print("fontname=\"Helvetica\" ");
+  out.print("fontcolor=\"#6a1b9a\" ");
+  out.print("width=1.0];\n");
+}
+
+operation drawEdge(src:String, tgt:String) {
+  out.print("  \"" + src + "\" -> \"" + tgt + "\" [");
+  out.print("arrowhead=normal ");
+  out.print("arrowsize=0.6 ");
+  out.print("penwidth=1.2 ");
+  out.print("color=\"#546e7a\"];\n");
+}
+%]

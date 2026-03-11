@@ -1,0 +1,127 @@
+[* 
+  fmea_table.egl - EGL template for FMEA HTML table
+  FIXED: removed all raaml!fmea:: type references from EGL
+  The 'fmea' object is passed directly as a parameter from EGX
+*]
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>[%=title%]</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 11px; margin: 10px; background: #f5f5f5; }
+    h1 { color: #1a237e; font-size: 16px; border-bottom: 2px solid #1a237e; padding-bottom: 5px; }
+    .subtitle { color: #546e7a; font-size: 10px; margin-bottom: 15px; }
+    table { border-collapse: collapse; width: 100%; background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2); margin-bottom: 20px; }
+    th { background: #1a237e; color: white; padding: 6px 8px; text-align: left;
+         font-size: 10px; font-weight: bold; }
+    td { padding: 5px 8px; border: 1px solid #e0e0e0; vertical-align: top; font-size: 10px; }
+    tr:nth-child(even) { background: #f9f9f9; }
+    .rpn-high   { background: #ffcdd2; color: #b71c1c; font-weight: bold; text-align: center; }
+    .rpn-medium { background: #ffe0b2; color: #e65100; font-weight: bold; text-align: center; }
+    .rpn-low    { background: #c8e6c9; color: #1b5e20; font-weight: bold; text-align: center; }
+    .sev { background: #e8eaf6; text-align: center; font-weight: bold; }
+    .occ { background: #e8f5e9; text-align: center; font-weight: bold; }
+    .det { background: #fff3e0; text-align: center; font-weight: bold; }
+    .legend { display: flex; gap: 15px; margin-bottom: 10px; align-items: center; font-size: 10px; }
+    .leg-box { width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 3px; }
+    .summary-box { background: white; border: 1px solid #ccc; padding: 10px;
+                   margin-bottom: 15px; border-radius: 3px; font-size: 10px; }
+    .source-note { color: #78909c; font-style: italic; font-size: 9px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+<h1>[%=title%]</h1>
+<p class="subtitle">ISO 26262:2018 FMEA | AIAG FMEA-4 RPN Methodology |
+Data sources: Singh &amp; Gabbar (2019), MDPI AEB Hardware (2021), IEC 62380:2004</p>
+
+[%
+var allItems = fmea.fmeaItems;
+var highRisk = allItems.select(i | i.RPN >= 200).size();
+var medRisk  = allItems.select(i | i.RPN >= 100 and i.RPN < 200).size();
+var lowRisk  = allItems.select(i | i.RPN < 100).size();
+var maxRPN   = 0;
+for (i in allItems) { if (i.RPN > maxRPN) { maxRPN = i.RPN; } }
+%]
+<div class="summary-box">
+  <strong>Summary:</strong> [%=allItems.size()%] failure modes analyzed &nbsp;|&nbsp;
+  <span style="color:#b71c1c;font-weight:bold;">[%=highRisk%] HIGH RISK (RPN&gt;=200)</span> &nbsp;|&nbsp;
+  <span style="color:#e65100;font-weight:bold;">[%=medRisk%] MEDIUM RISK (100&lt;=RPN&lt;200)</span> &nbsp;|&nbsp;
+  <span style="color:#1b5e20;font-weight:bold;">[%=lowRisk%] LOW RISK (RPN&lt;100)</span> &nbsp;|&nbsp;
+  Max RPN: <strong>[%=maxRPN%]</strong>
+</div>
+
+<div class="legend">
+  <strong>RPN Legend:</strong>
+  <span><span class="leg-box" style="background:#ffcdd2;border:1px solid #b71c1c;"></span>HIGH &gt;=200</span>
+  <span><span class="leg-box" style="background:#ffe0b2;border:1px solid #e65100;"></span>MEDIUM 100-199</span>
+  <span><span class="leg-box" style="background:#c8e6c9;border:1px solid #1b5e20;"></span>LOW &lt;100</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>FMEA Item / Component</th>
+      <th>Failure Mode</th>
+      <th>Cause</th>
+      <th>Effect</th>
+      <th>SEV</th>
+      <th>OCC</th>
+      <th>DET</th>
+      <th>RPN</th>
+      <th>ASIL</th>
+      <th>Recommended Action</th>
+    </tr>
+  </thead>
+  <tbody>
+[%
+var itemNum = 1;
+for (item in allItems) {
+  var fm    = item.failureMode.first();
+  var eff   = item.finalEffect.first();
+  var cause = item.cause.first();
+  var rpn   = item.RPN;
+  var rpnCalc = item.rpnCalculation.first();
+  var sev = 0; var occ = 0; var det = 0;
+  if (rpnCalc <> null) { sev = rpnCalc.SEV; occ = rpnCalc.OCC; det = rpnCalc.DET; }
+  var rpnClass = "rpn-low";
+  if (rpn >= 200) { rpnClass = "rpn-high"; }
+  else if (rpn >= 100) { rpnClass = "rpn-medium"; }
+  var fmType = "";
+  if (fm <> null) { fmType = fm.eClass().name; }
+  var action = "MONITOR: Acceptable risk.";
+  if (rpn >= 200) { action = "IMMEDIATE: Implement redundancy, BIST diagnostics, review PMHF."; }
+  else if (rpn >= 100) { action = "REQUIRED: Add diagnostic coverage, review detection mechanism."; }
+  var asilRef = "QM";
+  if (sev >= 9) { asilRef = "ASIL-D"; }
+  else if (sev >= 7) { asilRef = "ASIL-C/B"; }
+%]
+    <tr>
+      <td><strong>[%=itemNum%]</strong><br/>
+          <span style="color:#78909c;font-size:9px">[%=item.id%]</span></td>
+      <td><strong>[%=item.name%]</strong></td>
+      <td>[% if (fm <> null) { %][%=fm.name%]<br/>
+          <span style="color:#5c6bc0;font-size:9px;font-style:italic">[%=fmType%]</span>
+          [% } else { %]N/A[% } %]</td>
+      <td>[% if (cause <> null) { %][%=cause.name%][% } else { %]N/A[% } %]</td>
+      <td>[% if (eff <> null) { %][%=eff.name%][% } else { %]N/A[% } %]</td>
+      <td class="sev">[%=sev%]</td>
+      <td class="occ">[%=occ%]</td>
+      <td class="det">[%=det%]</td>
+      <td class="[%=rpnClass%]">[%=rpn%]</td>
+      <td style="text-align:center;font-weight:bold;color:[% if(sev>=9){%]#b71c1c[%}else{%]#e65100[%}%]">[%=asilRef%]</td>
+      <td style="font-size:9px">[%=action%]</td>
+    </tr>
+[%  itemNum = itemNum + 1; } %]
+  </tbody>
+</table>
+
+<p class="source-note">
+  Data: Singh &amp; Gabbar (2019); MDPI AEB Hardware (2021) Table 2;
+  IEC 62380:2004; ISO 26262:2018 Part 3 Table 4; SAE J2980:2018.
+  RPN thresholds per AIAG FMEA-4.
+</p>
+</body>
+</html>

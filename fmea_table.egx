@@ -1,0 +1,11 @@
+rule FMEAOverview
+    transform obj : M!FMEA {
+
+    template : "fmea_table.egl"
+
+    parameters : Map {
+        "fmea"  = obj,
+        "title" = "AEB FMEA Analysis - " + obj.name,
+        "icon"  = "table"
+    }
+}

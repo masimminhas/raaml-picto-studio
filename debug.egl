@@ -1,0 +1,3 @@
+[%
+out.print("<p><b>" + cls + "</b> (package: " + pkg + ") name=" + obj.name + "</p>");
+%]

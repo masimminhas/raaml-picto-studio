@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.stpa="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
+    xmi:id="SA_AEB_STPA_001"
+    id="SA_AEB_STPA_001"
+    name="AEB STPA Safety Analysis"
+    description="Systems Theoretic Process Analysis for AEB. Identifies unsafe control actions and causal scenarios per STPA Handbook 2018 (Leveson and Thomas).">
+  <analyses
+      xsi:type="raaml.stpa:STPA"
+      xmi:id="STPA_AEB_001"
+      id="STPA_AEB_001"
+      name="AEB System STPA"
+      description="STPA for AEB control loop: Driver-Vehicle-AEB ECU-Sensor-Actuator control structure.">
+    <controlStructures
+        xmi:id="CS_001"
+        id="CS_001"
+        name="AEB Control Structure"
+        description="TYPE:ControlStructure|AEB system control loop: Driver, AEB ECU (Controller), Sensors (Radar+Camera), Brake Actuator (Controlled Process), Vehicle Dynamics.">
+      <controllers
+          xmi:id="CTRL_001"
+          id="CTRL_001"
+          name="AEB ECU (Controller)"
+          description="TYPE:Controller|Primary AEB controller. Receives sensor data, computes TTC, issues brake command. Process model includes: obstacle position/velocity, vehicle speed, AEB activation state.">
+        <controlActions
+            xmi:id="CA_001"
+            id="CA_001"
+            name="CA-01: Apply Emergency Brake"
+            description="TYPE:ControlAction|CONTROLLER:AEB ECU|TARGET:Brake Actuator|Command to apply maximum deceleration. Issued when TTC below threshold."
+            type="command"
+            sourceController="CTRL_001"
+            targetProcess="CP_001"/>
+        <controlActions
+            xmi:id="CA_002"
+            id="CA_002"
+            name="CA-02: Release Brake Command"
+            description="TYPE:ControlAction|CONTROLLER:AEB ECU|TARGET:Brake Actuator|Command to release brake pressure after AEB event ends."
+            type="command"
+            sourceController="CTRL_001"
+            targetProcess="CP_001"/>
+        <controlActions
+            xmi:id="CA_003"
+            id="CA_003"
+            name="CA-03: Issue Driver Warning"
+            description="TYPE:ControlAction|CONTROLLER:AEB ECU|TARGET:HMI|Pre-warning before emergency braking. Audible and visual alert at TTC minus 2.5s."
+            type="warning"
+            sourceController="CTRL_001"
+            targetProcess="CP_001"/>
+      </controllers>
+      <controlledProcesses
+          xmi:id="CP_001"
+          id="CP_001"
+          name="Hydraulic Brake Actuator (Controlled Process)"
+          description="TYPE:ControlledProcess|Receives brake commands from AEB ECU. Converts electrical command to hydraulic pressure. Provides pressure feedback.">
+        <providedFeedback
+            xmi:id="FB_001"
+            id="FB_001"
+            name="FB-01: Brake Pressure Feedback"
+            description="TYPE:Feedback|Hydraulic pressure sensor reading confirming brake application. Sent to AEB ECU at 100Hz."
+            type="sensor"
+            source="CP_001"
+            targetController="CTRL_001"/>
+      </controlledProcesses>
+    </controlStructures>
+    <losses
+        xmi:id="STPA_L_001"
+        id="STPA_L_001"
+        name="L-01: Loss of Human Life"
+        description="TYPE:Loss|Fatality of vehicle occupant, pedestrian, or third party. Highest priority loss. Corresponds to ISO 26262 S3 severity."
+        category="life"/>
+    <losses
+        xmi:id="STPA_L_002"
+        id="STPA_L_002"
+        name="L-02: Serious Injury"
+        description="TYPE:Loss|Serious injury requiring hospitalisation. Corresponds to ISO 26262 S2 severity."
+        category="injury"/>
+    <losses
+        xmi:id="STPA_L_003"
+        id="STPA_L_003"
+        name="L-03: Vehicle Damage"
+        description="TYPE:Loss|Significant vehicle damage reducing roadworthiness. Property loss."
+        category="property"/>
+    <losses
+        xmi:id="STPA_L_004"
+        id="STPA_L_004"
+        name="L-04: Mission Loss - AEB Unavailability"
+        description="TYPE:Loss|AEB system unavailable due to fault. Loss of safety function. Mission loss."
+        category="mission"/>
+    <hazards
+        xmi:id="STPA_H_001"
+        id="STPA_H_001"
+        name="H-01: AEB Does Not Brake When Required"
+        description="TYPE:Hazard|LOSSES:L-01,L-02|Vehicle does not decelerate when collision is imminent and AEB should activate. System-level hazard worst case."/>
+    <hazards
+        xmi:id="STPA_H_002"
+        id="STPA_H_002"
+        name="H-02: AEB Brakes When Not Required"
+        description="TYPE:Hazard|LOSSES:L-01,L-02,L-03|Vehicle decelerates sharply without collision threat at highway speed. Risk to following traffic."/>
+    <hazards
+        xmi:id="STPA_H_003"
+        id="STPA_H_003"
+        name="H-03: AEB Provides Insufficient Braking"
+        description="TYPE:Hazard|LOSSES:L-01,L-02|Vehicle decelerates but insufficient to avoid or mitigate collision."/>
+    <hazards
+        xmi:id="STPA_H_004"
+        id="STPA_H_004"
+        name="H-04: AEB Continues Braking After Threat Gone"
+        description="TYPE:Hazard|LOSSES:L-01,L-02,L-03|Brakes applied continuously after obstacle has cleared. Vehicle instability risk."/>
+    <unsafeControlActions
+        xmi:id="UCA_001"
+        id="UCA_001"
+        name="UCA-01: CA-01 NOT PROVIDED when vehicle closing on obstacle above TTC threshold"
+        description="TYPE:UCA|HAZARD:H-01|CA:CA-01 Apply Emergency Brake|UNSAFE_TYPE:Not Provided|CONTEXT:TTC below 1.5s urban or 2.0s highway, obstacle confirmed|HAZARD_LINK:H-01 AEB does not brake when required|CONSTRAINT:SC-01 AEB shall apply braking when confirmed obstacle TTC below threshold|CAUSAL_FACTORS:Sensor failure, ECU failure, actuator failure"
+        controlAction="CA_001"
+        unsafeType="Not Provided"/>
+    <unsafeControlActions
+        xmi:id="UCA_002"
+        id="UCA_002"
+        name="UCA-02: CA-01 PROVIDED when no obstacle present above 80 km/h"
+        description="TYPE:UCA|HAZARD:H-02|CA:CA-01 Apply Emergency Brake|UNSAFE_TYPE:Provided Causes Hazard|CONTEXT:Vehicle speed above 80km/h, no confirmed obstacle within 150m|HAZARD_LINK:H-02 AEB brakes without threat|CONSTRAINT:SC-02 AEB shall not apply braking without dual-sensor confirmed obstacle above 80km/h|CAUSAL_FACTORS:False radar target, sensor fusion failure, ghost target"
+        unsafeType="Provided Causes Hazard"/>
+    <unsafeControlActions
+        xmi:id="UCA_003"
+        id="UCA_003"
+        name="UCA-03: CA-01 PROVIDED TOO LATE after FTTI of 150ms highway"
+        description="TYPE:UCA|HAZARD:H-01|CA:CA-01 Apply Emergency Brake|UNSAFE_TYPE:Too Late|CONTEXT:Braking command issued more than 150ms after FTTI deadline at highway speed|HAZARD_LINK:H-01 insufficient TTC remaining for deceleration|CONSTRAINT:SC-03 AEB shall issue brake command within 150ms of FTTI trigger at highway|CAUSAL_FACTORS:CAN latency, ECU processing overload, sensor data staleness"
+        unsafeType="Too Late"/>
+    <unsafeControlActions
+        xmi:id="UCA_004"
+        id="UCA_004"
+        name="UCA-04: CA-02 NOT PROVIDED after obstacle cleared - brakes remain applied"
+        description="TYPE:UCA|HAZARD:H-04|CA:CA-02 Release Brake Command|UNSAFE_TYPE:Not Provided|CONTEXT:Obstacle no longer detected, vehicle still decelerating|HAZARD_LINK:H-04 continuous braking after threat gone|CONSTRAINT:SC-04 AEB shall release braking within 200ms of obstacle clearance|CAUSAL_FACTORS:Solenoid valve stuck open, software state machine fault"
+        unsafeType="Not Provided"/>
+    <unsafeControlActions
+        xmi:id="UCA_005"
+        id="UCA_005"
+        name="UCA-05: CA-01 PROVIDED with insufficient magnitude - less than 0.5g urban"
+        description="TYPE:UCA|HAZARD:H-03|CA:CA-01 Apply Emergency Brake|UNSAFE_TYPE:Wrong Magnitude|CONTEXT:Emergency braking commanded but deceleration below 0.5g urban or 0.7g highway|HAZARD_LINK:H-03 insufficient braking to avoid collision|CONSTRAINT:SC-05 AEB shall achieve minimum 0.5g urban and 0.7g highway deceleration|CAUSAL_FACTORS:Hydraulic pressure loss, partial valve opening, pump degradation"
+        unsafeType="Wrong Magnitude"/>
+    <unsafeControlActions
+        xmi:id="UCA_006"
+        id="UCA_006"
+        name="UCA-06: CA-03 NOT PROVIDED before CA-01 - no driver warning"
+        description="TYPE:UCA|HAZARD:H-02|CA:CA-03 Issue Driver Warning|UNSAFE_TYPE:Not Provided|CONTEXT:Emergency braking applied without prior driver warning at TTC 2.5s|HAZARD_LINK:H-02 driver startled causing secondary hazard|CONSTRAINT:SC-06 AEB shall issue warning at TTC 2.5s urban and 3.0s highway before braking|CAUSAL_FACTORS:HMI failure, warning logic bypass, timing error"
+        unsafeType="Not Provided"/>
+    <unsafeControlActions
+        xmi:id="UCA_007"
+        id="UCA_007"
+        name="UCA-07: CA-01 PROVIDED during ABS active braking by driver"
+        description="TYPE:UCA|HAZARD:H-02|CA:CA-01 Apply Emergency Brake|UNSAFE_TYPE:Wrong Timing - Conflict|CONTEXT:Driver already applying maximum braking, AEB also commands braking causing arbitration conflict|HAZARD_LINK:H-02 brake system conflict, wheel lock|CONSTRAINT:SC-07 AEB shall not override driver maximum braking input|CAUSAL_FACTORS:Missing driver input monitoring, arbitration logic failure"
+        unsafeType="Wrong Timing"/>
+    <controlFlaws
+        xmi:id="CF_001"
+        id="CF_001"
+        name="CF-01: Incorrect Obstacle Present in Process Model"
+        description="TYPE:ControlFlaw|UCA:UCA-01,UCA-02|AEB ECU process model believes no obstacle exists when one is present, or vice versa|CAUSE:Sensor data corrupted, radar-camera fusion disagreement, stale sensor data beyond validity window|MITIGATION:Sensor data validity timeout 100ms, cross-validation confidence threshold"/>
+    <controlFlaws
+        xmi:id="CF_002"
+        id="CF_002"
+        name="CF-02: Incorrect Vehicle Speed in Process Model"
+        description="TYPE:ControlFlaw|UCA:UCA-03,UCA-05|ECU uses wrong vehicle speed for TTC and deceleration threshold calculation|CAUSE:Wheel speed sensor failure, CAN message corruption, odometry drift|MITIGATION:Redundant speed sources, E2E protection on vehicle speed CAN message"/>
+    <controlFlaws
+        xmi:id="CF_003"
+        id="CF_003"
+        name="CF-03: Incorrect Brake Pressure State in Process Model"
+        description="TYPE:ControlFlaw|UCA:UCA-04,UCA-05|ECU believes brakes are released when they are still applied, or wrong pressure level|CAUSE:Pressure sensor failure, feedback CAN message loss, valve position not confirmed|MITIGATION:Redundant pressure sensors, feedback timeout detection"/>
+    <controlFlaws
+        xmi:id="CF_004"
+        id="CF_004"
+        name="CF-04: Incorrect AEB Activation State in Process Model"
+        description="TYPE:ControlFlaw|UCA:UCA-07|ECU does not know driver is currently braking at maximum|CAUSE:Driver brake input sensor failure, missing brake pedal position monitoring|MITIGATION:Monitor brake pedal position and deceleration, suppress AEB during driver max braking"/>
+  </analyses>
+</raaml:SafetyAnalysis>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.gsn="http://edu.kit.sdq/dsis/metamodels/raaml/gsn"
+    xmi:id="SA_AEB_GSN_001"
+    id="SA_AEB_GSN_001"
+    name="AEB GSN Safety Case"
+    description="Goal Structuring Notation safety case for AEB system per GSN Community Standard v3 2021. Argues AEB is acceptably safe for road use per ISO 26262:2018 ASIL-D.">
+
+  <analyses xsi:type="raaml.gsn:GSN"
+      xmi:id="GSN_AEB_001"
+      id="GSN_AEB_001"
+      name="AEB Safety Case - GSN"
+      description="Top-level safety argument: AEB system is acceptably safe for deployment on public roads under defined operational design domain.">
+
+    <contextualInformation xsi:type="raaml.gsn:Context"
+        xmi:id="GSN_C_001" id="GSN_C_001"
+        name="C-01: AEB System Definition"
+        description="TYPE:Context|LEVEL:Top|AEB system as defined in item definition: forward-looking radar plus camera plus ECU plus hydraulic actuator. Operational design domain: public roads, 0-130 km/h, all weather with degraded mode in adverse conditions."
+        contextId="C-01"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Context"
+        xmi:id="GSN_C_002" id="GSN_C_002"
+        name="C-02: Applicable Standards and Regulations"
+        description="TYPE:Context|LEVEL:Top|ISO 26262:2018 all parts, UN ECE Regulation No. 152 AEBS, Euro NCAP AEB C2C Protocol v4.3.1, Euro NCAP VRU Protocol v4.5.1, SAE J2980:2018."
+        contextId="C-02"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Context"
+        xmi:id="GSN_C_003" id="GSN_C_003"
+        name="C-03: HARA Results Summary"
+        description="TYPE:Context|LEVEL:Goal2|HARA identifies 9 hazardous events. Max ASIL = ASIL-D for loss of braking and pedestrian detection. Safety goals SG-01 to SG-05 derived. Reference: aeb_hara.xmi."
+        contextId="C-03"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Context"
+        xmi:id="GSN_C_004" id="GSN_C_004"
+        name="C-04: FMEA Results Summary"
+        description="TYPE:Context|LEVEL:Goal3|9 failure modes analysed. Highest RPN=320 (camera night pedestrian). All RPN above 100 have corrective actions defined. Reference: aeb_fmea.xmi."
+        contextId="C-04"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Context"
+        xmi:id="GSN_C_005" id="GSN_C_005"
+        name="C-05: FTA Results Summary"
+        description="TYPE:Context|LEVEL:Goal3|PMHF = 3.2e-9/h for SG-01 ASIL-D. Target 1e-8/h achieved. Dual-channel sensor architecture confirmed. Reference: aeb_fta.xmi."
+        contextId="C-05"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Justification"
+        xmi:id="GSN_J_001" id="GSN_J_001"
+        name="J-01: Residual Risk Acceptable"
+        description="TYPE:Justification|Residual risk after all safety measures is ALARP. PMHF 3.2e-9/h is 3x below ISO 26262 Part 5 Table 6 target of 1e-8/h. Euro NCAP 5-star AEB performance validated."
+        contextId="J-01"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Assumption"
+        xmi:id="GSN_A_001" id="GSN_A_001"
+        name="A-01: Correct Vehicle Integration"
+        description="TYPE:Assumption|AEB system is correctly integrated into vehicle per DIA. Brake system, CAN network, and power supply meet specifications in TSC. No systematic errors from integration."
+        contextId="A-01"/>
+
+    <contextualInformation xsi:type="raaml.gsn:Assumption"
+        xmi:id="GSN_A_002" id="GSN_A_002"
+        name="A-02: Operational Design Domain Respected"
+        description="TYPE:Assumption|Vehicle operates within defined ODD: public roads 0-130km/h. AEB automatically deactivates outside ODD. Driver has been informed per user manual."
+        contextId="A-02"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_001" id="GSN_G_001"
+        name="G-01: AEB Is Acceptably Safe"
+        description="TYPE:Goal|LEVEL:1|STATUS:Supported|The AEB system is acceptably safe for deployment on public roads within the defined operational design domain, meeting all applicable safety standards and regulations."
+        nodeId="G-01"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_002" id="GSN_G_002"
+        name="G-02: All Hazards Are Identified and Assessed"
+        description="TYPE:Goal|LEVEL:2|STATUS:Supported|All hazards arising from AEB malfunction have been identified through systematic HARA and HAZOP analysis, and assigned appropriate ASIL levels."
+        nodeId="G-02"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_003" id="GSN_G_003"
+        name="G-03: ASIL-D Safety Goals Are Satisfied"
+        description="TYPE:Goal|LEVEL:2|STATUS:Supported|All ASIL-D safety goals (SG-01 prevent rear-end, SG-03 pedestrian, SG-04 FTTI) are satisfied by the implemented safety measures."
+        nodeId="G-03"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_004" id="GSN_G_004"
+        name="G-04: ASIL-C Safety Goals Are Satisfied"
+        description="TYPE:Goal|LEVEL:2|STATUS:Supported|ASIL-C safety goals (SG-02 no false activation highway, SG-05 adverse weather) are satisfied."
+        nodeId="G-04"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_005" id="GSN_G_005"
+        name="G-05: Hardware PMHF Target Met"
+        description="TYPE:Goal|LEVEL:3|STATUS:Supported|Hardware architecture achieves PMHF of 3.2e-9/h which is below ISO 26262 Part 5 Table 6 target of 1e-8/h for ASIL-D."
+        nodeId="G-05"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_006" id="GSN_G_006"
+        name="G-06: Software Safety Requirements Met"
+        description="TYPE:Goal|LEVEL:3|STATUS:Supported|Software implements dual-channel sensor fusion, watchdog, E2E CRC, ECC memory. ASIL-D software methods applied per ISO 26262 Part 6 Table 4."
+        nodeId="G-06"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_007" id="GSN_G_007"
+        name="G-07: All Critical FMEA Items Have Corrective Actions"
+        description="TYPE:Goal|LEVEL:3|STATUS:Supported|All FMEA items with RPN above 100 have defined and implemented corrective actions. RPN=320 camera night issue resolved by IR illumination per Euro NCAP VRU v4.5.1."
+        nodeId="G-07"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_008" id="GSN_G_008"
+        name="G-08: All UCAs Have Safety Constraints"
+        description="TYPE:Goal|LEVEL:3|STATUS:Supported|All 7 unsafe control actions identified in STPA have corresponding safety constraints SC-01 to SC-07 implemented in design."
+        nodeId="G-08"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Goal"
+        xmi:id="GSN_G_009" id="GSN_G_009"
+        name="G-09: Validation Against Euro NCAP Passed"
+        description="TYPE:Goal|LEVEL:3|STATUS:Supported|AEB system validated against Euro NCAP AEB C2C Protocol v4.3.1 CCRs/CCRm/CCRb and VRU Protocol v4.5.1 CPNA day and night scenarios."
+        nodeId="G-09"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Strategy"
+        xmi:id="GSN_S_001" id="GSN_S_001"
+        name="S-01: Argument by ISO 26262 V-Model Compliance"
+        description="TYPE:Strategy|LEVEL:1|Argue over the complete ISO 26262:2018 V-model: HARA identifies hazards, safety goals are derived, FSC and TSC implement goals, hardware and software requirements are satisfied, verification and validation confirm compliance."
+        nodeId="S-01"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Strategy"
+        xmi:id="GSN_S_002" id="GSN_S_002"
+        name="S-02: Argument by Completeness of Hazard Identification"
+        description="TYPE:Strategy|LEVEL:2|HARA covers all operational situations (OS-01 to OS-06) and all malfunctioning behaviours (MB-01 to MB-05). HAZOP adds guide-word analysis on all subsystem nodes. STPA adds control loop analysis."
+        nodeId="S-02"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Strategy"
+        xmi:id="GSN_S_003" id="GSN_S_003"
+        name="S-03: Argument over Each ASIL-D Safety Goal"
+        description="TYPE:Strategy|LEVEL:2|For each ASIL-D safety goal, argue: (1) hardware PMHF meets target, (2) software ASIL-D methods applied, (3) integration test passed, (4) validation test passed."
+        nodeId="S-03"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_001" id="GSN_SN_001"
+        name="Sn-01: HARA Report"
+        description="TYPE:Solution|EVIDENCE:HARA report aeb_hara.xmi. 9 hazardous events, ASIL assignments verified against ISO 26262:2018 Part 3 Table 4 and SAE J2980:2018. Independent review completed."
+        nodeId="Sn-01"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_002" id="GSN_SN_002"
+        name="Sn-02: HAZOP Report"
+        description="TYPE:Solution|EVIDENCE:HAZOP analysis aeb_hazop.xmi. 15 deviations identified across all AEB subsystem nodes. All critical deviations have corrective actions."
+        nodeId="Sn-02"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_003" id="GSN_SN_003"
+        name="Sn-03: FTA Report"
+        description="TYPE:Solution|EVIDENCE:FTA aeb_fta.xmi. PMHF = 3.2e-9/h below 1e-8/h target. Dual-channel AND gate confirms independence. Ref: MDPI AEB Hardware 2021 Table 3."
+        nodeId="Sn-03"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_004" id="GSN_SN_004"
+        name="Sn-04: FMEA Report"
+        description="TYPE:Solution|EVIDENCE:FMEA aeb_fmea.xmi. Max RPN=320. All items above RPN=100 have corrective actions implemented. AIAG FMEA-4 methodology."
+        nodeId="Sn-04"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_005" id="GSN_SN_005"
+        name="Sn-05: STPA Report"
+        description="TYPE:Solution|EVIDENCE:STPA aeb_stpa.xmi. 7 UCAs identified. 4 control flaws analysed. Safety constraints SC-01 to SC-07 implemented in design specification."
+        nodeId="Sn-05"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_006" id="GSN_SN_006"
+        name="Sn-06: Requirements Traceability Report"
+        description="TYPE:Solution|EVIDENCE:Requirements model aeb_requirements.xmi. Full SG to FSR to TSR to SSR/HSR traceability. 12 derivation relationships. ASIL-D decomposition confirmed."
+        nodeId="Sn-06"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_007" id="GSN_SN_007"
+        name="Sn-07: Euro NCAP Test Results"
+        description="TYPE:Solution|EVIDENCE:Euro NCAP AEB C2C v4.3.1 CCRs/CCRm/CCRb test results. Euro NCAP VRU v4.5.1 CPNA day and night test results. 5-star performance confirmed."
+        nodeId="Sn-07"/>
+
+    <gsnNodes xsi:type="raaml.gsn:Solution"
+        xmi:id="GSN_SN_008" id="GSN_SN_008"
+        name="Sn-08: ISO 26262 Confirmation Measures"
+        description="TYPE:Solution|EVIDENCE:Independent safety assessment report. Functional safety audit per ISO 26262:2018 Part 2. DIA with vehicle OEM. Safety manual issued."
+        nodeId="Sn-08"/>
+
+    <supportedBy xmi:id="GSN_SUP_001" id="GSN_SUP_001"
+        name="G-01 SupportedBy S-01"/>
+    <supportedBy xmi:id="GSN_SUP_002" id="GSN_SUP_002"
+        name="S-01 SupportedBy G-02"/>
+    <supportedBy xmi:id="GSN_SUP_003" id="GSN_SUP_003"
+        name="S-01 SupportedBy G-03"/>
+    <supportedBy xmi:id="GSN_SUP_004" id="GSN_SUP_004"
+        name="S-01 SupportedBy G-04"/>
+    <supportedBy xmi:id="GSN_SUP_005" id="GSN_SUP_005"
+        name="G-02 SupportedBy S-02"/>
+    <supportedBy xmi:id="GSN_SUP_006" id="GSN_SUP_006"
+        name="S-02 SupportedBy Sn-01"/>
+    <supportedBy xmi:id="GSN_SUP_007" id="GSN_SUP_007"
+        name="S-02 SupportedBy Sn-02"/>
+    <supportedBy xmi:id="GSN_SUP_008" id="GSN_SUP_008"
+        name="S-02 SupportedBy Sn-05"/>
+    <supportedBy xmi:id="GSN_SUP_009" id="GSN_SUP_009"
+        name="G-03 SupportedBy S-03"/>
+    <supportedBy xmi:id="GSN_SUP_010" id="GSN_SUP_010"
+        name="S-03 SupportedBy G-05"/>
+    <supportedBy xmi:id="GSN_SUP_011" id="GSN_SUP_011"
+        name="S-03 SupportedBy G-06"/>
+    <supportedBy xmi:id="GSN_SUP_012" id="GSN_SUP_012"
+        name="S-03 SupportedBy G-07"/>
+    <supportedBy xmi:id="GSN_SUP_013" id="GSN_SUP_013"
+        name="S-03 SupportedBy G-08"/>
+    <supportedBy xmi:id="GSN_SUP_014" id="GSN_SUP_014"
+        name="S-03 SupportedBy G-09"/>
+    <supportedBy xmi:id="GSN_SUP_015" id="GSN_SUP_015"
+        name="G-05 SupportedBy Sn-03"/>
+    <supportedBy xmi:id="GSN_SUP_016" id="GSN_SUP_016"
+        name="G-06 SupportedBy Sn-06"/>
+    <supportedBy xmi:id="GSN_SUP_017" id="GSN_SUP_017"
+        name="G-07 SupportedBy Sn-04"/>
+    <supportedBy xmi:id="GSN_SUP_018" id="GSN_SUP_018"
+        name="G-08 SupportedBy Sn-05"/>
+    <supportedBy xmi:id="GSN_SUP_019" id="GSN_SUP_019"
+        name="G-09 SupportedBy Sn-07"/>
+    <supportedBy xmi:id="GSN_SUP_020" id="GSN_SUP_020"
+        name="G-01 SupportedBy Sn-08"/>
+
+    <inContextOf xmi:id="GSN_ICO_001" id="GSN_ICO_001"
+        name="G-01 InContextOf C-01"/>
+    <inContextOf xmi:id="GSN_ICO_002" id="GSN_ICO_002"
+        name="G-01 InContextOf C-02"/>
+    <inContextOf xmi:id="GSN_ICO_003" id="GSN_ICO_003"
+        name="G-02 InContextOf C-03"/>
+    <inContextOf xmi:id="GSN_ICO_004" id="GSN_ICO_004"
+        name="G-03 InContextOf C-04"/>
+    <inContextOf xmi:id="GSN_ICO_005" id="GSN_ICO_005"
+        name="G-03 InContextOf C-05"/>
+    <inContextOf xmi:id="GSN_ICO_006" id="GSN_ICO_006"
+        name="G-01 InContextOf J-01"/>
+    <inContextOf xmi:id="GSN_ICO_007" id="GSN_ICO_007"
+        name="G-01 InContextOf A-01"/>
+    <inContextOf xmi:id="GSN_ICO_008" id="GSN_ICO_008"
+        name="G-01 InContextOf A-02"/>
+
+  </analyses>
+</raaml:SafetyAnalysis>

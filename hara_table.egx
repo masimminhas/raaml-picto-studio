@@ -1,0 +1,11 @@
+rule HARAOverview
+    transform obj : M!ISO26262 {
+
+    template : "hara_table.egl"
+
+    parameters : Map {
+        "haraModel" = obj,
+        "title"     = "AEB HARA - " + obj.name,
+        "icon"      = "table"
+    }
+}

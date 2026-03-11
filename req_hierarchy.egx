@@ -1,0 +1,11 @@
+rule RequirementsOverview
+    transform obj : M!RequirementsModel {
+
+    template : "req_hierarchy.egl"
+
+    parameters : Map {
+        "reqModel" = obj,
+        "title"    = "AEB Requirements - " + obj.name,
+        "icon"     = "tree"
+    }
+}

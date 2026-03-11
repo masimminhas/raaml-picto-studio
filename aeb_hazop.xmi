@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.hara="http://edu.kit.sdq/dsis/metamodels/raaml/hara"
+    xmi:id="SA_AEB_HAZOP_001"
+    id="SA_AEB_HAZOP_001"
+    name="AEB HAZOP Safety Analysis"
+    description="Hazard and Operability Study for AEB System per IEC 61882:2016. Guide word based deviation analysis on AEB subsystem functions.">
+
+  <analyses xsi:type="raaml.hara:ISO26262"
+      xmi:id="HAZOP_AEB_001"
+      id="HAZOP_AEB_001"
+      name="AEB System HAZOP"
+      description="HAZOP analysis covering radar sensing, ECU processing, brake actuation, CAN communication, and pedestrian detection functions.">
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_001" id="HZ_001"
+        name="HZ-01: NO SIGNAL - Radar Sensor Output"
+        description="NODE:Radar Sensor|PARAMETER:Obstacle detection signal|GUIDEWORD:NO|DEVIATION:No radar signal output to ECU|CAUSE:Transceiver hardware failure, power loss, antenna disconnection|CONSEQUENCE:AEB cannot detect obstacle, no emergency braking, rear-end collision risk|SAFEGUARD:Camera redundancy, CAN E2E timeout detection, AEB warning lamp|RISK:CRITICAL|ASIL:D|ACTION:Implement HFT=1 dual-channel sensing per ISO 26262 Part 5"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_002" id="HZ_002"
+        name="HZ-02: MORE THAN - Radar Detection Range"
+        description="NODE:Radar Sensor|PARAMETER:Detection range|GUIDEWORD:MORE THAN|DEVIATION:Radar reports obstacles beyond actual range|CAUSE:Gain miscalibration, multipath amplification|CONSEQUENCE:Premature AEB activation at safe following distance|SAFEGUARD:Sensor fusion cross-validation, plausibility check|RISK:HIGH|ASIL:C|ACTION:Camera cross-validation mandatory above 80km/h"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_003" id="HZ_003"
+        name="HZ-03: LESS THAN - Radar Detection Range"
+        description="NODE:Radar Sensor|PARAMETER:Detection range|GUIDEWORD:LESS THAN|DEVIATION:Radar effective range reduced below 60m|CAUSE:Radome contamination, antenna degradation, ice/dirt accumulation|CONSEQUENCE:Insufficient TTC for highway braking, late or no AEB response|SAFEGUARD:Radome self-diagnostic, degraded mode warning, range monitoring|RISK:CRITICAL|ASIL:D|ACTION:Implement online range self-test, driver warning on degradation"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_004" id="HZ_004"
+        name="HZ-04: OTHER THAN - Radar Target Classification"
+        description="NODE:Radar Sensor|PARAMETER:Target type classification|GUIDEWORD:OTHER THAN|DEVIATION:Ghost target from multipath reflection classified as real vehicle|CAUSE:Highway infrastructure reflections, wet road, metal guardrails|CONSEQUENCE:False AEB activation causing rear-end risk from following vehicle|SAFEGUARD:Doppler velocity cross-check, camera confirmation, track history filter|RISK:HIGH|ASIL:C|ACTION:Minimum 2-scan track confirmation before AEB authorisation"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_005" id="HZ_005"
+        name="HZ-05: LATE - Radar Signal Processing"
+        description="NODE:Radar Sensor|PARAMETER:Signal processing latency|GUIDEWORD:LATE|DEVIATION:Radar object data arrives at ECU after FTTI deadline|CAUSE:DSP overload, CAN bus congestion, processing pipeline stall|CONSEQUENCE:TTC calculation based on stale data, AEB activation too late|SAFEGUARD:CAN E2E sequence counter, watchdog, FTTI monitoring|RISK:CRITICAL|ASIL:D|ACTION:Guarantee maximum sensor-to-ECU latency of 20ms per FTTI budget"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_006" id="HZ_006"
+        name="HZ-06: NO FUNCTION - AEB ECU Processing"
+        description="NODE:AEB ECU|PARAMETER:Collision threat computation|GUIDEWORD:NO|DEVIATION:ECU produces no braking decision output|CAUSE:MCU hardware fault, power supply failure, software deadlock|CONSEQUENCE:Complete AEB function loss, no warning, no braking|SAFEGUARD:Hardware watchdog 50ms, dual MCU lockstep, safe state transition|RISK:CRITICAL|ASIL:D|ACTION:Lockstep MCU architecture, watchdog reset to safe state within FTTI"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_007" id="HZ_007"
+        name="HZ-07: OTHER THAN - ECU TTC Calculation"
+        description="NODE:AEB ECU|PARAMETER:Time-to-collision value|GUIDEWORD:OTHER THAN|DEVIATION:ECU computes incorrect TTC due to memory corruption|CAUSE:SRAM bit-flip from SEU, stack overflow, corrupted calibration data|CONSEQUENCE:Wrong activation threshold, missed or false AEB activation|SAFEGUARD:ECC memory, CRC on parameters, BIST at startup|RISK:HIGH|ASIL:D|ACTION:ECC SRAM mandatory, periodic parameter CRC check at 100ms interval"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_008" id="HZ_008"
+        name="HZ-08: NO PRESSURE - Brake Actuator"
+        description="NODE:Hydraulic Brake Actuator|PARAMETER:Brake pressure output|GUIDEWORD:NO|DEVIATION:Zero brake pressure despite AEB command|CAUSE:Solenoid valve stuck closed, hydraulic pump failure, seal leak|CONSEQUENCE:AEB activates but vehicle does not decelerate, silent failure|SAFEGUARD:Brake pressure sensor feedback, actuator BIST, pressure plausibility check|RISK:CRITICAL|ASIL:D|ACTION:Redundant pressure sensors, BIST every ignition cycle"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_009" id="HZ_009"
+        name="HZ-09: MORE THAN - Brake Pressure Duration"
+        description="NODE:Hydraulic Brake Actuator|PARAMETER:Brake pressure duration|GUIDEWORD:MORE THAN|DEVIATION:Brakes remain applied after AEB deactivation command|CAUSE:Solenoid valve stuck open, control signal latch-up|CONSEQUENCE:Continuous braking at highway speed causing wheel lock and vehicle instability|SAFEGUARD:Valve position feedback, pressure relief valve, ABS override|RISK:CRITICAL|ASIL:D|ACTION:Fail-safe valve design with spring-return, ABS arbitration"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_010" id="HZ_010"
+        name="HZ-10: NO SIGNAL - CAN Bus Radar to ECU"
+        description="NODE:CAN Communication Bus|PARAMETER:Radar data message|GUIDEWORD:NO|DEVIATION:No CAN messages received from radar by ECU|CAUSE:CAN transceiver failure, bus-off state, wiring open circuit|CONSEQUENCE:ECU has no sensor input, AEB enters safe state if E2E detects loss|SAFEGUARD:CAN E2E profile, bus-off recovery, message timeout detection at 50ms|RISK:MEDIUM|ASIL:B|ACTION:E2E CRC plus sequence counter per ISO 26262 Part 6 Annex D"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_011" id="HZ_011"
+        name="HZ-11: OTHER THAN - CAN Message Content"
+        description="NODE:CAN Communication Bus|PARAMETER:Radar message data integrity|GUIDEWORD:OTHER THAN|DEVIATION:Corrupted or spoofed radar data on CAN bus|CAUSE:EMI induced bit errors, bus fault, missing E2E protection|CONSEQUENCE:ECU acts on false obstacle data, wrong AEB decision|SAFEGUARD:E2E CRC 8-bit, sequence counter, message authentication|RISK:HIGH|ASIL:C|ACTION:ISO 26262 Part 6 E2E library profile 2 for radar CAN messages"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_012" id="HZ_012"
+        name="HZ-12: NO DETECTION - Camera Pedestrian Night"
+        description="NODE:Camera Sensor|PARAMETER:Pedestrian detection in low light|GUIDEWORD:NO|DEVIATION:Camera fails to detect pedestrian below 1 lux illumination|CAUSE:Insufficient sensor sensitivity, no IR illumination, lens contamination|CONSEQUENCE:No AEB response to pedestrian, fatality risk|SAFEGUARD:Radar fallback for VRU detection, IR illuminator, lens heater|RISK:CRITICAL|ASIL:D|ACTION:IR illumination mandatory for nighttime CPNA compliance per Euro NCAP VRU v4.5.1"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_013" id="HZ_013"
+        name="HZ-13: REVERSE - Brake Command Polarity"
+        description="NODE:AEB ECU to Brake Actuator Interface|PARAMETER:Brake command signal polarity|GUIDEWORD:REVERSE|DEVIATION:Brake release command sent instead of brake apply command|CAUSE:Signal inversion in software, incorrect pin mapping, hardware fault|CONSEQUENCE:AEB attempts braking but releases any existing brake pressure|SAFEGUARD:Command range plausibility check, signed command with checksum|RISK:CRITICAL|ASIL:D|ACTION:Hardware and software independent polarity verification at integration test"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_014" id="HZ_014"
+        name="HZ-14: EARLY - AEB Activation"
+        description="NODE:AEB ECU Decision Logic|PARAMETER:AEB activation timing|GUIDEWORD:EARLY|DEVIATION:AEB activates at TTC above threshold with no real threat|CAUSE:TTC threshold miscalibration, false sensor fusion confirmation|CONSEQUENCE:Unnecessary braking, driver discomfort, following vehicle risk|SAFEGUARD:Dual sensor confirmation, TTC hysteresis, driver override|RISK:HIGH|ASIL:C|ACTION:TTC threshold validation per Euro NCAP CCRb scenario test protocol"/>
+
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="HZ_015" id="HZ_015"
+        name="HZ-15: PART OF - Braking Deceleration"
+        description="NODE:Hydraulic Brake Actuator|PARAMETER:Achieved deceleration|GUIDEWORD:PART OF|DEVIATION:AEB achieves only partial deceleration below 0.3g instead of required 0.5g urban or 0.7g highway|CAUSE:Hydraulic pressure loss, partial valve opening, degraded pump performance|CONSEQUENCE:Collision not avoided, injury severity increased though not maximum|SAFEGUARD:Deceleration monitoring, pressure sensor feedback, degraded mode warning|RISK:HIGH|ASIL:C|ACTION:Minimum deceleration monitoring with driver alert on under-performance"/>
+
+    <verifiedItems xsi:type="raaml.hara:Verified"
+        xmi:id="HZ_VER_001" id="HZ_VER_001"
+        name="HAZOP Verification"
+        result="Verified against IEC 61882:2016. All 15 HAZOP deviations reviewed by independent safety engineer. All CRITICAL items have corrective actions assigned."/>
+
+  </analyses>
+</raaml:SafetyAnalysis>

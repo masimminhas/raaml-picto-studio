@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewpoint:DAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" uid="_WmYTwBsNEfG-0JNPhLRQ-Q" version="15.4.1.202403191723">
+  <semanticResources>raaml.ecore</semanticResources>
+  <semanticResources>raaml.genmodel</semanticResources>
+  <semanticResources>aeb_fmea.picto</semanticResources>
+  <semanticResources>aeb_requirements_Version2.picto</semanticResources>
+  <semanticResources>aeb_requirements.picto</semanticResources>
+  <semanticResources>aeb_fta.picto</semanticResources>
+  <semanticResources>aeb_hara.picto</semanticResources>
+  <semanticResources>aeb_iso26262.picto</semanticResources>
+  <semanticResources>aeb_iso26262.xmi</semanticResources>
+  <semanticResources>aeb_stpa.xmi</semanticResources>
+  <semanticResources>aeb_stpa.picto</semanticResources>
+  <semanticResources>aeb_gsn.xmi</semanticResources>
+  <semanticResources>aeb_gsn.picto</semanticResources>
+  <semanticResources>aeb_hazop.picto</semanticResources>
+</viewpoint:DAnalysis>
