@@ -1,0 +1,90 @@
+[%
+var rootPkg = ecore!EPackage.all()
+    .select(p | p.eSuperPackage.isUndefined())
+    .first();
+%]
+digraph overview {
+    graph [
+        rankdir=TB
+        fontname="Arial"
+        fontsize=12
+        bgcolor="white"
+        label="RAAML Metamodel Package Architecture"
+        labelloc=t
+        pad=0.5
+    ]
+    node [
+        fontname="Arial"
+        fontsize=10
+        shape=record
+        style="filled,rounded"
+        color="#2C7BB6"
+    ]
+    edge [
+        fontname="Arial"
+        fontsize=9
+        color="#555555"
+        style=dashed
+        arrowhead=open
+    ]
+
+[%
+if (rootPkg.isDefined()) {
+    for (subPkg in rootPkg.eSubpackages) {
+        var classes = subPkg.eClassifiers
+            .select(c | c.isKindOf(ecore!EClass));
+        var abstractCount = classes
+            .select(c | c.abstract).size();
+        var concreteCount = classes.size()
+            - abstractCount;
+        var fillColor = getPackageColor(subPkg.name);
+%]
+    [%=subPkg.name%] [
+        label="{ \<\<package\>\> | [%=subPkg.name%] | [%=classes.size()%] classes\n[%=concreteCount%] concrete / [%=abstractCount%] abstract }"
+        fillcolor="[%=fillColor%]"
+    ]
+[%  }
+} %]
+
+[%
+// Cross-package dependency edges
+if (rootPkg.isDefined()) {
+    var drawnEdges = Set {};
+    for (subPkg in rootPkg.eSubpackages) {
+        for (cls in subPkg.eClassifiers
+                .select(c | c.isKindOf(ecore!EClass))) {
+            for (ref in cls.eReferences) {
+                if (ref.eType.isDefined()
+                    and ref.eType.ePackage.isDefined()) {
+                    var tPkg = ref.eType.ePackage;
+                    if (tPkg <> subPkg
+                        and tPkg <> rootPkg
+                        and tPkg.name.isDefined()) {
+                        var key = subPkg.name
+                            + "->" + tPkg.name;
+                        if (not drawnEdges.includes(key)) {
+                            drawnEdges.add(key);
+%]
+    [%=subPkg.name%] -> [%=tPkg.name%]
+[%                      }
+                    }
+                }
+            }
+        }
+    }
+} %]
+}
+
+[%
+operation getPackageColor(pkgName : String) : String {
+    if (pkgName = "fmea")    { return "#FFE8E8"; }
+    if (pkgName = "fta")     { return "#E8FFE8"; }
+    if (pkgName = "hara")    { return "#E8E8FF"; }
+    if (pkgName = "stpa")    { return "#FFF8E8"; }
+    if (pkgName = "gsn")     { return "#F8E8FF"; }
+    if (pkgName = "core")    { return "#E8F8FF"; }
+    if (pkgName = "req")     { return "#FFFFE8"; }
+    if (pkgName = "library") { return "#F0F0F0"; }
+    return "#F5F5F5";
+}
+%]
