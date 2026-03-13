@@ -10,12 +10,6 @@
             contributorClass="org.eclipse.ui.part.EditorActionBarContributor">
       </editor>
    </extension>
-   <extension point="org.eclipse.emf.ecore.dynamic_package">
-      <resource
-         uri="platform:/resource/raaml-picto-studio/model/raaml.ecore"
-         location="model/raaml.ecore">
-      </resource>
-   </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated raaml -->
       <package
