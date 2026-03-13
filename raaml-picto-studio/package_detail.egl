@@ -1,0 +1,120 @@
+[%
+var classes = pkg.eClassifiers
+    .select(c | c.isKindOf(ecore!EClass));
+%]
+digraph [%=pkg.name%]_pkg {
+    graph [
+        rankdir=BT
+        fontname="Arial"
+        fontsize=11
+        bgcolor="white"
+        label="[%=pkg.name%] Package — RAAML Metamodel"
+        labelloc=t
+        pad=0.4
+    ]
+    node [
+        fontname="Courier New"
+        fontsize=9
+        shape=record
+        style="filled,rounded"
+        color="#336699"
+    ]
+    edge [
+        fontname="Arial"
+        fontsize=8
+    ]
+
+[%
+// ── Class nodes ──────────────────────────────────
+for (cls in classes) {
+    var fillColor = "#DDEEFF";
+    if (cls.abstract)  { fillColor = "#F5F5DC"; }
+    if (cls.interface) { fillColor = "#EEFFEE"; }
+
+    var stereotype = "";
+    if (cls.abstract)  { stereotype = "abstract "; }
+    if (cls.interface) { stereotype = "interface "; }
+
+    var attrStr = "";
+    for (attr in cls.eStructuralFeatures
+            .select(f | f.isKindOf(ecore!EAttribute))) {
+        var reqMark = "";
+        if (attr.lowerBound > 0) { reqMark = " [r]"; }
+        attrStr = attrStr + attr.name
+            + " : " + attr.eType.name
+            + reqMark + "\\l";
+    }
+    if (attrStr = "") { attrStr = " \\l"; }
+%]
+    [%=cls.name%] [
+        fillcolor="[%=fillColor%]"
+        label="{ [%=stereotype%][%=cls.name%] | [%=attrStr%] }"
+    ]
+[% } %]
+
+[%
+// ── Inheritance edges ────────────────────────────
+for (cls in classes) {
+    for (superType in cls.eSuperTypes) {
+        if (classes.includes(superType)) {
+%]
+    [%=cls.name%] -> [%=superType.name%] [
+        arrowhead=empty
+        arrowsize=1.5
+        color="#336699"
+        penwidth=1.5
+        style=solid
+    ]
+[%      }
+    }
+} %]
+
+[%
+// ── Containment edges ────────────────────────────
+for (cls in classes) {
+    for (ref in cls.eStructuralFeatures
+            .select(f |
+                f.isKindOf(ecore!EReference)
+                and f.containment)) {
+        var targetCls = ref.eType;
+        if (targetCls.isKindOf(ecore!EClass)) {
+            var upper = ref.upperBound = -1
+                ? "*"
+                : ref.upperBound.asString();
+            var mult = ref.lowerBound.asString()
+                + ".." + upper;
+%]
+    [%=cls.name%] -> [%=targetCls.name%] [
+        arrowhead=diamond
+        arrowsize=1.2
+        color="#CC3300"
+        label="[%=ref.name%] [%=mult%]"
+        fontsize=8
+        style=solid
+    ]
+[%      }
+    }
+} %]
+
+[%
+// ── Non-containment reference edges ─────────────
+for (cls in classes) {
+    for (ref in cls.eStructuralFeatures
+            .select(f |
+                f.isKindOf(ecore!EReference)
+                and not f.containment)) {
+        var targetCls = ref.eType;
+        if (targetCls.isKindOf(ecore!EClass)
+            and classes.includes(targetCls)) {
+%]
+    [%=cls.name%] -> [%=targetCls.name%] [
+        arrowhead=open
+        style=dashed
+        color="#666666"
+        label="[%=ref.name%]"
+        fontsize=8
+    ]
+[%      }
+    }
+} %]
+}

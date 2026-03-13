@@ -1,0 +1,111 @@
+pre {
+    var emfTool : new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+    emfTool.eCoreUtil.resolveAll(M.resource.resourceSet);
+
+    var rootPkg = EPackage.all
+        .selectOne(p | p.name = "raaml");
+
+    var packages : Sequence;
+    if (rootPkg.isDefined()) {
+        packages = rootPkg.eSubpackages.sortBy(p | p.name);
+    } else {
+        packages = Sequence {};
+    }
+
+    var classes = EClass.all.sortBy(c | c.name);
+}
+
+// ── Rule 1: All classes overview ─────────────────────────────
+rule ClassDiagram {
+
+    parameters : Map {
+        "mainClassName" = "",
+        "classNames"    = EClass.all.name,
+        "format"        = "graphviz-dot",
+        "path"          = List {"RAAML", "All Classes"},
+        "icon"          = "diagram-ff0000",
+        "layers" = Sequence {
+            Map {"id"="features",              "title"="Features",               "active"=true},
+            Map {"id"="supertypes",            "title"="Supertypes",             "active"=true},
+            Map {"id"="inlineReferences",      "title"="Inline references",      "active"=true},
+            Map {"id"="referenceLabels",       "title"="Reference labels",       "active"=true},
+            Map {"id"="inherited",             "title"="Inherited features",     "active"=false},
+            Map {"id"="operations",            "title"="Operations",             "active"=false},
+            Map {"id"="derived",               "title"="Derived features",       "active"=false},
+            Map {"id"="referencesToSelf",      "title"="References to self",     "active"=false},
+            Map {"id"="documentation",         "title"="Documentation",          "active"=false},
+            Map {"id"="constraintDescriptions","title"="Constraint descriptions","active"=false},
+            Map {"id"="constraintNames",       "title"="Constraint names",       "active"=false}
+        }
+    }
+
+    template : "classdiagram.egl"
+}
+
+// ── Rule 2: One diagram per subpackage ───────────────────────
+rule PackageDiagram
+    transform pkg : EPackage
+    in : packages {
+
+    parameters : Map {
+        "mainClassName" = "",
+        "classNames"    = pkg.eClassifiers
+            .select(c | c.isKindOf(EClass)).name,
+        "format"        = "graphviz-dot",
+        "path"          = List {
+            "RAAML",
+            "Packages",
+            pkg.name
+        },
+        "icon"  = "diagram-fffbd7",
+        "layers" = Sequence {
+            Map {"id"="features",              "title"="Features",               "active"=true},
+            Map {"id"="supertypes",            "title"="Supertypes",             "active"=true},
+            Map {"id"="inlineReferences",      "title"="Inline references",      "active"=true},
+            Map {"id"="referenceLabels",       "title"="Reference labels",       "active"=true},
+            Map {"id"="inherited",             "title"="Inherited features",     "active"=false},
+            Map {"id"="operations",            "title"="Operations",             "active"=false},
+            Map {"id"="derived",               "title"="Derived features",       "active"=false},
+            Map {"id"="documentation",         "title"="Documentation",          "active"=false},
+            Map {"id"="constraintDescriptions","title"="Constraint descriptions","active"=false},
+            Map {"id"="constraintNames",       "title"="Constraint names",       "active"=false}
+        }
+    }
+
+    template : "classdiagram.egl"
+}
+
+// ── Rule 3: One diagram per class ────────────────────────────
+rule EClass2ClassDiagram
+    transform c : EClass
+    in : classes {
+
+    parameters {
+        return Map {
+            "mainClassName" = c.name,
+            "classNames"    = Sequence {},
+            "format"        = "graphviz-dot",
+            "path"          = Sequence {
+                "RAAML",
+                "Classes",
+                c.name
+            },
+            "icon"  = "diagram-fffbd7",
+            "layers" = Sequence {
+                Map {"id"="features",              "title"="Features",               "active"=true},
+                Map {"id"="supertypes",            "title"="Supertypes",             "active"=true},
+                Map {"id"="subtypes",              "title"="Subtypes",               "active"=true},
+                Map {"id"="inlineReferences",      "title"="Inline references",      "active"=true},
+                Map {"id"="referenceLabels",       "title"="Reference labels",       "active"=true},
+                Map {"id"="inherited",             "title"="Inherited features",     "active"=false},
+                Map {"id"="operations",            "title"="Operations",             "active"=false},
+                Map {"id"="derived",               "title"="Derived features",       "active"=false},
+                Map {"id"="documentation",         "title"="Documentation",          "active"=false},
+                Map {"id"="constraintDescriptions","title"="Constraint descriptions","active"=false},
+                Map {"id"="constraintNames",       "title"="Constraint names",       "active"=false}
+            }
+        };
+    }
+
+    template : "classdiagram.egl"
+}

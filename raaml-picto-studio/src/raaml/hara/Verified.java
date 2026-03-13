@@ -1,0 +1,50 @@
+/**
+ */
+package raaml.hara;
+
+import raaml.core.CoreSafetyElement;
+
+/**
+ * <!-- begin-user-doc -->
+ * A representation of the model object '<em><b>Verified</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * <!-- begin-model-doc -->
+ * Verification status of an element
+ * <!-- end-model-doc -->
+ *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link raaml.hara.Verified#getResult <em>Result</em>}</li>
+ * </ul>
+ *
+ * @see raaml.hara.HaraPackage#getVerified()
+ * @model annotation="http://edu.kit.sdq/raaml/metaclass base='Class' stereotype='Verified'"
+ * @generated
+ */
+public interface Verified extends CoreSafetyElement {
+	/**
+	 * Returns the value of the '<em><b>Result</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Result</em>' attribute.
+	 * @see #setResult(String)
+	 * @see raaml.hara.HaraPackage#getVerified_Result()
+	 * @model
+	 * @generated
+	 */
+	String getResult();
+
+	/**
+	 * Sets the value of the '{@link raaml.hara.Verified#getResult <em>Result</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Result</em>' attribute.
+	 * @see #getResult()
+	 * @generated
+	 */
+	void setResult(String value);
+
+} // Verified

@@ -1,0 +1,97 @@
+[%
+out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>AEB HARA</title>");
+out.print("<style>");
+out.print("body{font-family:Arial,sans-serif;font-size:11px;margin:10px;background:#f5f5f5;}");
+out.print("h1{color:#1a237e;font-size:16px;border-bottom:2px solid #1a237e;padding-bottom:5px;}");
+out.print("h2{color:#37474f;font-size:13px;margin-top:20px;border-left:4px solid #1a237e;padding-left:8px;}");
+out.print(".sub{color:#546e7a;font-size:10px;margin-bottom:15px;}");
+out.print("table{border-collapse:collapse;width:100%;background:white;margin-bottom:20px;}");
+out.print("th{background:#1a237e;color:white;padding:6px 8px;text-align:left;font-size:10px;}");
+out.print("td{padding:5px 8px;border:1px solid #e0e0e0;vertical-align:top;font-size:10px;}");
+out.print("tr:nth-child(even){background:#f9f9f9;}");
+out.print(".aD{background:#b71c1c;color:white;font-weight:bold;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".aC{background:#e65100;color:white;font-weight:bold;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".aB{background:#f57f17;color:white;font-weight:bold;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".aQ{background:#546e7a;color:white;font-weight:bold;padding:2px 6px;border-radius:3px;display:inline-block;}");
+out.print(".os{background:#e3f2fd;color:#1565c0;padding:1px 4px;border-radius:2px;font-size:9px;}");
+out.print(".mb{background:#fce4ec;color:#880e4f;padding:1px 4px;border-radius:2px;font-size:9px;}");
+out.print(".note{color:#78909c;font-style:italic;font-size:9px;margin-top:10px;}");
+out.print("</style></head><body>");
+out.print("<h1>AEB HARA - ISO 26262 Hazard Analysis and Risk Assessment</h1>");
+out.print("<p class='sub'>Method: ISO 26262:2018 Part 3 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1 | SAE J2980:2018</p>");
+
+out.print("<h2>Operational Situations</h2>");
+out.print("<table><thead><tr><th>ID</th><th>Operational Situation</th><th>Description</th></tr></thead><tbody>");
+for (os in haraModel.operationalSituations) {
+  out.print("<tr>");
+  out.print("<td><span class='os'>" + os.id + "</span></td>");
+  out.print("<td><strong>" + os.name + "</strong></td>");
+  out.print("<td>" + os.description + "</td>");
+  out.print("</tr>");
+}
+out.print("</tbody></table>");
+
+out.print("<h2>Malfunctioning Behaviours</h2>");
+out.print("<table><thead><tr><th>ID</th><th>Malfunctioning Behaviour</th><th>Description</th></tr></thead><tbody>");
+for (mb in haraModel.malfunctioningBehaviors) {
+  out.print("<tr>");
+  out.print("<td><span class='mb'>" + mb.id + "</span></td>");
+  out.print("<td><strong>" + mb.name + "</strong></td>");
+  out.print("<td>" + mb.description + "</td>");
+  out.print("</tr>");
+}
+out.print("</tbody></table>");
+
+out.print("<h2>ASIL Assignments</h2>");
+out.print("<table><thead><tr>");
+out.print("<th>ID</th><th>Description</th><th>ASIL</th><th>Override</th>");
+out.print("</tr></thead><tbody>");
+
+for (aa in haraModel.asilAssignments) {
+  var av = aa.ASIL.toString();
+  var ac = "aQ";
+  if (av = "D") { ac = "aD"; }
+  if (av = "C") { ac = "aC"; }
+  if (av = "B") { ac = "aB"; }
+  var ov = "-";
+  if (aa.ASILOverride <> null) {
+    ov = aa.ASILOverride.toString();
+  }
+  out.print("<tr>");
+  out.print("<td><strong>" + aa.id + "</strong></td>");
+  out.print("<td>" + aa.description + "</td>");
+  out.print("<td style='text-align:center'><span class='" + ac + "'>" + av + "</span></td>");
+  out.print("<td style='text-align:center;font-size:9px'>" + ov + "</td>");
+  out.print("</tr>");
+}
+out.print("</tbody></table>");
+
+if (haraModel.verifiedItems.size() > 0) {
+  out.print("<h2>Verification</h2>");
+  out.print("<table><thead><tr><th>ID</th><th>Name</th><th>Result</th></tr></thead><tbody>");
+  for (v in haraModel.verifiedItems) {
+    out.print("<tr>");
+    out.print("<td>" + v.id + "</td>");
+    out.print("<td>" + v.name + "</td>");
+    out.print("<td>" + v.result + "</td>");
+    out.print("</tr>");
+  }
+  out.print("</tbody></table>");
+}
+
+if (haraModel.confirmedItems.size() > 0) {
+  out.print("<h2>Confirmation</h2>");
+  out.print("<table><thead><tr><th>ID</th><th>Name</th><th>Result</th></tr></thead><tbody>");
+  for (c in haraModel.confirmedItems) {
+    out.print("<tr>");
+    out.print("<td>" + c.id + "</td>");
+    out.print("<td>" + c.name + "</td>");
+    out.print("<td>" + c.result + "</td>");
+    out.print("</tr>");
+  }
+  out.print("</tbody></table>");
+}
+
+out.print("<p class='note'>ASIL: ISO 26262:2018 Part 3 Table 4 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1 | SAE J2980:2018</p>");
+out.print("</body></html>");
+%]

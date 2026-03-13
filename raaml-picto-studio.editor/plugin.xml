@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.presentation.RaamlModelWizardID"
+            name="%_UI_RaamlModelWizard_label"
+            class="raaml.presentation.RaamlModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/RaamlModelFile.gif">
+         <description>%_UI_RaamlModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.presentation.RaamlEditorID"
+            name="%_UI_RaamlEditor_label"
+            icon="icons/full/obj16/RaamlModelFile.gif"
+            extensions="raaml"
+            class="raaml.presentation.RaamlEditor"
+            contributorClass="raaml.presentation.RaamlActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.core.presentation.CoreModelWizardID"
+            name="%_UI_CoreModelWizard_label"
+            class="raaml.core.presentation.CoreModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/CoreModelFile.gif">
+         <description>%_UI_CoreModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.core.presentation.CoreEditorID"
+            name="%_UI_CoreEditor_label"
+            icon="icons/full/obj16/CoreModelFile.gif"
+            extensions="core"
+            class="raaml.core.presentation.CoreEditor"
+            contributorClass="raaml.core.presentation.CoreActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.req.presentation.ReqModelWizardID"
+            name="%_UI_ReqModelWizard_label"
+            class="raaml.req.presentation.ReqModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ReqModelFile.gif">
+         <description>%_UI_ReqModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.req.presentation.ReqEditorID"
+            name="%_UI_ReqEditor_label"
+            icon="icons/full/obj16/ReqModelFile.gif"
+            extensions="req"
+            class="raaml.req.presentation.ReqEditor"
+            contributorClass="raaml.req.presentation.ReqActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.library.presentation.LibraryModelWizardID"
+            name="%_UI_LibraryModelWizard_label"
+            class="raaml.library.presentation.LibraryModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/LibraryModelFile.gif">
+         <description>%_UI_LibraryModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.library.presentation.LibraryEditorID"
+            name="%_UI_LibraryEditor_label"
+            icon="icons/full/obj16/LibraryModelFile.gif"
+            extensions="library"
+            class="raaml.library.presentation.LibraryEditor"
+            contributorClass="raaml.library.presentation.LibraryActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.fta.presentation.FtaModelWizardID"
+            name="%_UI_FtaModelWizard_label"
+            class="raaml.fta.presentation.FtaModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/FtaModelFile.gif">
+         <description>%_UI_FtaModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.fta.presentation.FtaEditorID"
+            name="%_UI_FtaEditor_label"
+            icon="icons/full/obj16/FtaModelFile.gif"
+            extensions="fta"
+            class="raaml.fta.presentation.FtaEditor"
+            contributorClass="raaml.fta.presentation.FtaActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.fmea.presentation.FmeaModelWizardID"
+            name="%_UI_FmeaModelWizard_label"
+            class="raaml.fmea.presentation.FmeaModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/FmeaModelFile.gif">
+         <description>%_UI_FmeaModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.fmea.presentation.FmeaEditorID"
+            name="%_UI_FmeaEditor_label"
+            icon="icons/full/obj16/FmeaModelFile.gif"
+            extensions="fmea"
+            class="raaml.fmea.presentation.FmeaEditor"
+            contributorClass="raaml.fmea.presentation.FmeaActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.hara.presentation.HaraModelWizardID"
+            name="%_UI_HaraModelWizard_label"
+            class="raaml.hara.presentation.HaraModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/HaraModelFile.gif">
+         <description>%_UI_HaraModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.hara.presentation.HaraEditorID"
+            name="%_UI_HaraEditor_label"
+            icon="icons/full/obj16/HaraModelFile.gif"
+            extensions="hara"
+            class="raaml.hara.presentation.HaraEditor"
+            contributorClass="raaml.hara.presentation.HaraActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.stpa.presentation.StpaModelWizardID"
+            name="%_UI_StpaModelWizard_label"
+            class="raaml.stpa.presentation.StpaModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/StpaModelFile.gif">
+         <description>%_UI_StpaModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.stpa.presentation.StpaEditorID"
+            name="%_UI_StpaEditor_label"
+            icon="icons/full/obj16/StpaModelFile.gif"
+            extensions="stpa"
+            class="raaml.stpa.presentation.StpaEditor"
+            contributorClass="raaml.stpa.presentation.StpaActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.gsn.presentation.GsnModelWizardID"
+            name="%_UI_GsnModelWizard_label"
+            class="raaml.gsn.presentation.GsnModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/GsnModelFile.gif">
+         <description>%_UI_GsnModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.gsn.presentation.GsnEditorID"
+            name="%_UI_GsnEditor_label"
+            icon="icons/full/obj16/GsnModelFile.gif"
+            extensions="gsn"
+            class="raaml.gsn.presentation.GsnEditor"
+            contributorClass="raaml.gsn.presentation.GsnActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

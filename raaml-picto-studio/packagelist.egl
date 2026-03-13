@@ -1,0 +1,27 @@
+<html>
+<body style="font-family:Arial; padding:20px">
+<h2>EPackage Diagnostic</h2>
+<p><b>Total EPackages found:</b> [%=EPackage.all.size()%]</p>
+<hr/>
+<h3>All Packages:</h3>
+<table border="1" cellpadding="5">
+<tr><th>Name</th><th>nsURI</th><th>Has SuperPackage?</th><th>SuperPackage Name</th></tr>
+[% for (pkg in EPackage.all) { %]
+<tr>
+    <td>[%=pkg.name%]</td>
+    <td>[%=pkg.nsURI%]</td>
+    <td>[%=pkg.eSuperPackage.isDefined()%]</td>
+    <td>[%=pkg.eSuperPackage.isDefined() ? pkg.eSuperPackage.name : "ROOT"%]</td>
+</tr>
+[% } %]
+</table>
+<hr/>
+<h3>Subpackages only (eSuperPackage.isDefined()):</h3>
+<ul>
+[% for (pkg in EPackage.all.select(p | p.eSuperPackage.isDefined())) { %]
+    <li>[%=pkg.name%] (parent: [%=pkg.eSuperPackage.name%])</li>
+[% } %]
+</ul>
+<p><b>Subpackage count:</b> [%=EPackage.all.select(p | p.eSuperPackage.isDefined()).size()%]</p>
+</body>
+</html>
