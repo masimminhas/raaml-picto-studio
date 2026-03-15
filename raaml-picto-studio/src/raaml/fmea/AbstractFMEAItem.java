@@ -3,9 +3,6 @@
 package raaml.fmea;
 
 import org.eclipse.emf.common.util.EList;
-
-import raaml.core.AbstractCause;
-import raaml.core.AbstractEffect;
 import raaml.core.AbstractFailureMode;
 import raaml.core.CoreSafetyElement;
 
@@ -73,7 +70,7 @@ public interface AbstractFMEAItem extends CoreSafetyElement {
 
 	/**
 	 * Returns the value of the '<em><b>Final Effect</b></em>' containment reference list.
-	 * The list contents are of type {@link raaml.core.AbstractEffect}.
+	 * The list contents are of type {@link raaml.core.AbstractFailureMode}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Final Effect</em>' containment reference list.
@@ -81,11 +78,11 @@ public interface AbstractFMEAItem extends CoreSafetyElement {
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	EList<AbstractEffect> getFinalEffect();
+	EList<AbstractFailureMode> getFinalEffect();
 
 	/**
 	 * Returns the value of the '<em><b>Cause</b></em>' containment reference list.
-	 * The list contents are of type {@link raaml.core.AbstractCause}.
+	 * The list contents are of type {@link raaml.core.AbstractFailureMode}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cause</em>' containment reference list.
@@ -93,6 +90,6 @@ public interface AbstractFMEAItem extends CoreSafetyElement {
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	EList<AbstractCause> getCause();
+	EList<AbstractFailureMode> getCause();
 
 } // AbstractFMEAItem

@@ -16,9 +16,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import raaml.core.AbstractCause;
-import raaml.core.AbstractEffect;
 import raaml.core.AbstractFailureMode;
 
 import raaml.core.impl.CoreSafetyElementImpl;
@@ -81,7 +78,7 @@ public abstract class AbstractFMEAItemImpl extends CoreSafetyElementImpl impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AbstractEffect> finalEffect;
+	protected EList<AbstractFailureMode> finalEffect;
 
 	/**
 	 * The cached value of the '{@link #getCause() <em>Cause</em>}' containment reference list.
@@ -91,7 +88,7 @@ public abstract class AbstractFMEAItemImpl extends CoreSafetyElementImpl impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AbstractCause> cause;
+	protected EList<AbstractFailureMode> cause;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -154,9 +151,9 @@ public abstract class AbstractFMEAItemImpl extends CoreSafetyElementImpl impleme
 	 * @generated
 	 */
 	@Override
-	public EList<AbstractEffect> getFinalEffect() {
+	public EList<AbstractFailureMode> getFinalEffect() {
 		if (finalEffect == null) {
-			finalEffect = new EObjectContainmentEList<AbstractEffect>(AbstractEffect.class, this, FmeaPackage.ABSTRACT_FMEA_ITEM__FINAL_EFFECT);
+			finalEffect = new EObjectContainmentEList<AbstractFailureMode>(AbstractFailureMode.class, this, FmeaPackage.ABSTRACT_FMEA_ITEM__FINAL_EFFECT);
 		}
 		return finalEffect;
 	}
@@ -167,9 +164,9 @@ public abstract class AbstractFMEAItemImpl extends CoreSafetyElementImpl impleme
 	 * @generated
 	 */
 	@Override
-	public EList<AbstractCause> getCause() {
+	public EList<AbstractFailureMode> getCause() {
 		if (cause == null) {
-			cause = new EObjectContainmentEList<AbstractCause>(AbstractCause.class, this, FmeaPackage.ABSTRACT_FMEA_ITEM__CAUSE);
+			cause = new EObjectContainmentEList<AbstractFailureMode>(AbstractFailureMode.class, this, FmeaPackage.ABSTRACT_FMEA_ITEM__CAUSE);
 		}
 		return cause;
 	}
@@ -230,11 +227,11 @@ public abstract class AbstractFMEAItemImpl extends CoreSafetyElementImpl impleme
 				return;
 			case FmeaPackage.ABSTRACT_FMEA_ITEM__FINAL_EFFECT:
 				getFinalEffect().clear();
-				getFinalEffect().addAll((Collection<? extends AbstractEffect>)newValue);
+				getFinalEffect().addAll((Collection<? extends AbstractFailureMode>)newValue);
 				return;
 			case FmeaPackage.ABSTRACT_FMEA_ITEM__CAUSE:
 				getCause().clear();
-				getCause().addAll((Collection<? extends AbstractCause>)newValue);
+				getCause().addAll((Collection<? extends AbstractFailureMode>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

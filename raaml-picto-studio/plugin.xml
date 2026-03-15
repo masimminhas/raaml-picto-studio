@@ -1,90 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="aeb.fmea.editor.FMEAFormEditor"
-            name="FMEA Editor"
-            extensions="fmea"
-            class="aeb.fmea.editor.FMEAFormEditor"
-            contributorClass="org.eclipse.ui.part.EditorActionBarContributor">
-      </editor>
-   </extension>
-   <extension point="org.eclipse.emf.ecore.dynamic_package">
-      <resource
-         uri="platform:/resource/raaml-picto-studio/model/raaml.ecore"
-         location="model/raaml.ecore">
-      </resource>
-   </extension>
+
+   <!-- Metamodel package registrations -->
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
       <package
             uri="http://edu.kit.sdq/dsis/metamodels/raaml"
             class="raaml.RaamlPackage"
-            genModel="raaml.genmodel"/>
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
       <package
             uri="http://edu.kit.sdq/dsis/metamodels/raaml/core"
             class="raaml.core.CorePackage"
-            genModel="raaml.genmodel"/>
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
-      <package
-            uri="http://edu.kit.sdq/dsis/metamodels/raaml/req"
-            class="raaml.req.ReqPackage"
-            genModel="raaml.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
-      <package
-            uri="http://edu.kit.sdq/dsis/metamodels/raaml/library"
-            class="raaml.library.LibraryPackage"
-            genModel="raaml.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
-      <package
-            uri="http://edu.kit.sdq/dsis/metamodels/raaml/fta"
-            class="raaml.fta.FtaPackage"
-            genModel="raaml.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
       <package
             uri="http://edu.kit.sdq/dsis/metamodels/raaml/fmea"
             class="raaml.fmea.FmeaPackage"
-            genModel="raaml.genmodel"/>
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/fta"
+            class="raaml.fta.FtaPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
       <package
             uri="http://edu.kit.sdq/dsis/metamodels/raaml/hara"
             class="raaml.hara.HaraPackage"
-            genModel="raaml.genmodel"/>
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
       <package
             uri="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
             class="raaml.stpa.StpaPackage"
-            genModel="raaml.genmodel"/>
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated raaml -->
       <package
             uri="http://edu.kit.sdq/dsis/metamodels/raaml/gsn"
             class="raaml.gsn.GsnPackage"
-            genModel="raaml.genmodel"/>
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/req"
+            class="raaml.req.ReqPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/library"
+            class="raaml.library.LibraryPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
 </plugin>

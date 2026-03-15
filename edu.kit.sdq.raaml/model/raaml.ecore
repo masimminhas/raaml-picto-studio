@@ -1116,9 +1116,9 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="failureMode" lowerBound="1"
           upperBound="-1" eType="#//core/AbstractFailureMode" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="finalEffect" lowerBound="1"
-          upperBound="-1" eType="#//core/AbstractEffect" containment="true"/>
+          upperBound="-1" eType="#//core/AbstractFailureMode" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="cause" lowerBound="1"
-          upperBound="-1" eType="#//core/AbstractCause" containment="true"/>
+          upperBound="-1" eType="#//core/AbstractFailureMode" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="FMEAItem" eSuperTypes="#//fmea/AbstractFMEAItem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

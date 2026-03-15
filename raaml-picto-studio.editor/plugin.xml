@@ -257,5 +257,13 @@
             contributorClass="raaml.gsn.presentation.GsnActionBarContributor">
       </editor>
    </extension>
-
+<extension point="org.eclipse.ui.editors">
+   <editor
+         id="aeb.fmea.editor.FMEAFormEditor"
+         name="FMEA Form Editor"
+         extensions="xmi"
+         class="aeb.fmea.editor.FMEAFormEditor"
+         contributorClass="org.eclipse.ui.part.EditorActionBarContributor">
+   </editor>
+</extension>
 </plugin>

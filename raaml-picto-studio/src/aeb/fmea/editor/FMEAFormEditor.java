@@ -138,9 +138,10 @@ public class FMEAFormEditor extends FormEditor {
             }
             System.out.println("FMEAFormEditor: Package registered OK: " + expectedNsURI);
 
-            // Step 6: Load the model
-            fmeaResource = rs.getResource(modelURI, true);
-            fmeaResource.load(null);
+         // Step 6: Load the model — create resource first, then load
+         // This ensures the local RS registry is used, not the global one
+         fmeaResource = rs.createResource(modelURI);
+         fmeaResource.load(null);
 
             // Step 7: Report any load errors/warnings
             fmeaResource.getErrors().forEach(e ->

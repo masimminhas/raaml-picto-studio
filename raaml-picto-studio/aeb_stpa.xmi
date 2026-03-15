@@ -3,14 +3,14 @@
     xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:raaml="http://platform:/resource/raaml-picto-studio/model/raaml.ecore""
-    xmlns:raaml.stpa="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:stpa="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
     xmi:id="SA_AEB_STPA_001"
     id="SA_AEB_STPA_001"
     name="AEB STPA Safety Analysis"
-    description="Systems Theoretic Process Analysis for AEB. Identifies unsafe control actions and causal scenarios per STPA Handbook 2018 (Leveson and Thomas)."/>
+    description="Systems Theoretic Process Analysis for AEB. Identifies unsafe control actions and causal scenarios per STPA Handbook 2018 (Leveson and Thomas).">
   <analyses
-      xsi:type="raaml.stpa:STPA"
+      xsi:type="stpa:STPA"
       xmi:id="STPA_AEB_001"
       id="STPA_AEB_001"
       name="AEB System STPA"

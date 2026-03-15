@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <!-- Root metamodel package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml"
+            class="raaml.RaamlPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- Core sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/core"
+            class="raaml.core.CorePackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- FMEA sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/fmea"
+            class="raaml.fmea.FmeaPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- FTA sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/fta"
+            class="raaml.fta.FtaPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- HARA sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/hara"
+            class="raaml.hara.HaraPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- STPA sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
+            class="raaml.stpa.StpaPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- GSN sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/gsn"
+            class="raaml.gsn.GsnPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- Requirements sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/req"
+            class="raaml.req.ReqPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+   <!-- Library sub-package -->
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/library"
+            class="raaml.library.LibraryPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
+
+</plugin>

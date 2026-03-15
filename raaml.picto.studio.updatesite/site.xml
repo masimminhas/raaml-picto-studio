@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/raaml.picto.studio.feature_1.0.1.202603151629.jar" id="raaml.picto.studio.feature" version="1.0.1.202603151629" os="win32,linux,macosx" ws="win32,gtk,cocoa" arch="x86_64"/>
+</site>

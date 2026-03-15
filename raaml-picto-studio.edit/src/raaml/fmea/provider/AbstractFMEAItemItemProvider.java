@@ -197,6 +197,100 @@ public class AbstractFMEAItemItemProvider extends CoreSafetyElementItemProvider 
 			(createChildParameter
 				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FAILURE_MODE,
 				 FmeaFactory.eINSTANCE.createDelayedFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createLossOfFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createDegradationOfFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createIntermittentFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createPartialFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createExceedingFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createUnintendedFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT,
+				 FmeaFactory.eINSTANCE.createDelayedFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createLossOfFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createDegradationOfFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createIntermittentFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createPartialFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createExceedingFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createUnintendedFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE,
+				 FmeaFactory.eINSTANCE.createDelayedFunction()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FAILURE_MODE ||
+			childFeature == FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__FINAL_EFFECT ||
+			childFeature == FmeaPackage.Literals.ABSTRACT_FMEA_ITEM__CAUSE;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

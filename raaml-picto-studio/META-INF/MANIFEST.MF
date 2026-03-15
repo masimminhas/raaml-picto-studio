@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: raaml-picto-studio
 Bundle-Name: %pluginName
 Bundle-SymbolicName: raaml-picto-studio;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -35,7 +35,7 @@ Export-Package: raaml,
  raaml.stpa,
  raaml.stpa.impl,
  raaml.stpa.util,
- raaml.util
+ raaml.util,aeb.fmea.editor
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms,

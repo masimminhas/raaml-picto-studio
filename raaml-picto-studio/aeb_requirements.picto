@@ -1,8 +1,11 @@
 <?nsuri picto?>
-<picto format="egx" transformation="req_hierarchy.egx" standalone="true">
+<picto format="egx"
+       transformation="platform:/plugin/raaml-picto-studio/req_hierarchy.egx"
+       standalone="true">
     <model type="EMF">
         <parameter name="name" value="M"/>
-        <parameter name="metamodelFile" file="raaml.ecore"/>
-        <parameter name="modelFile" file="aeb_requirements.xmi"/>
+        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml"/>
+        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml/req"/>
+        <parameter name="modelFile" value="raaml-picto-studio/aeb_requirements.xmi"/>
     </model>
 </picto>

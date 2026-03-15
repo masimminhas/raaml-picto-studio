@@ -1,27 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="raaml.picto.studio.feature"
-      label="Feature"
-      version="1.0.0.qualifier">
+      label="RAAML Picto Studio"
+      version="1.0.1.qualifier"
+      provider-name="KIT DSIS – Karlsruhe Institute of Technology"
+      plugin="edu.kit.sdq.raaml"
+      os="win32,linux,macosx"
+      ws="win32,gtk,cocoa"
+      arch="x86_64">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="https://github.com/masimminhas/raaml-picto-studio">
+      RAAML Picto Studio is a model-driven safety analysis workbench built on Eclipse
+      Epsilon and Picto. It provides live, interactive HTML visualizations for ISO 26262
+      safety analyses — including FMEA, FTA, HARA, STPA, GSN, HAZOP and Requirements —
+      using the RAAML (Risk Analysis and Assessment Modelling Language) metamodel.
+
+      Key features:
+      - RAAML metamodel with sub-packages for FMEA, FTA, HARA, STPA, GSN, REQ, and Library
+      - Live Picto visualizations rendered from EGL/EGX transformation templates
+      - Form-based FMEA editor for user-friendly entry of failure modes and RPN values
+      - Pre-modelled AEB (Autonomous Emergency Braking) case study instance models
+      - ISO 26262:2018 and AIAG FMEA-4 compliant RPN methodology
+      - Automated EGL/EGX template synthesis via higher-order model-to-text transformation
+
+      Update Site: https://masimminhas.github.io/raaml-picto-studio/
+      Source Code:  https://github.com/masimminhas/raaml-picto-studio
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="https://www.kit.edu">
+      Copyright (c) 2025 KIT 
+
+      This software is developed at KIT as part of model-driven safety engineering research.
+      Contact: masim.minhas@kit.edu
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="https://www.eclipse.org/legal/epl-2.0/">
+      Eclipse Public License - v 2.0
+
+      THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE
+      PUBLIC LICENSE (&quot;AGREEMENT&quot;). ANY USE, REPRODUCTION OR DISTRIBUTION
+      OF THE PROGRAM CONSTITUTES RECIPIENT&apos;S ACCEPTANCE OF THIS AGREEMENT.
+
+      Full license text: https://www.eclipse.org/legal/epl-2.0/
    </license>
+
+   <url>
+      <update label="RAAML Picto Studio Update Site" url="https://masimminhas.github.io/raaml-picto-studio/"/>
+      <discovery label="RAAML Picto Studio on GitHub" url="https://github.com/masimminhas/raaml-picto-studio"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.epsilon.picto" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.epsilon.egl.engine" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.epsilon.egx.engine" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.epsilon.flexmi" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.ecore" version="2.20.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.ecore.xmi" version="2.20.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.200.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.24.0" match="greaterOrEqual"/>
+   </requires>
 
    <plugin
          id="edu.kit.sdq.raaml"
          version="0.0.0"/>
 
    <plugin
-         id="raaml-picto-studio.editor"
+         id="raaml-picto-studio"
          version="0.0.0"/>
 
    <plugin
@@ -29,7 +73,7 @@
          version="0.0.0"/>
 
    <plugin
-         id="raaml-picto-studio"
+         id="raaml-picto-studio.editor"
          version="0.0.0"/>
 
 </feature>
