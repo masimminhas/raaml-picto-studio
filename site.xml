@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/raaml.picto.studio.feature_1.0.2.202603161030.jar" id="raaml.picto.studio.feature" version="1.0.2.202603161030"/>
+   <feature url="features/raaml.picto.studio.feature_1.0.2.202603161128.jar" id="raaml.picto.studio.feature" version="1.0.2.202603161128"/>
+   <category-def name="raaml.picto.studio.category" label="RAAML Picto Studio">
+      <description>
+         Risk Analysis and Assessment Modeling Language (RAAML) with
+         Picto visualizations. Supports FMEA, FTA, HARA, STPA, GSN,
+         REQ and ISO 26262 analysis types.
+         Requires Epsilon 2.8.0 to be pre-installed.
+      </description>
+   </category-def>
 </site>
