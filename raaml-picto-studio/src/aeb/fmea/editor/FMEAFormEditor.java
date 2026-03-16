@@ -74,120 +74,95 @@ public class FMEAFormEditor extends FormEditor {
      * Loads the selected .xmi file into an EMF ResourceSet and resolves the
      * first 'analyses' element (expected to be the FMEA analysis instance).
      */
-    private void loadModel(IEditorInput input) {
+private void loadModel(IEditorInput input) {
 
-        IFile file = getIFile(input);
-        if (file == null) {
-            System.err.println("FMEAFormEditor: Input is not a FileEditorInput.");
+    IFile file = getIFile(input);
+    if (file == null) {
+        System.err.println("FMEAFormEditor: Input is not a FileEditorInput.");
+        return;
+    }
+
+    URI modelURI = URI.createPlatformResourceURI(
+            file.getFullPath().toString(), true);
+
+    // Use a ResourceSet with XMI factory — NO need to load raaml.ecore
+    // because all packages are already registered via plugin.xml generated_package
+    ResourceSet rs = new ResourceSetImpl();
+    rs.getResourceFactoryRegistry()
+      .getExtensionToFactoryMap()
+      .put("xmi", new XMIResourceFactoryImpl());
+    rs.getResourceFactoryRegistry()
+      .getExtensionToFactoryMap()
+      .put("raaml", new XMIResourceFactoryImpl());
+    rs.getResourceFactoryRegistry()
+      .getExtensionToFactoryMap()
+      .put("fmea", new XMIResourceFactoryImpl());
+
+    // Copy all globally registered packages into this ResourceSet
+    for (java.util.Map.Entry<String, Object> entry :
+            EPackage.Registry.INSTANCE.entrySet()) {
+        rs.getPackageRegistry().put(entry.getKey(), entry.getValue());
+    }
+
+    try {
+        fmeaResource = rs.getResource(modelURI, true);
+        fmeaResource.load(null);
+
+        fmeaResource.getWarnings().forEach(w ->
+            System.out.println("Model WARNING: " + w.getMessage()));
+
+        if (!fmeaResource.getErrors().isEmpty()) {
+            fmeaResource.getErrors().forEach(e ->
+                System.err.println("Model ERROR: " + e.getMessage()));
+            System.err.println("FMEAFormEditor: Model has errors, aborting.");
             return;
         }
 
-        // Step 1: Locate raaml.ecore in the same project
-     // REPLACE WITH THIS:
-        IFile ecoreFile = findEcoreFile(file.getProject());
-        if (ecoreFile == null) {
-            System.err.println("FMEAFormEditor: No .ecore file found anywhere in project: "
-                    + file.getProject().getName()
-                    + ". Please add raaml.ecore to the project.");
+        if (fmeaResource.getContents().isEmpty()) {
+            System.err.println("FMEAFormEditor: Model resource is empty.");
             return;
         }
-        System.out.println("FMEAFormEditor: Found ecore at: " + ecoreFile.getFullPath());
 
-        URI ecoreURI = URI.createPlatformResourceURI(
-                ecoreFile.getFullPath().toString(), true);
-        URI modelURI = URI.createPlatformResourceURI(
-                file.getFullPath().toString(), true);
+        // Navigate to FMEA analysis object
+        EObject root = fmeaResource.getContents().get(0);
+        System.out.println("FMEAFormEditor: Root class = " + root.eClass().getName());
 
-        // Step 2: Build a ResourceSet with all needed factories
-        ResourceSet rs = new ResourceSetImpl();
-        rs.getResourceFactoryRegistry()
-          .getExtensionToFactoryMap()
-          .put("ecore", new EcoreResourceFactoryImpl());
-        rs.getResourceFactoryRegistry()
-          .getExtensionToFactoryMap()
-          .put("xmi",   new XMIResourceFactoryImpl());
-        rs.getResourceFactoryRegistry()
-          .getExtensionToFactoryMap()
-          .put("fmea",  new XMIResourceFactoryImpl());
+        EStructuralFeature analysesFeature = root.eClass()
+                .getEStructuralFeature("analyses");
 
-        try {
-            // Step 3: Load the ecore metamodel
-            Resource ecoreRes = rs.getResource(ecoreURI, true);
-            ecoreRes.load(null);
-
-            if (ecoreRes.getContents().isEmpty()) {
-                System.err.println("FMEAFormEditor: raaml.ecore is empty!");
-                return;
-            }
-
-            // Step 4: Register ALL packages into BOTH the global registry
-            //         AND the ResourceSet's local package registry
-            for (EObject obj : ecoreRes.getContents()) {
-                if (obj instanceof EPackage) {
-                    registerPackageRecursive((EPackage) obj, rs);
+        if (analysesFeature != null) {
+            Object analyses = root.eGet(analysesFeature);
+            if (analyses instanceof java.util.List) {
+                java.util.List<?> list = (java.util.List<?>) analyses;
+                for (Object item : list) {
+                    if (item instanceof EObject) {
+                        EObject candidate = (EObject) item;
+                        String className = candidate.eClass().getName();
+                        System.out.println("FMEAFormEditor: Found analysis: " + className);
+                        if (className.contains("FMEA") || className.contains("Fmea")) {
+                            fmeaObject = candidate;
+                            break;
+                        }
+                    }
+                }
+                // fallback: take first analysis if no FMEA found by name
+                if (fmeaObject == null && !list.isEmpty()) {
+                    fmeaObject = (EObject) list.get(0);
                 }
             }
-
-            // Step 5: Verify the known nsURI was actually registered
-            String expectedNsURI = "http://edu.kit.sdq/dsis/metamodels/raaml";
-            if (EPackage.Registry.INSTANCE.getEPackage(expectedNsURI) == null) {
-                System.err.println("FMEAFormEditor: Package with nsURI '"
-                        + expectedNsURI + "' was NOT registered! "
-                        + "Check that raaml.ecore has this nsURI.");
-                return;
-            }
-            System.out.println("FMEAFormEditor: Package registered OK: " + expectedNsURI);
-
-         // Step 6: Load the model — create resource first, then load
-         // This ensures the local RS registry is used, not the global one
-         fmeaResource = rs.createResource(modelURI);
-         fmeaResource.load(null);
-
-            // Step 7: Report any load errors/warnings
-            fmeaResource.getErrors().forEach(e ->
-                System.err.println("Model ERROR: " + e.getMessage()
-                        + " [line " + e.getLine() + "]"));
-            fmeaResource.getWarnings().forEach(w ->
-                System.out.println("Model WARNING: " + w.getMessage()));
-
-            if (!fmeaResource.getErrors().isEmpty()) {
-                System.err.println("FMEAFormEditor: Model has errors, aborting.");
-                return;
-            }
-
-            if (fmeaResource.getContents().isEmpty()) {
-                System.err.println("FMEAFormEditor: Model resource is empty.");
-                return;
-            }
-
-            // Step 8: Navigate to the FMEA analysis object
-            EObject root = fmeaResource.getContents().get(0);
-            System.out.println("FMEAFormEditor: Root class = " + root.eClass().getName());
-
-            EStructuralFeature analysesFeature =
-                    root.eClass().getEStructuralFeature("analyses");
-            if (analysesFeature == null) {
-                System.err.println("FMEAFormEditor: No 'analyses' feature on: "
-                        + root.eClass().getName());
-                return;
-            }
-
-            @SuppressWarnings("unchecked")
-            List<EObject> analyses = (List<EObject>) root.eGet(analysesFeature);
-            if (analyses == null || analyses.isEmpty()) {
-                System.err.println("FMEAFormEditor: 'analyses' list is empty.");
-                return;
-            }
-
-            fmeaObject = analyses.get(0);
-            System.out.println("FMEAFormEditor: FMEA object class = "
-                    + fmeaObject.eClass().getName());
-
-        } catch (Exception e) {
-            System.err.println("FMEAFormEditor: Load failed: " + e.getMessage());
-            e.printStackTrace();
+        } else {
+            // fallback: root itself is the FMEA object
+            fmeaObject = root;
         }
+
+        System.out.println("FMEAFormEditor: Loaded fmeaObject = "
+                + (fmeaObject != null ? fmeaObject.eClass().getName() : "NULL"));
+
+    } catch (Exception e) {
+        System.err.println("FMEAFormEditor: Load failed: " + e.getMessage());
+        e.printStackTrace();
     }
+}
     private void registerPackageRecursive(EPackage pkg, ResourceSet rs) {
         if (pkg == null) return;
         String nsURI = pkg.getNsURI();
