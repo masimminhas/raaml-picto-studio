@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RAAML Semantic Constraints Validation
+  ======================================
+  Runs EVL constraints against all AEB instance models.
+
+  IMPORTANT: This must be run from a Runtime Eclipse where the
+  RAAML metamodel plugin is deployed. See instructions below.
+
+  Steps:
+    1. In your development Eclipse: Run As -> Eclipse Application
+    2. In the Runtime Eclipse: import the raaml-picto-studio project
+    3. Right-click this file -> Run As -> Ant Build...
+    4. JRE tab -> "Run in the same JRE as the workspace"
+    5. Click Run
+-->
+<project default="validate-all">
+
+    <!-- Load Epsilon ANT tasks from the runtime Eclipse's classpath -->
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"
+             onerror="report"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"
+             onerror="report"/>
+
+    <!-- Paths -->
+    <property name="evl.file" value="raaml-semantic-constraints.evl"/>
+    <property name="metamodel.uri" value="http://edu.kit.sdq/dsis/metamodels/raaml"/>
+
+    <macrodef name="validate-model">
+        <attribute name="model.file"/>
+        <attribute name="model.label"/>
+        <sequential>
+            <echo>============================================</echo>
+            <echo>Validating: @{model.label}</echo>
+            <echo>  File: @{model.file}</echo>
+            <echo>============================================</echo>
+
+            <epsilon.emf.loadModel name="M"
+                                   modelfile="@{model.file}"
+                                   metamodeluri="${metamodel.uri}"
+                                   read="true"
+                                   store="false"
+                                   expand="true"/>
+
+            <epsilon.evl src="${evl.file}"
+                         failonerrors="false"
+                         failonwarnings="false">
+                <model ref="M"/>
+            </epsilon.evl>
+
+            <epsilon.disposeModels/>
+            <echo> </echo>
+        </sequential>
+    </macrodef>
+
+    <target name="validate-all"
+            description="Run EVL constraints against all AEB instance models">
+
+        <echo>================================================================</echo>
+        <echo>RAAML Semantic Constraints Validation Suite</echo>
+        <echo>================================================================</echo>
+
+        <validate-model model.file="aeb_fmea.xmi"       model.label="AEB FMEA Analysis"/>
+        <validate-model model.file="aeb_fta.xmi"        model.label="AEB Fault Tree Analysis"/>
+        <validate-model model.file="aeb_stpa.xmi"       model.label="AEB STPA Analysis"/>
+        <validate-model model.file="aeb_hara.xmi"       model.label="AEB HARA (ISO 26262)"/>
+        <validate-model model.file="aeb_gsn.xmi"        model.label="AEB GSN Safety Case"/>
+        <validate-model model.file="aeb_hazop.xmi"      model.label="AEB HAZOP Analysis"/>
+        <validate-model model.file="aeb_iso26262.xmi"   model.label="AEB ISO 26262 Compliance"/>
+        <validate-model model.file="aeb_requirements.xmi" model.label="AEB Safety Requirements"/>
+        <validate-model model.file="SafetyAnalysis.xmi"  model.label="Full Safety Analysis"/>
+
+        <echo>================================================================</echo>
+        <echo>Validation complete.</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

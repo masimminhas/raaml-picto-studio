@@ -1,0 +1,11 @@
+# Publication guide (private working documents)
+docs/
+
+# Compiled class files
+bin/
+*.class
+
+# Eclipse project files (workspace-specific)
+.classpath
+.project
+.settings/

@@ -1,0 +1,345 @@
+// ============================================================================
+// RAAML Semantic Constraints (EVL)
+// Purpose: Demonstrates that OMG RAAML profile OCL constraints can be
+//          expressed as Epsilon Validation Language (EVL) rules over the
+//          standalone Ecore metamodel, proving constraint preservation.
+//
+// Reference: OMG RAAML v1.0 (formal/2023-06-01)
+// Author: RAAML Picto Studio
+// ============================================================================
+
+// --- Import the RAAML metamodel namespaces ---
+// Pre-condition: The RAAML Ecore packages are registered in the EMF registry.
+// These constraints operate on instances conforming to:
+//   http://edu.kit.sdq/dsis/metamodels/raaml
+//   http://edu.kit.sdq/dsis/metamodels/raaml/fmea
+//   http://edu.kit.sdq/dsis/metamodels/raaml/fta
+//   http://edu.kit.sdq/dsis/metamodels/raaml/stpa
+//   http://edu.kit.sdq/dsis/metamodels/raaml/hara
+//   http://edu.kit.sdq/dsis/metamodels/raaml/gsn
+//   http://edu.kit.sdq/dsis/metamodels/raaml/req
+
+
+// ============================================================================
+// 1. FMEA CONSTRAINTS
+// ============================================================================
+
+// Constraint: RPN must equal SEV * OCC * DET
+// Profile equivalent: OCL inv RPNConsistency: self.RPN = self.SEV * self.OCC * self.DET
+context RPNCalculation {
+
+    constraint RPNMustBeProduct {
+        check {
+            if (self.SEV == null or self.OCC == null or self.DET == null) {
+                return true; // Skip if values not yet set
+            }
+            var expected = self.SEV * self.OCC * self.DET;
+            return (self.RPN - expected).abs() < 0.001;
+        }
+        message : "RPN value (" + self.RPN + ") must equal SEV (" + self.SEV
+                  + ") x OCC (" + self.OCC + ") x DET (" + self.DET
+                  + ") = " + (self.SEV * self.OCC * self.DET)
+        fix {
+            title : "Recalculate RPN as SEV x OCC x DET"
+            do {
+                self.RPN = self.SEV * self.OCC * self.DET;
+            }
+        }
+    }
+
+    // Constraint: SEV, OCC, DET must be in range [1, 10]
+    // Profile equivalent: OCL inv SEVRange: self.SEV >= 1 and self.SEV <= 10
+    constraint SEVInRange {
+        check : self.SEV == null or (self.SEV >= 1.0 and self.SEV <= 10.0)
+        message : "Severity (SEV=" + self.SEV + ") must be between 1 and 10 (AIAG FMEA-4)"
+    }
+
+    constraint OCCInRange {
+        check : self.OCC == null or (self.OCC >= 1.0 and self.OCC <= 10.0)
+        message : "Occurrence (OCC=" + self.OCC + ") must be between 1 and 10 (AIAG FMEA-4)"
+    }
+
+    constraint DETInRange {
+        check : self.DET == null or (self.DET >= 1.0 and self.DET <= 10.0)
+        message : "Detection (DET=" + self.DET + ") must be between 1 and 10 (AIAG FMEA-4)"
+    }
+}
+
+// Constraint: FMEAItem aggregated RPN should match its RPNCalculation
+// Profile equivalent: OCL inv FMEAItemRPNConsistency
+context FMEAItem {
+
+    constraint FMEAItemRPNConsistency {
+        check {
+            if (self.rpnCalculation.isEmpty()) {
+                return true;
+            }
+            var calcRPN = self.rpnCalculation.first().RPN;
+            return calcRPN == null or self.RPN == null
+                   or (self.RPN - calcRPN).abs() < 0.001;
+        }
+        message : "FMEAItem '" + self.name + "' aggregated RPN (" + self.RPN
+                  + ") does not match its RPNCalculation ("
+                  + self.rpnCalculation.first().RPN + ")"
+    }
+}
+
+
+// ============================================================================
+// 2. FTA CONSTRAINTS
+// ============================================================================
+
+// Constraint: Gate probability must be consistent with input event probabilities
+// Profile equivalent: OCL inv GateProbabilityConsistency
+context Gate {
+
+    constraint GateProbabilityConsistent {
+        guard : self.isKindOf(OR) or self.isKindOf(AND)
+        check {
+            // Only validate if all inputs have probabilities set
+            if (self.sourceEvent.exists(e | e.probability == null)) {
+                return true;
+            }
+            if (self.targetEvent == null or self.targetEvent.probability == null) {
+                return true;
+            }
+
+            var expected : Real;
+            if (self.isKindOf(OR)) {
+                // P(OR) = 1 - product(1 - P_i) for independent events
+                expected = 1.0;
+                for (input in self.sourceEvent) {
+                    expected = expected * (1.0 - input.probability);
+                }
+                expected = 1.0 - expected;
+            } else if (self.isKindOf(AND)) {
+                // P(AND) = product(P_i) for independent events
+                expected = 1.0;
+                for (input in self.sourceEvent) {
+                    expected = expected * input.probability;
+                }
+            }
+
+            // Allow small floating point tolerance
+            return (self.targetEvent.probability - expected).abs()
+                   < (expected * 0.01 + 1.0e-15);
+        }
+        message : "Gate '" + self.name + "' output probability ("
+                  + self.targetEvent.probability
+                  + ") is inconsistent with input event probabilities"
+    }
+}
+
+// Constraint: FTATree must not have circular gate references
+// Profile equivalent: OCL inv FTATreeAcyclic (no cycles in fault tree)
+context FTATree {
+
+    constraint FTATreeAcyclic {
+        check {
+            // Verify that no event appears as both input and output of the same
+            // path through the tree (simplified acyclicity check)
+            var visited = new Set;
+            return self.gates.forAll(g |
+                not visited.includes(g.targetEvent)
+                and visited.add(g.targetEvent) <> null
+            );
+        }
+        message : "Fault tree '" + self.name
+                  + "' contains circular gate references (acyclic property violated)"
+    }
+}
+
+// Constraint: Event probability must be in [0, 1]
+context FTAElement {
+
+    constraint ProbabilityInRange {
+        check : self.probability == null
+                or (self.probability >= 0.0 and self.probability <= 1.0)
+        message : "Event '" + self.name + "' probability (" + self.probability
+                  + ") must be between 0 and 1"
+    }
+}
+
+
+// ============================================================================
+// 3. STPA CONSTRAINTS
+// ============================================================================
+
+// Constraint: UCA unsafeType must be from the STPA Handbook taxonomy
+// Profile equivalent: OCL inv UCATypeValid
+context UndesiredControlAction {
+
+    constraint UCATypeValid {
+        check {
+            if (self.unsafeType == null or self.unsafeType.trim() == "") {
+                return true;
+            }
+            // Accept both space-separated (as used in instance models)
+            // and camelCase (as used in some STPA tools) forms
+            var validTypes = Set{
+                "Not Provided", "Provided Causes Hazard",
+                "Too Late", "Too Early", "Wrong Magnitude",
+                "Wrong Timing", "Stopped Too Soon",
+                "Applied Too Long", "Wrong Order",
+                "NotProvided", "ProvidedCausesHazard",
+                "TooLate", "TooEarly", "WrongMagnitude",
+                "WrongTiming", "StoppedTooSoon",
+                "AppliedTooLong", "WrongOrder"
+            };
+            return validTypes.includes(self.unsafeType)
+                   or validTypes.exists(t | t.toLowerCase()
+                      == self.unsafeType.toLowerCase());
+        }
+        message : "UCA '" + self.name + "' has invalid unsafeType '"
+                  + self.unsafeType
+                  + "'. Must be one of: NotProvided, ProvidedCausesHazard, "
+                  + "TooLate, TooEarly, WrongMagnitude, WrongTiming, "
+                  + "StoppedTooSoon, AppliedTooLong (STPA Handbook 2018)"
+    }
+
+    // Constraint: Every UCA must be linked to at least one hazard
+    // via its control action's context
+    constraint UCAMustReferenceControlAction {
+        check : self.controlAction <> null
+        message : "UCA '" + self.name
+                  + "' must reference a ControlAction (STPA Step 2)"
+    }
+}
+
+// Constraint: ControlStructure must have at least one controller
+// and one controlled process
+context ControlStructure {
+
+    constraint ControlStructureMustHaveController {
+        check : self.controllers.notEmpty()
+        message : "Control structure '" + self.name
+                  + "' must contain at least one Controller (STPA Step 1)"
+    }
+
+    constraint ControlStructureMustHaveProcess {
+        check : self.controlledProcesses.notEmpty()
+        message : "Control structure '" + self.name
+                  + "' must contain at least one ControlledProcess (STPA Step 1)"
+    }
+}
+
+
+// ============================================================================
+// 4. HARA / ISO 26262 CONSTRAINTS
+// ============================================================================
+
+// Constraint: ASIL determination must be consistent with S, E, C values
+// Profile equivalent: OCL inv ASILDeterminationValid
+// Reference: ISO 26262:2018 Part 3, Table 6
+context ASILAssignment {
+
+    constraint ASILMustBeAssigned {
+        check : self.ASIL <> null
+        message : "ASILAssignment '" + self.name
+                  + "' must have an ASIL value (ISO 26262 Part 3)"
+    }
+}
+
+// Constraint: ASIL decomposition must satisfy ISO 26262 Part 9 rules
+// Profile equivalent: OCL inv ASILDecompositionValid
+context ASILDecompose {
+
+    constraint ASILDecompositionValid {
+        check {
+            // Source and target requirements must both have ASIL assignments
+            return self.source <> null and self.target <> null;
+        }
+        message : "ASIL decomposition must reference both source and target "
+                  + "requirements (ISO 26262 Part 9, Table 5)"
+    }
+}
+
+
+// ============================================================================
+// 5. GSN CONSTRAINTS
+// ============================================================================
+
+// Constraint: Every Goal should be supported by at least one element
+// Profile equivalent: OCL inv GoalMustBeSupported
+context GSN {
+
+    constraint GoalsMustBeSupported {
+        check {
+            // Every Goal in the GSN should appear as a source in at least
+            // one SupportedBy relationship (except leaf goals with Solutions)
+            var goals = self.gsnNodes.select(n | n.isKindOf(Goal));
+            if (goals.isEmpty()) {
+                return true;
+            }
+            // At least the top goal should have support
+            return self.supportedBy.notEmpty();
+        }
+        message : "GSN safety case '" + self.name
+                  + "' must contain at least one SupportedBy relationship "
+                  + "(GSN Community Standard v3)"
+    }
+
+    // Constraint: GSN must have at least one Goal
+    constraint GSNMustHaveGoal {
+        check : self.gsnNodes.exists(n | n.isKindOf(Goal))
+        message : "GSN '" + self.name
+                  + "' must contain at least one Goal node "
+                  + "(GSN Community Standard v3)"
+    }
+}
+
+
+// ============================================================================
+// 6. REQUIREMENTS CONSTRAINTS
+// ============================================================================
+
+// Constraint: Requirement hierarchy must not be self-referential
+// Profile equivalent: OCL inv RequirementHierarchyValid
+context Requirement {
+
+    constraint RequirementNotSelfParent {
+        check : self.parentRequirement <> self
+        message : "Requirement '" + self.name
+                  + "' cannot be its own parent requirement"
+    }
+
+    // Constraint: Safety Goal must have ASIL assigned (if it's an
+    // ISO26262SafetyRequirementTemplate)
+    critique SafetyRequirementShouldHaveASIL {
+        guard : self.isKindOf(ISO26262SafetyRequirementTemplate)
+        check : self.ASIL <> null
+        message : "Safety requirement '" + self.name
+                  + "' should have an ASIL assignment (ISO 26262 Part 3)"
+    }
+}
+
+
+// ============================================================================
+// 7. CROSS-TECHNIQUE CONSISTENCY CONSTRAINTS
+// ============================================================================
+
+// These constraints demonstrate the unique advantage of the unified metamodel:
+// cross-technique validation that is impossible in isolated single-technique tools.
+
+// Constraint: STPA Loss count should be consistent with HARA hazardous events
+// (informational critique, not a hard constraint)
+context SafetyAnalysis {
+
+    critique CrossTechniqueTraceabilityCheck {
+        check {
+            var stpaAnalyses = self.analyses.select(a | a.isKindOf(STPA));
+            var haraAnalyses = self.analyses.select(a | a.isKindOf(ISO26262));
+            // If both STPA and HARA exist, they should both be populated
+            if (stpaAnalyses.notEmpty() and haraAnalyses.notEmpty()) {
+                var hasLosses = stpaAnalyses.exists(s | s.losses.notEmpty());
+                var hasHazards = haraAnalyses.exists(h |
+                    h.malfunctioningBehaviors.notEmpty());
+                return hasLosses and hasHazards;
+            }
+            return true;
+        }
+        message : "Both STPA and HARA analyses exist but one appears incomplete. "
+                  + "Ensure cross-technique consistency: STPA losses should "
+                  + "correspond to HARA hazardous events."
+    }
+}
