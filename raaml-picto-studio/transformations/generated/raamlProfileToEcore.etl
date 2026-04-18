@@ -1,0 +1,2435 @@
+// ============================================================================
+// raamlProfileToEcore.etl  (AUTO-GENERATED - do not edit)
+// ----------------------------------------------------------------------------
+// Forward transformation: UML profile instance -> RAAML Ecore instance
+// Generated from raaml.ecore annotations by all-forward-rules.egl
+// Rules: 100
+// ============================================================================
+
+import '../helpers/uml-helpers.eol';
+
+pre {
+    ('Forward transformation starting... '
+        + '100 rules loaded.').println();
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Situation>> -> RAAML core!Situation
+// ----------------------------------------------------------------------------
+rule Transform_Situation
+    transform s : UML!Class
+    to t : RAAML!core!Situation {
+
+    guard : s.hasStereotype('Situation')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Situation', 'id') <> null) {
+        t.id = s.getTaggedValue('Situation', 'id');
+    }
+    if (s.getTaggedValue('Situation', 'description') <> null) {
+        t.description = s.getTaggedValue('Situation', 'description');
+    }
+    if (s.getTaggedValue('Situation', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Situation', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<FailureMode>> -> RAAML core!FailureMode
+// ----------------------------------------------------------------------------
+rule Transform_FailureMode
+    transform s : UML!Class
+    to t : RAAML!core!FailureMode {
+
+    guard : s.hasStereotype('FailureMode')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FailureMode', 'id') <> null) {
+        t.id = s.getTaggedValue('FailureMode', 'id');
+    }
+    if (s.getTaggedValue('FailureMode', 'description') <> null) {
+        t.description = s.getTaggedValue('FailureMode', 'description');
+    }
+    if (s.getTaggedValue('FailureMode', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FailureMode', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Hazard>> -> RAAML core!Hazard
+// ----------------------------------------------------------------------------
+rule Transform_Hazard
+    transform s : UML!Class
+    to t : RAAML!core!Hazard {
+
+    guard : s.hasStereotype('Hazard')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Hazard', 'id') <> null) {
+        t.id = s.getTaggedValue('Hazard', 'id');
+    }
+    if (s.getTaggedValue('Hazard', 'description') <> null) {
+        t.description = s.getTaggedValue('Hazard', 'description');
+    }
+    if (s.getTaggedValue('Hazard', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Hazard', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Error>> -> RAAML core!Error
+// ----------------------------------------------------------------------------
+rule Transform_Error
+    transform s : UML!Class
+    to t : RAAML!core!Error {
+
+    guard : s.hasStereotype('Error')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Error', 'id') <> null) {
+        t.id = s.getTaggedValue('Error', 'id');
+    }
+    if (s.getTaggedValue('Error', 'description') <> null) {
+        t.description = s.getTaggedValue('Error', 'description');
+    }
+    if (s.getTaggedValue('Error', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Error', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Fault>> -> RAAML core!Fault
+// ----------------------------------------------------------------------------
+rule Transform_Fault
+    transform s : UML!Class
+    to t : RAAML!core!Fault {
+
+    guard : s.hasStereotype('Fault')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Fault', 'id') <> null) {
+        t.id = s.getTaggedValue('Fault', 'id');
+    }
+    if (s.getTaggedValue('Fault', 'description') <> null) {
+        t.description = s.getTaggedValue('Fault', 'description');
+    }
+    if (s.getTaggedValue('Fault', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Fault', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Detection>> -> RAAML core!Detection
+// ----------------------------------------------------------------------------
+rule Transform_Detection
+    transform s : UML!Class
+    to t : RAAML!core!Detection {
+
+    guard : s.hasStereotype('Detection')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Detection', 'id') <> null) {
+        t.id = s.getTaggedValue('Detection', 'id');
+    }
+    if (s.getTaggedValue('Detection', 'description') <> null) {
+        t.description = s.getTaggedValue('Detection', 'description');
+    }
+    if (s.getTaggedValue('Detection', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Detection', 'visibility');
+    }
+    if (s.getTaggedValue('Detection', 'affects') <> null) {
+        t.affects = s.getTaggedValue('Detection', 'affects');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Recommendation>> -> RAAML core!Recommendation
+// ----------------------------------------------------------------------------
+rule Transform_Recommendation
+    transform s : UML!Class
+    to t : RAAML!core!Recommendation {
+
+    guard : s.hasStereotype('Recommendation')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Recommendation', 'id') <> null) {
+        t.id = s.getTaggedValue('Recommendation', 'id');
+    }
+    if (s.getTaggedValue('Recommendation', 'description') <> null) {
+        t.description = s.getTaggedValue('Recommendation', 'description');
+    }
+    if (s.getTaggedValue('Recommendation', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Recommendation', 'visibility');
+    }
+    if (s.getTaggedValue('Recommendation', 'affects') <> null) {
+        t.affects = s.getTaggedValue('Recommendation', 'affects');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Mitigation>> -> RAAML core!Mitigation
+// ----------------------------------------------------------------------------
+rule Transform_Mitigation
+    transform s : UML!Class
+    to t : RAAML!core!Mitigation {
+
+    guard : s.hasStereotype('Mitigation')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Mitigation', 'id') <> null) {
+        t.id = s.getTaggedValue('Mitigation', 'id');
+    }
+    if (s.getTaggedValue('Mitigation', 'description') <> null) {
+        t.description = s.getTaggedValue('Mitigation', 'description');
+    }
+    if (s.getTaggedValue('Mitigation', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Mitigation', 'visibility');
+    }
+    if (s.getTaggedValue('Mitigation', 'affects') <> null) {
+        t.affects = s.getTaggedValue('Mitigation', 'affects');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Prevention>> -> RAAML core!Prevention
+// ----------------------------------------------------------------------------
+rule Transform_Prevention
+    transform s : UML!Class
+    to t : RAAML!core!Prevention {
+
+    guard : s.hasStereotype('Prevention')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Prevention', 'id') <> null) {
+        t.id = s.getTaggedValue('Prevention', 'id');
+    }
+    if (s.getTaggedValue('Prevention', 'description') <> null) {
+        t.description = s.getTaggedValue('Prevention', 'description');
+    }
+    if (s.getTaggedValue('Prevention', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Prevention', 'visibility');
+    }
+    if (s.getTaggedValue('Prevention', 'affects') <> null) {
+        t.affects = s.getTaggedValue('Prevention', 'affects');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML State with <<FailureState>> -> RAAML core!FailureState
+// ----------------------------------------------------------------------------
+rule Transform_FailureState
+    transform s : UML!State
+    to t : RAAML!core!FailureState {
+
+    guard : s.hasStereotype('FailureState')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FailureState', 'id') <> null) {
+        t.id = s.getTaggedValue('FailureState', 'id');
+    }
+    if (s.getTaggedValue('FailureState', 'description') <> null) {
+        t.description = s.getTaggedValue('FailureState', 'description');
+    }
+    if (s.getTaggedValue('FailureState', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FailureState', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<RelevantTo>> -> RAAML core!RelevantTo
+// ----------------------------------------------------------------------------
+rule Transform_RelevantTo
+    transform s : UML!Dependency
+    to t : RAAML!core!RelevantTo {
+
+    guard : s.hasStereotype('RelevantTo')
+
+    t.name = s.name;
+    if (s.getTaggedValue('RelevantTo', 'id') <> null) {
+        t.id = s.getTaggedValue('RelevantTo', 'id');
+    }
+    if (s.getTaggedValue('RelevantTo', 'description') <> null) {
+        t.description = s.getTaggedValue('RelevantTo', 'description');
+    }
+    if (s.getTaggedValue('RelevantTo', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('RelevantTo', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<PresentIn>> -> RAAML core!PresentIn
+// ----------------------------------------------------------------------------
+rule Transform_PresentIn
+    transform s : UML!Dependency
+    to t : RAAML!core!PresentIn {
+
+    guard : s.hasStereotype('PresentIn')
+
+    t.name = s.name;
+    if (s.getTaggedValue('PresentIn', 'id') <> null) {
+        t.id = s.getTaggedValue('PresentIn', 'id');
+    }
+    if (s.getTaggedValue('PresentIn', 'description') <> null) {
+        t.description = s.getTaggedValue('PresentIn', 'description');
+    }
+    if (s.getTaggedValue('PresentIn', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('PresentIn', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<Violates>> -> RAAML core!Violates
+// ----------------------------------------------------------------------------
+rule Transform_Violates
+    transform s : UML!Dependency
+    to t : RAAML!core!Violates {
+
+    guard : s.hasStereotype('Violates')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Violates', 'id') <> null) {
+        t.id = s.getTaggedValue('Violates', 'id');
+    }
+    if (s.getTaggedValue('Violates', 'description') <> null) {
+        t.description = s.getTaggedValue('Violates', 'description');
+    }
+    if (s.getTaggedValue('Violates', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Violates', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Item>> -> RAAML core!Item
+// ----------------------------------------------------------------------------
+rule Transform_Item
+    transform s : UML!Class
+    to t : RAAML!core!Item {
+
+    guard : s.hasStereotype('Item')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Item', 'id') <> null) {
+        t.id = s.getTaggedValue('Item', 'id');
+    }
+    if (s.getTaggedValue('Item', 'description') <> null) {
+        t.description = s.getTaggedValue('Item', 'description');
+    }
+    if (s.getTaggedValue('Item', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Item', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<SingleElementItem>> -> RAAML core!SingleElementItem
+// ----------------------------------------------------------------------------
+rule Transform_SingleElementItem
+    transform s : UML!Class
+    to t : RAAML!core!SingleElementItem {
+
+    guard : s.hasStereotype('SingleElementItem')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SingleElementItem', 'id') <> null) {
+        t.id = s.getTaggedValue('SingleElementItem', 'id');
+    }
+    if (s.getTaggedValue('SingleElementItem', 'description') <> null) {
+        t.description = s.getTaggedValue('SingleElementItem', 'description');
+    }
+    if (s.getTaggedValue('SingleElementItem', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SingleElementItem', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ElementGroup>> -> RAAML core!ElementGroup
+// ----------------------------------------------------------------------------
+rule Transform_ElementGroup
+    transform s : UML!Class
+    to t : RAAML!core!ElementGroup {
+
+    guard : s.hasStereotype('ElementGroup')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ElementGroup', 'id') <> null) {
+        t.id = s.getTaggedValue('ElementGroup', 'id');
+    }
+    if (s.getTaggedValue('ElementGroup', 'description') <> null) {
+        t.description = s.getTaggedValue('ElementGroup', 'description');
+    }
+    if (s.getTaggedValue('ElementGroup', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ElementGroup', 'visibility');
+    }
+    if (s.getTaggedValue('ElementGroup', 'groupCriterion') <> null) {
+        t.groupCriterion = s.getTaggedValue('ElementGroup', 'groupCriterion');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ElementGroupBasedItem>> -> RAAML core!ElementGroupBasedItem
+// ----------------------------------------------------------------------------
+rule Transform_ElementGroupBasedItem
+    transform s : UML!Class
+    to t : RAAML!core!ElementGroupBasedItem {
+
+    guard : s.hasStereotype('ElementGroupBasedItem')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ElementGroupBasedItem', 'id') <> null) {
+        t.id = s.getTaggedValue('ElementGroupBasedItem', 'id');
+    }
+    if (s.getTaggedValue('ElementGroupBasedItem', 'description') <> null) {
+        t.description = s.getTaggedValue('ElementGroupBasedItem', 'description');
+    }
+    if (s.getTaggedValue('ElementGroupBasedItem', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ElementGroupBasedItem', 'visibility');
+    }
+    if (s.getTaggedValue('ElementGroupBasedItem', 'groupCriterion') <> null) {
+        t.groupCriterion = s.getTaggedValue('ElementGroupBasedItem', 'groupCriterion');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Factor>> -> RAAML core!Factor
+// ----------------------------------------------------------------------------
+rule Transform_Factor
+    transform s : UML!Class
+    to t : RAAML!core!Factor {
+
+    guard : s.hasStereotype('Factor')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Factor', 'id') <> null) {
+        t.id = s.getTaggedValue('Factor', 'id');
+    }
+    if (s.getTaggedValue('Factor', 'description') <> null) {
+        t.description = s.getTaggedValue('Factor', 'description');
+    }
+    if (s.getTaggedValue('Factor', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Factor', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ProcessModelFlaw>> -> RAAML core!ProcessModelFlaw
+// ----------------------------------------------------------------------------
+rule Transform_ProcessModelFlaw
+    transform s : UML!Class
+    to t : RAAML!core!ProcessModelFlaw {
+
+    guard : s.hasStereotype('ProcessModelFlaw')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ProcessModelFlaw', 'id') <> null) {
+        t.id = s.getTaggedValue('ProcessModelFlaw', 'id');
+    }
+    if (s.getTaggedValue('ProcessModelFlaw', 'description') <> null) {
+        t.description = s.getTaggedValue('ProcessModelFlaw', 'description');
+    }
+    if (s.getTaggedValue('ProcessModelFlaw', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ProcessModelFlaw', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<HarmPotential>> -> RAAML core!HarmPotential
+// ----------------------------------------------------------------------------
+rule Transform_HarmPotential
+    transform s : UML!Class
+    to t : RAAML!core!HarmPotential {
+
+    guard : s.hasStereotype('HarmPotential')
+
+    t.name = s.name;
+    if (s.getTaggedValue('HarmPotential', 'id') <> null) {
+        t.id = s.getTaggedValue('HarmPotential', 'id');
+    }
+    if (s.getTaggedValue('HarmPotential', 'description') <> null) {
+        t.description = s.getTaggedValue('HarmPotential', 'description');
+    }
+    if (s.getTaggedValue('HarmPotential', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('HarmPotential', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Scenario>> -> RAAML core!Scenario
+// ----------------------------------------------------------------------------
+rule Transform_Scenario
+    transform s : UML!Class
+    to t : RAAML!core!Scenario {
+
+    guard : s.hasStereotype('Scenario')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Scenario', 'id') <> null) {
+        t.id = s.getTaggedValue('Scenario', 'id');
+    }
+    if (s.getTaggedValue('Scenario', 'description') <> null) {
+        t.description = s.getTaggedValue('Scenario', 'description');
+    }
+    if (s.getTaggedValue('Scenario', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Scenario', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Requirement>> -> RAAML req!Requirement
+// ----------------------------------------------------------------------------
+rule Transform_Requirement
+    transform s : UML!Class
+    to t : RAAML!req!Requirement {
+
+    guard : s.hasStereotype('Requirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Requirement', 'id') <> null) {
+        t.id = s.getTaggedValue('Requirement', 'id');
+    }
+    if (s.getTaggedValue('Requirement', 'description') <> null) {
+        t.description = s.getTaggedValue('Requirement', 'description');
+    }
+    if (s.getTaggedValue('Requirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Requirement', 'visibility');
+    }
+    if (s.getTaggedValue('Requirement', 'text') <> null) {
+        t.text = s.getTaggedValue('Requirement', 'text');
+    }
+    if (s.getTaggedValue('Requirement', 'type') <> null) {
+        t.type = s.getTaggedValue('Requirement', 'type');
+    }
+    if (s.getTaggedValue('Requirement', 'priority') <> null) {
+        t.priority = s.getTaggedValue('Requirement', 'priority');
+    }
+    if (s.getTaggedValue('Requirement', 'status') <> null) {
+        t.status = s.getTaggedValue('Requirement', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Abstraction with <<DeriveRequirement>> -> RAAML req!DeriveRequirement
+// ----------------------------------------------------------------------------
+rule Transform_DeriveRequirement
+    transform s : UML!Abstraction
+    to t : RAAML!req!DeriveRequirement {
+
+    guard : s.hasStereotype('DeriveRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('DeriveRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('DeriveRequirement', 'id');
+    }
+    if (s.getTaggedValue('DeriveRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('DeriveRequirement', 'description');
+    }
+    if (s.getTaggedValue('DeriveRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('DeriveRequirement', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Abstraction with <<IndependenceRequirement>> -> RAAML req!IndependenceRequirement
+// ----------------------------------------------------------------------------
+rule Transform_IndependenceRequirement
+    transform s : UML!Abstraction
+    to t : RAAML!req!IndependenceRequirement {
+
+    guard : s.hasStereotype('IndependenceRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('IndependenceRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('IndependenceRequirement', 'id');
+    }
+    if (s.getTaggedValue('IndependenceRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('IndependenceRequirement', 'description');
+    }
+    if (s.getTaggedValue('IndependenceRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('IndependenceRequirement', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Abstraction with <<ASILDecompose>> -> RAAML req!ASILDecompose
+// ----------------------------------------------------------------------------
+rule Transform_ASILDecompose
+    transform s : UML!Abstraction
+    to t : RAAML!req!ASILDecompose {
+
+    guard : s.hasStereotype('ASILDecompose')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ASILDecompose', 'id') <> null) {
+        t.id = s.getTaggedValue('ASILDecompose', 'id');
+    }
+    if (s.getTaggedValue('ASILDecompose', 'description') <> null) {
+        t.description = s.getTaggedValue('ASILDecompose', 'description');
+    }
+    if (s.getTaggedValue('ASILDecompose', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ASILDecompose', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Abstraction with <<Satisfy>> -> RAAML req!Satisfy
+// ----------------------------------------------------------------------------
+rule Transform_Satisfy
+    transform s : UML!Abstraction
+    to t : RAAML!req!Satisfy {
+
+    guard : s.hasStereotype('Satisfy')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Satisfy', 'id') <> null) {
+        t.id = s.getTaggedValue('Satisfy', 'id');
+    }
+    if (s.getTaggedValue('Satisfy', 'description') <> null) {
+        t.description = s.getTaggedValue('Satisfy', 'description');
+    }
+    if (s.getTaggedValue('Satisfy', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Satisfy', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Abstraction with <<UserInfoRequirement>> -> RAAML req!UserInfoRequirement
+// ----------------------------------------------------------------------------
+rule Transform_UserInfoRequirement
+    transform s : UML!Abstraction
+    to t : RAAML!req!UserInfoRequirement {
+
+    guard : s.hasStereotype('UserInfoRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('UserInfoRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('UserInfoRequirement', 'id');
+    }
+    if (s.getTaggedValue('UserInfoRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('UserInfoRequirement', 'description');
+    }
+    if (s.getTaggedValue('UserInfoRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('UserInfoRequirement', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Abstraction with <<RecoveryRequirement>> -> RAAML req!RecoveryRequirement
+// ----------------------------------------------------------------------------
+rule Transform_RecoveryRequirement
+    transform s : UML!Abstraction
+    to t : RAAML!req!RecoveryRequirement {
+
+    guard : s.hasStereotype('RecoveryRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('RecoveryRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('RecoveryRequirement', 'id');
+    }
+    if (s.getTaggedValue('RecoveryRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('RecoveryRequirement', 'description');
+    }
+    if (s.getTaggedValue('RecoveryRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('RecoveryRequirement', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<DependabilityRequirement>> -> RAAML req!DependabilityRequirement
+// ----------------------------------------------------------------------------
+rule Transform_DependabilityRequirement
+    transform s : UML!Class
+    to t : RAAML!req!DependabilityRequirement {
+
+    guard : s.hasStereotype('DependabilityRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('DependabilityRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('DependabilityRequirement', 'id');
+    }
+    if (s.getTaggedValue('DependabilityRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('DependabilityRequirement', 'description');
+    }
+    if (s.getTaggedValue('DependabilityRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('DependabilityRequirement', 'visibility');
+    }
+    if (s.getTaggedValue('DependabilityRequirement', 'text') <> null) {
+        t.text = s.getTaggedValue('DependabilityRequirement', 'text');
+    }
+    if (s.getTaggedValue('DependabilityRequirement', 'type') <> null) {
+        t.type = s.getTaggedValue('DependabilityRequirement', 'type');
+    }
+    if (s.getTaggedValue('DependabilityRequirement', 'priority') <> null) {
+        t.priority = s.getTaggedValue('DependabilityRequirement', 'priority');
+    }
+    if (s.getTaggedValue('DependabilityRequirement', 'status') <> null) {
+        t.status = s.getTaggedValue('DependabilityRequirement', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<FunctionalSafetyRequirement>> -> RAAML req!FunctionalSafetyRequirement
+// ----------------------------------------------------------------------------
+rule Transform_FunctionalSafetyRequirement
+    transform s : UML!Class
+    to t : RAAML!req!FunctionalSafetyRequirement {
+
+    guard : s.hasStereotype('FunctionalSafetyRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('FunctionalSafetyRequirement', 'id');
+    }
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('FunctionalSafetyRequirement', 'description');
+    }
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FunctionalSafetyRequirement', 'visibility');
+    }
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'text') <> null) {
+        t.text = s.getTaggedValue('FunctionalSafetyRequirement', 'text');
+    }
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'type') <> null) {
+        t.type = s.getTaggedValue('FunctionalSafetyRequirement', 'type');
+    }
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'priority') <> null) {
+        t.priority = s.getTaggedValue('FunctionalSafetyRequirement', 'priority');
+    }
+    if (s.getTaggedValue('FunctionalSafetyRequirement', 'status') <> null) {
+        t.status = s.getTaggedValue('FunctionalSafetyRequirement', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<SoftwareSafetyRequirement>> -> RAAML req!SoftwareSafetyRequirement
+// ----------------------------------------------------------------------------
+rule Transform_SoftwareSafetyRequirement
+    transform s : UML!Class
+    to t : RAAML!req!SoftwareSafetyRequirement {
+
+    guard : s.hasStereotype('SoftwareSafetyRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('SoftwareSafetyRequirement', 'id');
+    }
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('SoftwareSafetyRequirement', 'description');
+    }
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SoftwareSafetyRequirement', 'visibility');
+    }
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'text') <> null) {
+        t.text = s.getTaggedValue('SoftwareSafetyRequirement', 'text');
+    }
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'type') <> null) {
+        t.type = s.getTaggedValue('SoftwareSafetyRequirement', 'type');
+    }
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'priority') <> null) {
+        t.priority = s.getTaggedValue('SoftwareSafetyRequirement', 'priority');
+    }
+    if (s.getTaggedValue('SoftwareSafetyRequirement', 'status') <> null) {
+        t.status = s.getTaggedValue('SoftwareSafetyRequirement', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<HardwareSafetyRequirement>> -> RAAML req!HardwareSafetyRequirement
+// ----------------------------------------------------------------------------
+rule Transform_HardwareSafetyRequirement
+    transform s : UML!Class
+    to t : RAAML!req!HardwareSafetyRequirement {
+
+    guard : s.hasStereotype('HardwareSafetyRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('HardwareSafetyRequirement', 'id');
+    }
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('HardwareSafetyRequirement', 'description');
+    }
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('HardwareSafetyRequirement', 'visibility');
+    }
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'text') <> null) {
+        t.text = s.getTaggedValue('HardwareSafetyRequirement', 'text');
+    }
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'type') <> null) {
+        t.type = s.getTaggedValue('HardwareSafetyRequirement', 'type');
+    }
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'priority') <> null) {
+        t.priority = s.getTaggedValue('HardwareSafetyRequirement', 'priority');
+    }
+    if (s.getTaggedValue('HardwareSafetyRequirement', 'status') <> null) {
+        t.status = s.getTaggedValue('HardwareSafetyRequirement', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<TechnicalSafetyRequirement>> -> RAAML req!TechnicalSafetyRequirement
+// ----------------------------------------------------------------------------
+rule Transform_TechnicalSafetyRequirement
+    transform s : UML!Class
+    to t : RAAML!req!TechnicalSafetyRequirement {
+
+    guard : s.hasStereotype('TechnicalSafetyRequirement')
+
+    t.name = s.name;
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'id') <> null) {
+        t.id = s.getTaggedValue('TechnicalSafetyRequirement', 'id');
+    }
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'description') <> null) {
+        t.description = s.getTaggedValue('TechnicalSafetyRequirement', 'description');
+    }
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('TechnicalSafetyRequirement', 'visibility');
+    }
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'text') <> null) {
+        t.text = s.getTaggedValue('TechnicalSafetyRequirement', 'text');
+    }
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'type') <> null) {
+        t.type = s.getTaggedValue('TechnicalSafetyRequirement', 'type');
+    }
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'priority') <> null) {
+        t.priority = s.getTaggedValue('TechnicalSafetyRequirement', 'priority');
+    }
+    if (s.getTaggedValue('TechnicalSafetyRequirement', 'status') <> null) {
+        t.status = s.getTaggedValue('TechnicalSafetyRequirement', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<SafetyGoal>> -> RAAML req!SafetyGoal
+// ----------------------------------------------------------------------------
+rule Transform_SafetyGoal
+    transform s : UML!Class
+    to t : RAAML!req!SafetyGoal {
+
+    guard : s.hasStereotype('SafetyGoal')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SafetyGoal', 'id') <> null) {
+        t.id = s.getTaggedValue('SafetyGoal', 'id');
+    }
+    if (s.getTaggedValue('SafetyGoal', 'description') <> null) {
+        t.description = s.getTaggedValue('SafetyGoal', 'description');
+    }
+    if (s.getTaggedValue('SafetyGoal', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SafetyGoal', 'visibility');
+    }
+    if (s.getTaggedValue('SafetyGoal', 'text') <> null) {
+        t.text = s.getTaggedValue('SafetyGoal', 'text');
+    }
+    if (s.getTaggedValue('SafetyGoal', 'type') <> null) {
+        t.type = s.getTaggedValue('SafetyGoal', 'type');
+    }
+    if (s.getTaggedValue('SafetyGoal', 'priority') <> null) {
+        t.priority = s.getTaggedValue('SafetyGoal', 'priority');
+    }
+    if (s.getTaggedValue('SafetyGoal', 'status') <> null) {
+        t.status = s.getTaggedValue('SafetyGoal', 'status');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<SafeState>> -> RAAML req!SafeState
+// ----------------------------------------------------------------------------
+rule Transform_SafeState
+    transform s : UML!Dependency
+    to t : RAAML!req!SafeState {
+
+    guard : s.hasStereotype('SafeState')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SafeState', 'id') <> null) {
+        t.id = s.getTaggedValue('SafeState', 'id');
+    }
+    if (s.getTaggedValue('SafeState', 'description') <> null) {
+        t.description = s.getTaggedValue('SafeState', 'description');
+    }
+    if (s.getTaggedValue('SafeState', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SafeState', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<OperatingMode>> -> RAAML req!OperatingMode
+// ----------------------------------------------------------------------------
+rule Transform_OperatingMode
+    transform s : UML!Dependency
+    to t : RAAML!req!OperatingMode {
+
+    guard : s.hasStereotype('OperatingMode')
+
+    t.name = s.name;
+    if (s.getTaggedValue('OperatingMode', 'id') <> null) {
+        t.id = s.getTaggedValue('OperatingMode', 'id');
+    }
+    if (s.getTaggedValue('OperatingMode', 'description') <> null) {
+        t.description = s.getTaggedValue('OperatingMode', 'description');
+    }
+    if (s.getTaggedValue('OperatingMode', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('OperatingMode', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<HazardAndRiskAssessment>> -> RAAML req!HazardAndRiskAssessment
+// ----------------------------------------------------------------------------
+rule Transform_HazardAndRiskAssessment
+    transform s : UML!Class
+    to t : RAAML!req!HazardAndRiskAssessment {
+
+    guard : s.hasStereotype('HazardAndRiskAssessment')
+
+    t.name = s.name;
+    if (s.getTaggedValue('HazardAndRiskAssessment', 'id') <> null) {
+        t.id = s.getTaggedValue('HazardAndRiskAssessment', 'id');
+    }
+    if (s.getTaggedValue('HazardAndRiskAssessment', 'description') <> null) {
+        t.description = s.getTaggedValue('HazardAndRiskAssessment', 'description');
+    }
+    if (s.getTaggedValue('HazardAndRiskAssessment', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('HazardAndRiskAssessment', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ISO26262SafetyRequirementTemplate>> -> RAAML req!ISO26262SafetyRequirementTemplate
+// ----------------------------------------------------------------------------
+rule Transform_ISO26262SafetyRequirementTemplate
+    transform s : UML!Class
+    to t : RAAML!req!ISO26262SafetyRequirementTemplate {
+
+    guard : s.hasStereotype('ISO26262SafetyRequirementTemplate')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'id') <> null) {
+        t.id = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'id');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'description') <> null) {
+        t.description = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'description');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'visibility');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'text') <> null) {
+        t.text = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'text');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'type') <> null) {
+        t.type = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'type');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'priority') <> null) {
+        t.priority = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'priority');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'status') <> null) {
+        t.status = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'status');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'ASIL') <> null) {
+        t.ASIL = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'ASIL');
+    }
+    if (s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'FTTI') <> null) {
+        t.FTTI = s.getTaggedValue('ISO26262SafetyRequirementTemplate', 'FTTI');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<GeneralLibrary>> -> RAAML library!GeneralLibrary
+// ----------------------------------------------------------------------------
+rule Transform_GeneralLibrary
+    transform s : UML!Package
+    to t : RAAML!library!GeneralLibrary {
+
+    guard : s.hasStereotype('GeneralLibrary')
+
+    t.name = s.name;
+    if (s.getTaggedValue('GeneralLibrary', 'id') <> null) {
+        t.id = s.getTaggedValue('GeneralLibrary', 'id');
+    }
+    if (s.getTaggedValue('GeneralLibrary', 'description') <> null) {
+        t.description = s.getTaggedValue('GeneralLibrary', 'description');
+    }
+    if (s.getTaggedValue('GeneralLibrary', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('GeneralLibrary', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<FTA>> -> RAAML fta!FTA
+// ----------------------------------------------------------------------------
+rule Transform_FTA
+    transform s : UML!Package
+    to t : RAAML!fta!FTA {
+
+    guard : s.hasStereotype('FTA')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FTA', 'id') <> null) {
+        t.id = s.getTaggedValue('FTA', 'id');
+    }
+    if (s.getTaggedValue('FTA', 'description') <> null) {
+        t.description = s.getTaggedValue('FTA', 'description');
+    }
+    if (s.getTaggedValue('FTA', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FTA', 'visibility');
+    }
+    // Containment: owned elements with <<FTATree>>
+    t.trees ::= s.getOwnedElementsByStereotype('FTATree');
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<BasicEvent>> -> RAAML fta!BasicEvent
+// ----------------------------------------------------------------------------
+rule Transform_BasicEvent
+    transform s : UML!Class
+    to t : RAAML!fta!BasicEvent {
+
+    guard : s.hasStereotype('BasicEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('BasicEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('BasicEvent', 'id');
+    }
+    if (s.getTaggedValue('BasicEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('BasicEvent', 'description');
+    }
+    if (s.getTaggedValue('BasicEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('BasicEvent', 'visibility');
+    }
+    if (s.getTaggedValue('BasicEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('BasicEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('BasicEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('BasicEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<IntermediateEvent>> -> RAAML fta!IntermediateEvent
+// ----------------------------------------------------------------------------
+rule Transform_IntermediateEvent
+    transform s : UML!Class
+    to t : RAAML!fta!IntermediateEvent {
+
+    guard : s.hasStereotype('IntermediateEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('IntermediateEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('IntermediateEvent', 'id');
+    }
+    if (s.getTaggedValue('IntermediateEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('IntermediateEvent', 'description');
+    }
+    if (s.getTaggedValue('IntermediateEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('IntermediateEvent', 'visibility');
+    }
+    if (s.getTaggedValue('IntermediateEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('IntermediateEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('IntermediateEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('IntermediateEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<TopEvent>> -> RAAML fta!TopEvent
+// ----------------------------------------------------------------------------
+rule Transform_TopEvent
+    transform s : UML!Class
+    to t : RAAML!fta!TopEvent {
+
+    guard : s.hasStereotype('TopEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('TopEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('TopEvent', 'id');
+    }
+    if (s.getTaggedValue('TopEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('TopEvent', 'description');
+    }
+    if (s.getTaggedValue('TopEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('TopEvent', 'visibility');
+    }
+    if (s.getTaggedValue('TopEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('TopEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('TopEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('TopEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ConditionalEvent>> -> RAAML fta!ConditionalEvent
+// ----------------------------------------------------------------------------
+rule Transform_ConditionalEvent
+    transform s : UML!Class
+    to t : RAAML!fta!ConditionalEvent {
+
+    guard : s.hasStereotype('ConditionalEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ConditionalEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('ConditionalEvent', 'id');
+    }
+    if (s.getTaggedValue('ConditionalEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('ConditionalEvent', 'description');
+    }
+    if (s.getTaggedValue('ConditionalEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ConditionalEvent', 'visibility');
+    }
+    if (s.getTaggedValue('ConditionalEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('ConditionalEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('ConditionalEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('ConditionalEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<DormantEvent>> -> RAAML fta!DormantEvent
+// ----------------------------------------------------------------------------
+rule Transform_DormantEvent
+    transform s : UML!Class
+    to t : RAAML!fta!DormantEvent {
+
+    guard : s.hasStereotype('DormantEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('DormantEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('DormantEvent', 'id');
+    }
+    if (s.getTaggedValue('DormantEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('DormantEvent', 'description');
+    }
+    if (s.getTaggedValue('DormantEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('DormantEvent', 'visibility');
+    }
+    if (s.getTaggedValue('DormantEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('DormantEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('DormantEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('DormantEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<UndevelopedEvent>> -> RAAML fta!UndevelopedEvent
+// ----------------------------------------------------------------------------
+rule Transform_UndevelopedEvent
+    transform s : UML!Class
+    to t : RAAML!fta!UndevelopedEvent {
+
+    guard : s.hasStereotype('UndevelopedEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('UndevelopedEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('UndevelopedEvent', 'id');
+    }
+    if (s.getTaggedValue('UndevelopedEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('UndevelopedEvent', 'description');
+    }
+    if (s.getTaggedValue('UndevelopedEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('UndevelopedEvent', 'visibility');
+    }
+    if (s.getTaggedValue('UndevelopedEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('UndevelopedEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('UndevelopedEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('UndevelopedEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<HouseEvent>> -> RAAML fta!HouseEvent
+// ----------------------------------------------------------------------------
+rule Transform_HouseEvent
+    transform s : UML!Class
+    to t : RAAML!fta!HouseEvent {
+
+    guard : s.hasStereotype('HouseEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('HouseEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('HouseEvent', 'id');
+    }
+    if (s.getTaggedValue('HouseEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('HouseEvent', 'description');
+    }
+    if (s.getTaggedValue('HouseEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('HouseEvent', 'visibility');
+    }
+    if (s.getTaggedValue('HouseEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('HouseEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('HouseEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('HouseEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ZeroEvent>> -> RAAML fta!ZeroEvent
+// ----------------------------------------------------------------------------
+rule Transform_ZeroEvent
+    transform s : UML!Class
+    to t : RAAML!fta!ZeroEvent {
+
+    guard : s.hasStereotype('ZeroEvent')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ZeroEvent', 'id') <> null) {
+        t.id = s.getTaggedValue('ZeroEvent', 'id');
+    }
+    if (s.getTaggedValue('ZeroEvent', 'description') <> null) {
+        t.description = s.getTaggedValue('ZeroEvent', 'description');
+    }
+    if (s.getTaggedValue('ZeroEvent', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ZeroEvent', 'visibility');
+    }
+    if (s.getTaggedValue('ZeroEvent', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('ZeroEvent', 'likelihood');
+    }
+    if (s.getTaggedValue('ZeroEvent', 'probability') <> null) {
+        t.probability = s.getTaggedValue('ZeroEvent', 'probability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<AND>> -> RAAML fta!AND
+// ----------------------------------------------------------------------------
+rule Transform_AND
+    transform s : UML!Class
+    to t : RAAML!fta!AND {
+
+    guard : s.hasStereotype('AND')
+
+    t.name = s.name;
+    if (s.getTaggedValue('AND', 'id') <> null) {
+        t.id = s.getTaggedValue('AND', 'id');
+    }
+    if (s.getTaggedValue('AND', 'description') <> null) {
+        t.description = s.getTaggedValue('AND', 'description');
+    }
+    if (s.getTaggedValue('AND', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('AND', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<OR>> -> RAAML fta!OR
+// ----------------------------------------------------------------------------
+rule Transform_OR
+    transform s : UML!Class
+    to t : RAAML!fta!OR {
+
+    guard : s.hasStereotype('OR')
+
+    t.name = s.name;
+    if (s.getTaggedValue('OR', 'id') <> null) {
+        t.id = s.getTaggedValue('OR', 'id');
+    }
+    if (s.getTaggedValue('OR', 'description') <> null) {
+        t.description = s.getTaggedValue('OR', 'description');
+    }
+    if (s.getTaggedValue('OR', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('OR', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<NOT>> -> RAAML fta!NOT
+// ----------------------------------------------------------------------------
+rule Transform_NOT
+    transform s : UML!Class
+    to t : RAAML!fta!NOT {
+
+    guard : s.hasStereotype('NOT')
+
+    t.name = s.name;
+    if (s.getTaggedValue('NOT', 'id') <> null) {
+        t.id = s.getTaggedValue('NOT', 'id');
+    }
+    if (s.getTaggedValue('NOT', 'description') <> null) {
+        t.description = s.getTaggedValue('NOT', 'description');
+    }
+    if (s.getTaggedValue('NOT', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('NOT', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<XOR>> -> RAAML fta!XOR
+// ----------------------------------------------------------------------------
+rule Transform_XOR
+    transform s : UML!Class
+    to t : RAAML!fta!XOR {
+
+    guard : s.hasStereotype('XOR')
+
+    t.name = s.name;
+    if (s.getTaggedValue('XOR', 'id') <> null) {
+        t.id = s.getTaggedValue('XOR', 'id');
+    }
+    if (s.getTaggedValue('XOR', 'description') <> null) {
+        t.description = s.getTaggedValue('XOR', 'description');
+    }
+    if (s.getTaggedValue('XOR', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('XOR', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<SEQ>> -> RAAML fta!SEQ
+// ----------------------------------------------------------------------------
+rule Transform_SEQ
+    transform s : UML!Class
+    to t : RAAML!fta!SEQ {
+
+    guard : s.hasStereotype('SEQ')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SEQ', 'id') <> null) {
+        t.id = s.getTaggedValue('SEQ', 'id');
+    }
+    if (s.getTaggedValue('SEQ', 'description') <> null) {
+        t.description = s.getTaggedValue('SEQ', 'description');
+    }
+    if (s.getTaggedValue('SEQ', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SEQ', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<INHIBIT>> -> RAAML fta!INHIBIT
+// ----------------------------------------------------------------------------
+rule Transform_INHIBIT
+    transform s : UML!Class
+    to t : RAAML!fta!INHIBIT {
+
+    guard : s.hasStereotype('INHIBIT')
+
+    t.name = s.name;
+    if (s.getTaggedValue('INHIBIT', 'id') <> null) {
+        t.id = s.getTaggedValue('INHIBIT', 'id');
+    }
+    if (s.getTaggedValue('INHIBIT', 'description') <> null) {
+        t.description = s.getTaggedValue('INHIBIT', 'description');
+    }
+    if (s.getTaggedValue('INHIBIT', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('INHIBIT', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<MAJORITY_VOTE>> -> RAAML fta!MAJORITY_VOTE
+// ----------------------------------------------------------------------------
+rule Transform_MAJORITY_VOTE
+    transform s : UML!Class
+    to t : RAAML!fta!MAJORITY_VOTE {
+
+    guard : s.hasStereotype('MAJORITY_VOTE')
+
+    t.name = s.name;
+    if (s.getTaggedValue('MAJORITY_VOTE', 'id') <> null) {
+        t.id = s.getTaggedValue('MAJORITY_VOTE', 'id');
+    }
+    if (s.getTaggedValue('MAJORITY_VOTE', 'description') <> null) {
+        t.description = s.getTaggedValue('MAJORITY_VOTE', 'description');
+    }
+    if (s.getTaggedValue('MAJORITY_VOTE', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('MAJORITY_VOTE', 'visibility');
+    }
+    if (s.getTaggedValue('MAJORITY_VOTE', 'm') <> null) {
+        t.m = s.getTaggedValue('MAJORITY_VOTE', 'm');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<FTATree>> -> RAAML fta!FTATree
+// ----------------------------------------------------------------------------
+rule Transform_FTATree
+    transform s : UML!Class
+    to t : RAAML!fta!FTATree {
+
+    guard : s.hasStereotype('FTATree')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FTATree', 'id') <> null) {
+        t.id = s.getTaggedValue('FTATree', 'id');
+    }
+    if (s.getTaggedValue('FTATree', 'description') <> null) {
+        t.description = s.getTaggedValue('FTATree', 'description');
+    }
+    if (s.getTaggedValue('FTATree', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FTATree', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<FTALibrary>> -> RAAML fta!FTALibrary
+// ----------------------------------------------------------------------------
+rule Transform_FTALibrary
+    transform s : UML!Package
+    to t : RAAML!fta!FTALibrary {
+
+    guard : s.hasStereotype('FTALibrary')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FTALibrary', 'id') <> null) {
+        t.id = s.getTaggedValue('FTALibrary', 'id');
+    }
+    if (s.getTaggedValue('FTALibrary', 'description') <> null) {
+        t.description = s.getTaggedValue('FTALibrary', 'description');
+    }
+    if (s.getTaggedValue('FTALibrary', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FTALibrary', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<FMEA>> -> RAAML fmea!FMEA
+// ----------------------------------------------------------------------------
+rule Transform_FMEA
+    transform s : UML!Package
+    to t : RAAML!fmea!FMEA {
+
+    guard : s.hasStereotype('FMEA')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FMEA', 'id') <> null) {
+        t.id = s.getTaggedValue('FMEA', 'id');
+    }
+    if (s.getTaggedValue('FMEA', 'description') <> null) {
+        t.description = s.getTaggedValue('FMEA', 'description');
+    }
+    if (s.getTaggedValue('FMEA', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FMEA', 'visibility');
+    }
+    // Containment: owned elements with <<FMEAItem>>
+    t.fmeaItems ::= s.getOwnedElementsByStereotype('FMEAItem');
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<RPNCalculation>> -> RAAML fmea!RPNCalculation
+// ----------------------------------------------------------------------------
+rule Transform_RPNCalculation
+    transform s : UML!Class
+    to t : RAAML!fmea!RPNCalculation {
+
+    guard : s.hasStereotype('RPNCalculation')
+
+    t.name = s.name;
+    if (s.getTaggedValue('RPNCalculation', 'id') <> null) {
+        t.id = s.getTaggedValue('RPNCalculation', 'id');
+    }
+    if (s.getTaggedValue('RPNCalculation', 'description') <> null) {
+        t.description = s.getTaggedValue('RPNCalculation', 'description');
+    }
+    if (s.getTaggedValue('RPNCalculation', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('RPNCalculation', 'visibility');
+    }
+    if (s.getTaggedValue('RPNCalculation', 'RPN') <> null) {
+        t.RPN = s.getTaggedValue('RPNCalculation', 'RPN');
+    }
+    if (s.getTaggedValue('RPNCalculation', 'SEV') <> null) {
+        t.SEV = s.getTaggedValue('RPNCalculation', 'SEV');
+    }
+    if (s.getTaggedValue('RPNCalculation', 'OCC') <> null) {
+        t.OCC = s.getTaggedValue('RPNCalculation', 'OCC');
+    }
+    if (s.getTaggedValue('RPNCalculation', 'DET') <> null) {
+        t.DET = s.getTaggedValue('RPNCalculation', 'DET');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<FMEAItem>> -> RAAML fmea!FMEAItem
+// ----------------------------------------------------------------------------
+rule Transform_FMEAItem
+    transform s : UML!Class
+    to t : RAAML!fmea!FMEAItem {
+
+    guard : s.hasStereotype('FMEAItem')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FMEAItem', 'id') <> null) {
+        t.id = s.getTaggedValue('FMEAItem', 'id');
+    }
+    if (s.getTaggedValue('FMEAItem', 'description') <> null) {
+        t.description = s.getTaggedValue('FMEAItem', 'description');
+    }
+    if (s.getTaggedValue('FMEAItem', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FMEAItem', 'visibility');
+    }
+    if (s.getTaggedValue('FMEAItem', 'RPN') <> null) {
+        t.RPN = s.getTaggedValue('FMEAItem', 'RPN');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<LossOfFunction>> -> RAAML fmea!LossOfFunction
+// ----------------------------------------------------------------------------
+rule Transform_LossOfFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!LossOfFunction {
+
+    guard : s.hasStereotype('LossOfFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('LossOfFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('LossOfFunction', 'id');
+    }
+    if (s.getTaggedValue('LossOfFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('LossOfFunction', 'description');
+    }
+    if (s.getTaggedValue('LossOfFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('LossOfFunction', 'visibility');
+    }
+    if (s.getTaggedValue('LossOfFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('LossOfFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('LossOfFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('LossOfFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<DegradationOfFunction>> -> RAAML fmea!DegradationOfFunction
+// ----------------------------------------------------------------------------
+rule Transform_DegradationOfFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!DegradationOfFunction {
+
+    guard : s.hasStereotype('DegradationOfFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('DegradationOfFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('DegradationOfFunction', 'id');
+    }
+    if (s.getTaggedValue('DegradationOfFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('DegradationOfFunction', 'description');
+    }
+    if (s.getTaggedValue('DegradationOfFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('DegradationOfFunction', 'visibility');
+    }
+    if (s.getTaggedValue('DegradationOfFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('DegradationOfFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('DegradationOfFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('DegradationOfFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<IntermittentFunction>> -> RAAML fmea!IntermittentFunction
+// ----------------------------------------------------------------------------
+rule Transform_IntermittentFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!IntermittentFunction {
+
+    guard : s.hasStereotype('IntermittentFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('IntermittentFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('IntermittentFunction', 'id');
+    }
+    if (s.getTaggedValue('IntermittentFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('IntermittentFunction', 'description');
+    }
+    if (s.getTaggedValue('IntermittentFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('IntermittentFunction', 'visibility');
+    }
+    if (s.getTaggedValue('IntermittentFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('IntermittentFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('IntermittentFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('IntermittentFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<PartialFunction>> -> RAAML fmea!PartialFunction
+// ----------------------------------------------------------------------------
+rule Transform_PartialFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!PartialFunction {
+
+    guard : s.hasStereotype('PartialFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('PartialFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('PartialFunction', 'id');
+    }
+    if (s.getTaggedValue('PartialFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('PartialFunction', 'description');
+    }
+    if (s.getTaggedValue('PartialFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('PartialFunction', 'visibility');
+    }
+    if (s.getTaggedValue('PartialFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('PartialFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('PartialFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('PartialFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ExceedingFunction>> -> RAAML fmea!ExceedingFunction
+// ----------------------------------------------------------------------------
+rule Transform_ExceedingFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!ExceedingFunction {
+
+    guard : s.hasStereotype('ExceedingFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ExceedingFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('ExceedingFunction', 'id');
+    }
+    if (s.getTaggedValue('ExceedingFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('ExceedingFunction', 'description');
+    }
+    if (s.getTaggedValue('ExceedingFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ExceedingFunction', 'visibility');
+    }
+    if (s.getTaggedValue('ExceedingFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('ExceedingFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('ExceedingFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('ExceedingFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<UnintendedFunction>> -> RAAML fmea!UnintendedFunction
+// ----------------------------------------------------------------------------
+rule Transform_UnintendedFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!UnintendedFunction {
+
+    guard : s.hasStereotype('UnintendedFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('UnintendedFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('UnintendedFunction', 'id');
+    }
+    if (s.getTaggedValue('UnintendedFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('UnintendedFunction', 'description');
+    }
+    if (s.getTaggedValue('UnintendedFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('UnintendedFunction', 'visibility');
+    }
+    if (s.getTaggedValue('UnintendedFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('UnintendedFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('UnintendedFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('UnintendedFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<DelayedFunction>> -> RAAML fmea!DelayedFunction
+// ----------------------------------------------------------------------------
+rule Transform_DelayedFunction
+    transform s : UML!Class
+    to t : RAAML!fmea!DelayedFunction {
+
+    guard : s.hasStereotype('DelayedFunction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('DelayedFunction', 'id') <> null) {
+        t.id = s.getTaggedValue('DelayedFunction', 'id');
+    }
+    if (s.getTaggedValue('DelayedFunction', 'description') <> null) {
+        t.description = s.getTaggedValue('DelayedFunction', 'description');
+    }
+    if (s.getTaggedValue('DelayedFunction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('DelayedFunction', 'visibility');
+    }
+    if (s.getTaggedValue('DelayedFunction', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('DelayedFunction', 'likelihood');
+    }
+    if (s.getTaggedValue('DelayedFunction', 'detectability') <> null) {
+        t.detectability = s.getTaggedValue('DelayedFunction', 'detectability');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<FMEALibrary>> -> RAAML fmea!FMEALibrary
+// ----------------------------------------------------------------------------
+rule Transform_FMEALibrary
+    transform s : UML!Package
+    to t : RAAML!fmea!FMEALibrary {
+
+    guard : s.hasStereotype('FMEALibrary')
+
+    t.name = s.name;
+    if (s.getTaggedValue('FMEALibrary', 'id') <> null) {
+        t.id = s.getTaggedValue('FMEALibrary', 'id');
+    }
+    if (s.getTaggedValue('FMEALibrary', 'description') <> null) {
+        t.description = s.getTaggedValue('FMEALibrary', 'description');
+    }
+    if (s.getTaggedValue('FMEALibrary', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('FMEALibrary', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<ISO26262>> -> RAAML hara!ISO26262
+// ----------------------------------------------------------------------------
+rule Transform_ISO26262
+    transform s : UML!Package
+    to t : RAAML!hara!ISO26262 {
+
+    guard : s.hasStereotype('ISO26262')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ISO26262', 'id') <> null) {
+        t.id = s.getTaggedValue('ISO26262', 'id');
+    }
+    if (s.getTaggedValue('ISO26262', 'description') <> null) {
+        t.description = s.getTaggedValue('ISO26262', 'description');
+    }
+    if (s.getTaggedValue('ISO26262', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ISO26262', 'visibility');
+    }
+    // Containment: owned elements with <<MalfunctioningBehaviour>>
+    t.malfunctioningBehaviors ::= s.getOwnedElementsByStereotype('MalfunctioningBehaviour');
+    // Containment: owned elements with <<OperationalSituation>>
+    t.operationalSituations ::= s.getOwnedElementsByStereotype('OperationalSituation');
+    // Containment: owned elements with <<Confirmed>>
+    t.confirmedItems ::= s.getOwnedElementsByStereotype('Confirmed');
+    // Containment: owned elements with <<Verified>>
+    t.verifiedItems ::= s.getOwnedElementsByStereotype('Verified');
+    // Containment: owned elements with <<ASILAssignment>>
+    t.asilAssignments ::= s.getOwnedElementsByStereotype('ASILAssignment');
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<OperationalSituation>> -> RAAML hara!OperationalSituation
+// ----------------------------------------------------------------------------
+rule Transform_OperationalSituation
+    transform s : UML!Class
+    to t : RAAML!hara!OperationalSituation {
+
+    guard : s.hasStereotype('OperationalSituation')
+
+    t.name = s.name;
+    if (s.getTaggedValue('OperationalSituation', 'id') <> null) {
+        t.id = s.getTaggedValue('OperationalSituation', 'id');
+    }
+    if (s.getTaggedValue('OperationalSituation', 'description') <> null) {
+        t.description = s.getTaggedValue('OperationalSituation', 'description');
+    }
+    if (s.getTaggedValue('OperationalSituation', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('OperationalSituation', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<MalfunctioningBehaviour>> -> RAAML hara!MalfunctioningBehaviour
+// ----------------------------------------------------------------------------
+rule Transform_MalfunctioningBehaviour
+    transform s : UML!Class
+    to t : RAAML!hara!MalfunctioningBehaviour {
+
+    guard : s.hasStereotype('MalfunctioningBehaviour')
+
+    t.name = s.name;
+    if (s.getTaggedValue('MalfunctioningBehaviour', 'id') <> null) {
+        t.id = s.getTaggedValue('MalfunctioningBehaviour', 'id');
+    }
+    if (s.getTaggedValue('MalfunctioningBehaviour', 'description') <> null) {
+        t.description = s.getTaggedValue('MalfunctioningBehaviour', 'description');
+    }
+    if (s.getTaggedValue('MalfunctioningBehaviour', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('MalfunctioningBehaviour', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Verified>> -> RAAML hara!Verified
+// ----------------------------------------------------------------------------
+rule Transform_Verified
+    transform s : UML!Class
+    to t : RAAML!hara!Verified {
+
+    guard : s.hasStereotype('Verified')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Verified', 'id') <> null) {
+        t.id = s.getTaggedValue('Verified', 'id');
+    }
+    if (s.getTaggedValue('Verified', 'description') <> null) {
+        t.description = s.getTaggedValue('Verified', 'description');
+    }
+    if (s.getTaggedValue('Verified', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Verified', 'visibility');
+    }
+    if (s.getTaggedValue('Verified', 'result') <> null) {
+        t.result = s.getTaggedValue('Verified', 'result');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Confirmed>> -> RAAML hara!Confirmed
+// ----------------------------------------------------------------------------
+rule Transform_Confirmed
+    transform s : UML!Class
+    to t : RAAML!hara!Confirmed {
+
+    guard : s.hasStereotype('Confirmed')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Confirmed', 'id') <> null) {
+        t.id = s.getTaggedValue('Confirmed', 'id');
+    }
+    if (s.getTaggedValue('Confirmed', 'description') <> null) {
+        t.description = s.getTaggedValue('Confirmed', 'description');
+    }
+    if (s.getTaggedValue('Confirmed', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Confirmed', 'visibility');
+    }
+    if (s.getTaggedValue('Confirmed', 'result') <> null) {
+        t.result = s.getTaggedValue('Confirmed', 'result');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ASILAssignment>> -> RAAML hara!ASILAssignment
+// ----------------------------------------------------------------------------
+rule Transform_ASILAssignment
+    transform s : UML!Class
+    to t : RAAML!hara!ASILAssignment {
+
+    guard : s.hasStereotype('ASILAssignment')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ASILAssignment', 'id') <> null) {
+        t.id = s.getTaggedValue('ASILAssignment', 'id');
+    }
+    if (s.getTaggedValue('ASILAssignment', 'description') <> null) {
+        t.description = s.getTaggedValue('ASILAssignment', 'description');
+    }
+    if (s.getTaggedValue('ASILAssignment', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ASILAssignment', 'visibility');
+    }
+    if (s.getTaggedValue('ASILAssignment', 'ASIL') <> null) {
+        t.ASIL = s.getTaggedValue('ASILAssignment', 'ASIL');
+    }
+    if (s.getTaggedValue('ASILAssignment', 'ASILOverride') <> null) {
+        t.ASILOverride = s.getTaggedValue('ASILAssignment', 'ASILOverride');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<SystemLevelEffect>> -> RAAML hara!SystemLevelEffect
+// ----------------------------------------------------------------------------
+rule Transform_SystemLevelEffect
+    transform s : UML!Class
+    to t : RAAML!hara!SystemLevelEffect {
+
+    guard : s.hasStereotype('SystemLevelEffect')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SystemLevelEffect', 'id') <> null) {
+        t.id = s.getTaggedValue('SystemLevelEffect', 'id');
+    }
+    if (s.getTaggedValue('SystemLevelEffect', 'description') <> null) {
+        t.description = s.getTaggedValue('SystemLevelEffect', 'description');
+    }
+    if (s.getTaggedValue('SystemLevelEffect', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SystemLevelEffect', 'visibility');
+    }
+    if (s.getTaggedValue('SystemLevelEffect', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('SystemLevelEffect', 'likelihood');
+    }
+    if (s.getTaggedValue('SystemLevelEffect', 'severity') <> null) {
+        t.severity = s.getTaggedValue('SystemLevelEffect', 'severity');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<VehicleLevelEffect>> -> RAAML hara!VehicleLevelEffect
+// ----------------------------------------------------------------------------
+rule Transform_VehicleLevelEffect
+    transform s : UML!Class
+    to t : RAAML!hara!VehicleLevelEffect {
+
+    guard : s.hasStereotype('VehicleLevelEffect')
+
+    t.name = s.name;
+    if (s.getTaggedValue('VehicleLevelEffect', 'id') <> null) {
+        t.id = s.getTaggedValue('VehicleLevelEffect', 'id');
+    }
+    if (s.getTaggedValue('VehicleLevelEffect', 'description') <> null) {
+        t.description = s.getTaggedValue('VehicleLevelEffect', 'description');
+    }
+    if (s.getTaggedValue('VehicleLevelEffect', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('VehicleLevelEffect', 'visibility');
+    }
+    if (s.getTaggedValue('VehicleLevelEffect', 'likelihood') <> null) {
+        t.likelihood = s.getTaggedValue('VehicleLevelEffect', 'likelihood');
+    }
+    if (s.getTaggedValue('VehicleLevelEffect', 'severity') <> null) {
+        t.severity = s.getTaggedValue('VehicleLevelEffect', 'severity');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<ISO26262Library>> -> RAAML hara!ISO26262Library
+// ----------------------------------------------------------------------------
+rule Transform_ISO26262Library
+    transform s : UML!Package
+    to t : RAAML!hara!ISO26262Library {
+
+    guard : s.hasStereotype('ISO26262Library')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ISO26262Library', 'id') <> null) {
+        t.id = s.getTaggedValue('ISO26262Library', 'id');
+    }
+    if (s.getTaggedValue('ISO26262Library', 'description') <> null) {
+        t.description = s.getTaggedValue('ISO26262Library', 'description');
+    }
+    if (s.getTaggedValue('ISO26262Library', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ISO26262Library', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<STPA>> -> RAAML stpa!STPA
+// ----------------------------------------------------------------------------
+rule Transform_STPA
+    transform s : UML!Package
+    to t : RAAML!stpa!STPA {
+
+    guard : s.hasStereotype('STPA')
+
+    t.name = s.name;
+    if (s.getTaggedValue('STPA', 'id') <> null) {
+        t.id = s.getTaggedValue('STPA', 'id');
+    }
+    if (s.getTaggedValue('STPA', 'description') <> null) {
+        t.description = s.getTaggedValue('STPA', 'description');
+    }
+    if (s.getTaggedValue('STPA', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('STPA', 'visibility');
+    }
+    // Containment: owned elements with <<ControlStructure>>
+    t.controlStructures ::= s.getOwnedElementsByStereotype('ControlStructure');
+    // Containment: owned elements with <<Loss>>
+    t.losses ::= s.getOwnedElementsByStereotype('Loss');
+    // Containment: owned elements with <<Hazard>>
+    t.hazards ::= s.getOwnedElementsByStereotype('Hazard');
+    // Containment: owned elements with <<UndesiredControlAction>>
+    t.unsafeControlActions ::= s.getOwnedElementsByStereotype('UndesiredControlAction');
+    // Containment: owned elements with <<ProcessModelFlaw>>
+    t.controlFlaws ::= s.getOwnedElementsByStereotype('ProcessModelFlaw');
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Loss>> -> RAAML stpa!Loss
+// ----------------------------------------------------------------------------
+rule Transform_Loss
+    transform s : UML!Class
+    to t : RAAML!stpa!Loss {
+
+    guard : s.hasStereotype('Loss')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Loss', 'id') <> null) {
+        t.id = s.getTaggedValue('Loss', 'id');
+    }
+    if (s.getTaggedValue('Loss', 'description') <> null) {
+        t.description = s.getTaggedValue('Loss', 'description');
+    }
+    if (s.getTaggedValue('Loss', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Loss', 'visibility');
+    }
+    if (s.getTaggedValue('Loss', 'category') <> null) {
+        t.category = s.getTaggedValue('Loss', 'category');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ControlStructure>> -> RAAML stpa!ControlStructure
+// ----------------------------------------------------------------------------
+rule Transform_ControlStructure
+    transform s : UML!Class
+    to t : RAAML!stpa!ControlStructure {
+
+    guard : s.hasStereotype('ControlStructure')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ControlStructure', 'id') <> null) {
+        t.id = s.getTaggedValue('ControlStructure', 'id');
+    }
+    if (s.getTaggedValue('ControlStructure', 'description') <> null) {
+        t.description = s.getTaggedValue('ControlStructure', 'description');
+    }
+    if (s.getTaggedValue('ControlStructure', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ControlStructure', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Controller>> -> RAAML stpa!Controller
+// ----------------------------------------------------------------------------
+rule Transform_Controller
+    transform s : UML!Class
+    to t : RAAML!stpa!Controller {
+
+    guard : s.hasStereotype('Controller')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Controller', 'id') <> null) {
+        t.id = s.getTaggedValue('Controller', 'id');
+    }
+    if (s.getTaggedValue('Controller', 'description') <> null) {
+        t.description = s.getTaggedValue('Controller', 'description');
+    }
+    if (s.getTaggedValue('Controller', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Controller', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ControlledProcess>> -> RAAML stpa!ControlledProcess
+// ----------------------------------------------------------------------------
+rule Transform_ControlledProcess
+    transform s : UML!Class
+    to t : RAAML!stpa!ControlledProcess {
+
+    guard : s.hasStereotype('ControlledProcess')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ControlledProcess', 'id') <> null) {
+        t.id = s.getTaggedValue('ControlledProcess', 'id');
+    }
+    if (s.getTaggedValue('ControlledProcess', 'description') <> null) {
+        t.description = s.getTaggedValue('ControlledProcess', 'description');
+    }
+    if (s.getTaggedValue('ControlledProcess', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ControlledProcess', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Actuator>> -> RAAML stpa!Actuator
+// ----------------------------------------------------------------------------
+rule Transform_Actuator
+    transform s : UML!Class
+    to t : RAAML!stpa!Actuator {
+
+    guard : s.hasStereotype('Actuator')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Actuator', 'id') <> null) {
+        t.id = s.getTaggedValue('Actuator', 'id');
+    }
+    if (s.getTaggedValue('Actuator', 'description') <> null) {
+        t.description = s.getTaggedValue('Actuator', 'description');
+    }
+    if (s.getTaggedValue('Actuator', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Actuator', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Sensor>> -> RAAML stpa!Sensor
+// ----------------------------------------------------------------------------
+rule Transform_Sensor
+    transform s : UML!Class
+    to t : RAAML!stpa!Sensor {
+
+    guard : s.hasStereotype('Sensor')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Sensor', 'id') <> null) {
+        t.id = s.getTaggedValue('Sensor', 'id');
+    }
+    if (s.getTaggedValue('Sensor', 'description') <> null) {
+        t.description = s.getTaggedValue('Sensor', 'description');
+    }
+    if (s.getTaggedValue('Sensor', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Sensor', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ControlAction>> -> RAAML stpa!ControlAction
+// ----------------------------------------------------------------------------
+rule Transform_ControlAction
+    transform s : UML!Class
+    to t : RAAML!stpa!ControlAction {
+
+    guard : s.hasStereotype('ControlAction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ControlAction', 'id') <> null) {
+        t.id = s.getTaggedValue('ControlAction', 'id');
+    }
+    if (s.getTaggedValue('ControlAction', 'description') <> null) {
+        t.description = s.getTaggedValue('ControlAction', 'description');
+    }
+    if (s.getTaggedValue('ControlAction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ControlAction', 'visibility');
+    }
+    if (s.getTaggedValue('ControlAction', 'type') <> null) {
+        t.type = s.getTaggedValue('ControlAction', 'type');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Feedback>> -> RAAML stpa!Feedback
+// ----------------------------------------------------------------------------
+rule Transform_Feedback
+    transform s : UML!Class
+    to t : RAAML!stpa!Feedback {
+
+    guard : s.hasStereotype('Feedback')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Feedback', 'id') <> null) {
+        t.id = s.getTaggedValue('Feedback', 'id');
+    }
+    if (s.getTaggedValue('Feedback', 'description') <> null) {
+        t.description = s.getTaggedValue('Feedback', 'description');
+    }
+    if (s.getTaggedValue('Feedback', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Feedback', 'visibility');
+    }
+    if (s.getTaggedValue('Feedback', 'type') <> null) {
+        t.type = s.getTaggedValue('Feedback', 'type');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<UndesiredControlAction>> -> RAAML stpa!UndesiredControlAction
+// ----------------------------------------------------------------------------
+rule Transform_UndesiredControlAction
+    transform s : UML!Class
+    to t : RAAML!stpa!UndesiredControlAction {
+
+    guard : s.hasStereotype('UndesiredControlAction')
+
+    t.name = s.name;
+    if (s.getTaggedValue('UndesiredControlAction', 'id') <> null) {
+        t.id = s.getTaggedValue('UndesiredControlAction', 'id');
+    }
+    if (s.getTaggedValue('UndesiredControlAction', 'description') <> null) {
+        t.description = s.getTaggedValue('UndesiredControlAction', 'description');
+    }
+    if (s.getTaggedValue('UndesiredControlAction', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('UndesiredControlAction', 'visibility');
+    }
+    if (s.getTaggedValue('UndesiredControlAction', 'unsafeType') <> null) {
+        t.unsafeType = s.getTaggedValue('UndesiredControlAction', 'unsafeType');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<STPALibrary>> -> RAAML stpa!STPALibrary
+// ----------------------------------------------------------------------------
+rule Transform_STPALibrary
+    transform s : UML!Package
+    to t : RAAML!stpa!STPALibrary {
+
+    guard : s.hasStereotype('STPALibrary')
+
+    t.name = s.name;
+    if (s.getTaggedValue('STPALibrary', 'id') <> null) {
+        t.id = s.getTaggedValue('STPALibrary', 'id');
+    }
+    if (s.getTaggedValue('STPALibrary', 'description') <> null) {
+        t.description = s.getTaggedValue('STPALibrary', 'description');
+    }
+    if (s.getTaggedValue('STPALibrary', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('STPALibrary', 'visibility');
+    }
+    // Containment: owned elements with <<ControlStructure>>
+    t.controlStructures ::= s.getOwnedElementsByStereotype('ControlStructure');
+    // Containment: owned elements with <<ControlAction>>
+    t.controlActions ::= s.getOwnedElementsByStereotype('ControlAction');
+    // Containment: owned elements with <<UndesiredControlAction>>
+    t.unsafeControlActions ::= s.getOwnedElementsByStereotype('UndesiredControlAction');
+}
+
+// ----------------------------------------------------------------------------
+// UML Package with <<GSN>> -> RAAML gsn!GSN
+// ----------------------------------------------------------------------------
+rule Transform_GSN
+    transform s : UML!Package
+    to t : RAAML!gsn!GSN {
+
+    guard : s.hasStereotype('GSN')
+
+    t.name = s.name;
+    if (s.getTaggedValue('GSN', 'id') <> null) {
+        t.id = s.getTaggedValue('GSN', 'id');
+    }
+    if (s.getTaggedValue('GSN', 'description') <> null) {
+        t.description = s.getTaggedValue('GSN', 'description');
+    }
+    if (s.getTaggedValue('GSN', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('GSN', 'visibility');
+    }
+    // Containment: owned elements with <<SupportedBy>>
+    t.supportedBy ::= s.getOwnedElementsByStereotype('SupportedBy');
+    // Containment: owned elements with <<InContextOf>>
+    t.inContextOf ::= s.getOwnedElementsByStereotype('InContextOf');
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Goal>> -> RAAML gsn!Goal
+// ----------------------------------------------------------------------------
+rule Transform_Goal
+    transform s : UML!Class
+    to t : RAAML!gsn!Goal {
+
+    guard : s.hasStereotype('Goal')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Goal', 'id') <> null) {
+        t.id = s.getTaggedValue('Goal', 'id');
+    }
+    if (s.getTaggedValue('Goal', 'description') <> null) {
+        t.description = s.getTaggedValue('Goal', 'description');
+    }
+    if (s.getTaggedValue('Goal', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Goal', 'visibility');
+    }
+    if (s.getTaggedValue('Goal', 'nodeId') <> null) {
+        t.nodeId = s.getTaggedValue('Goal', 'nodeId');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Strategy>> -> RAAML gsn!Strategy
+// ----------------------------------------------------------------------------
+rule Transform_Strategy
+    transform s : UML!Class
+    to t : RAAML!gsn!Strategy {
+
+    guard : s.hasStereotype('Strategy')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Strategy', 'id') <> null) {
+        t.id = s.getTaggedValue('Strategy', 'id');
+    }
+    if (s.getTaggedValue('Strategy', 'description') <> null) {
+        t.description = s.getTaggedValue('Strategy', 'description');
+    }
+    if (s.getTaggedValue('Strategy', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Strategy', 'visibility');
+    }
+    if (s.getTaggedValue('Strategy', 'nodeId') <> null) {
+        t.nodeId = s.getTaggedValue('Strategy', 'nodeId');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Solution>> -> RAAML gsn!Solution
+// ----------------------------------------------------------------------------
+rule Transform_Solution
+    transform s : UML!Class
+    to t : RAAML!gsn!Solution {
+
+    guard : s.hasStereotype('Solution')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Solution', 'id') <> null) {
+        t.id = s.getTaggedValue('Solution', 'id');
+    }
+    if (s.getTaggedValue('Solution', 'description') <> null) {
+        t.description = s.getTaggedValue('Solution', 'description');
+    }
+    if (s.getTaggedValue('Solution', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Solution', 'visibility');
+    }
+    if (s.getTaggedValue('Solution', 'nodeId') <> null) {
+        t.nodeId = s.getTaggedValue('Solution', 'nodeId');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Context>> -> RAAML gsn!Context
+// ----------------------------------------------------------------------------
+rule Transform_Context
+    transform s : UML!Class
+    to t : RAAML!gsn!Context {
+
+    guard : s.hasStereotype('Context')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Context', 'id') <> null) {
+        t.id = s.getTaggedValue('Context', 'id');
+    }
+    if (s.getTaggedValue('Context', 'description') <> null) {
+        t.description = s.getTaggedValue('Context', 'description');
+    }
+    if (s.getTaggedValue('Context', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Context', 'visibility');
+    }
+    if (s.getTaggedValue('Context', 'contextId') <> null) {
+        t.contextId = s.getTaggedValue('Context', 'contextId');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Justification>> -> RAAML gsn!Justification
+// ----------------------------------------------------------------------------
+rule Transform_Justification
+    transform s : UML!Class
+    to t : RAAML!gsn!Justification {
+
+    guard : s.hasStereotype('Justification')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Justification', 'id') <> null) {
+        t.id = s.getTaggedValue('Justification', 'id');
+    }
+    if (s.getTaggedValue('Justification', 'description') <> null) {
+        t.description = s.getTaggedValue('Justification', 'description');
+    }
+    if (s.getTaggedValue('Justification', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Justification', 'visibility');
+    }
+    if (s.getTaggedValue('Justification', 'contextId') <> null) {
+        t.contextId = s.getTaggedValue('Justification', 'contextId');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Assumption>> -> RAAML gsn!Assumption
+// ----------------------------------------------------------------------------
+rule Transform_Assumption
+    transform s : UML!Class
+    to t : RAAML!gsn!Assumption {
+
+    guard : s.hasStereotype('Assumption')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Assumption', 'id') <> null) {
+        t.id = s.getTaggedValue('Assumption', 'id');
+    }
+    if (s.getTaggedValue('Assumption', 'description') <> null) {
+        t.description = s.getTaggedValue('Assumption', 'description');
+    }
+    if (s.getTaggedValue('Assumption', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Assumption', 'visibility');
+    }
+    if (s.getTaggedValue('Assumption', 'contextId') <> null) {
+        t.contextId = s.getTaggedValue('Assumption', 'contextId');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<InContextOf>> -> RAAML gsn!InContextOf
+// ----------------------------------------------------------------------------
+rule Transform_InContextOf
+    transform s : UML!Dependency
+    to t : RAAML!gsn!InContextOf {
+
+    guard : s.hasStereotype('InContextOf')
+
+    t.name = s.name;
+    if (s.getTaggedValue('InContextOf', 'id') <> null) {
+        t.id = s.getTaggedValue('InContextOf', 'id');
+    }
+    if (s.getTaggedValue('InContextOf', 'description') <> null) {
+        t.description = s.getTaggedValue('InContextOf', 'description');
+    }
+    if (s.getTaggedValue('InContextOf', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('InContextOf', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Dependency with <<SupportedBy>> -> RAAML gsn!SupportedBy
+// ----------------------------------------------------------------------------
+rule Transform_SupportedBy
+    transform s : UML!Dependency
+    to t : RAAML!gsn!SupportedBy {
+
+    guard : s.hasStereotype('SupportedBy')
+
+    t.name = s.name;
+    if (s.getTaggedValue('SupportedBy', 'id') <> null) {
+        t.id = s.getTaggedValue('SupportedBy', 'id');
+    }
+    if (s.getTaggedValue('SupportedBy', 'description') <> null) {
+        t.description = s.getTaggedValue('SupportedBy', 'description');
+    }
+    if (s.getTaggedValue('SupportedBy', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('SupportedBy', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<Rationale>> -> RAAML gsn!Rationale
+// ----------------------------------------------------------------------------
+rule Transform_Rationale
+    transform s : UML!Class
+    to t : RAAML!gsn!Rationale {
+
+    guard : s.hasStereotype('Rationale')
+
+    t.name = s.name;
+    if (s.getTaggedValue('Rationale', 'id') <> null) {
+        t.id = s.getTaggedValue('Rationale', 'id');
+    }
+    if (s.getTaggedValue('Rationale', 'description') <> null) {
+        t.description = s.getTaggedValue('Rationale', 'description');
+    }
+    if (s.getTaggedValue('Rationale', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('Rationale', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<ASILOverrideRationale>> -> RAAML gsn!ASILOverrideRationale
+// ----------------------------------------------------------------------------
+rule Transform_ASILOverrideRationale
+    transform s : UML!Class
+    to t : RAAML!gsn!ASILOverrideRationale {
+
+    guard : s.hasStereotype('ASILOverrideRationale')
+
+    t.name = s.name;
+    if (s.getTaggedValue('ASILOverrideRationale', 'id') <> null) {
+        t.id = s.getTaggedValue('ASILOverrideRationale', 'id');
+    }
+    if (s.getTaggedValue('ASILOverrideRationale', 'description') <> null) {
+        t.description = s.getTaggedValue('ASILOverrideRationale', 'description');
+    }
+    if (s.getTaggedValue('ASILOverrideRationale', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('ASILOverrideRationale', 'visibility');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// UML Class with <<LessonLearned>> -> RAAML gsn!LessonLearned
+// ----------------------------------------------------------------------------
+rule Transform_LessonLearned
+    transform s : UML!Class
+    to t : RAAML!gsn!LessonLearned {
+
+    guard : s.hasStereotype('LessonLearned')
+
+    t.name = s.name;
+    if (s.getTaggedValue('LessonLearned', 'id') <> null) {
+        t.id = s.getTaggedValue('LessonLearned', 'id');
+    }
+    if (s.getTaggedValue('LessonLearned', 'description') <> null) {
+        t.description = s.getTaggedValue('LessonLearned', 'description');
+    }
+    if (s.getTaggedValue('LessonLearned', 'visibility') <> null) {
+        t.visibility = s.getTaggedValue('LessonLearned', 'visibility');
+    }
+}
+
+
+post {
+    'Forward transformation complete.'.println();
+}

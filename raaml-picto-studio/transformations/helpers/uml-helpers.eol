@@ -1,0 +1,152 @@
+// ============================================================================
+// uml-helpers.eol
+// ----------------------------------------------------------------------------
+// Helper operations for working with UML profile instances.
+//
+// These helpers abstract the UML2 API for stereotype application and
+// tagged value access. Used by the generated ETL rules (forward and
+// backward transformations).
+// ============================================================================
+
+@cached
+operation getRAAMLProfileName() : String {
+    return 'RAAML';
+}
+
+// --- Profile Access --------------------------------------------------------
+
+// Locate the RAAML profile in the loaded model resource set
+operation getRAAMLProfile() : UML!Profile {
+    var profile = UML!Profile.all.selectOne(p | p.name == getRAAMLProfileName());
+    if (profile.isUndefined() or profile == null) {
+        throw 'RAAML profile not found. Ensure the profile is loaded and applied.';
+    }
+    return profile;
+}
+
+// Locate a stereotype by name within the RAAML profile
+operation getRAAMLStereotype(name : String) : UML!Stereotype {
+    var profile = getRAAMLProfile();
+    return profile.ownedStereotypes.selectOne(s | s.name == name);
+}
+
+// --- Stereotype Application (forward direction - reading) ------------------
+
+// Check if a UML element has a specific RAAML stereotype applied
+operation UML!Element hasStereotype(stereotypeName : String) : Boolean {
+    return self.getAppliedStereotypes().exists(s | s.name == stereotypeName);
+}
+
+// Get the first applied stereotype whose name matches
+operation UML!Element getAppliedStereotypeByName(
+        stereotypeName : String) : UML!Stereotype {
+    return self.getAppliedStereotypes().selectOne(s | s.name == stereotypeName);
+}
+
+// Get a tagged value from an applied stereotype. Returns null if the
+// stereotype is not applied or the property is not set.
+operation UML!Element getTaggedValue(
+        stereotypeName : String, propertyName : String) : Any {
+    var stereo = self.getAppliedStereotypeByName(stereotypeName);
+    if (stereo.isUndefined() or stereo == null) return null;
+    return self.getValue(stereo, propertyName);
+}
+
+// ============================================================================
+// Pattern 3 helpers: detect stereotype applications via direct XMI
+// inspection. These work even when UML2 profile resolution fails
+// (e.g., when profiles are referenced via platform:/plugin URIs).
+//
+// Stereotype applications in XMI appear as elements whose eClass is a
+// profile-defined EClass (e.g., FMEA.FMEAItem) with a "base_Class"
+// reference pointing to the UML element the stereotype is applied to.
+// ============================================================================
+
+// Iterate all EObjects in a loaded EMF model (via Resource API) and
+// return those whose eClass simple name matches the given name.
+// Used to locate stereotype application elements without profile resolution.
+// NOTE: parameter named 'mdl' because 'model' is a reserved EOL keyword.
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) {
+            result.add(obj);
+        }
+    }
+    return result;
+}
+
+// Extract the base_Class reference from a stereotype application EObject.
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    var feature = stereoApp.eClass().getEStructuralFeature('base_Class');
+    if (feature.isUndefined() or feature == null) return null;
+    return stereoApp.eGet(feature);
+}
+
+// Return all UML Classes (from the given model) to which a stereotype of
+// the given name has been applied. Works via direct XMI scanning, not
+// via UML2 profile API, so it is profile-resolution-independent.
+// NOTE: parameter named 'mdl' because 'model' is a reserved EOL keyword.
+operation findUmlClassesWithStereotype(mdl : Any,
+                                       stereotypeName : String) : Sequence {
+    var result = new Sequence;
+    var apps = findAllEObjectsByTypeName(mdl, stereotypeName);
+    for (app in apps) {
+        var baseClass = getStereotypeBaseClass(app);
+        if (baseClass.isDefined() and baseClass <> null) {
+            result.add(baseClass);
+        }
+    }
+    return result;
+}
+
+// --- Stereotype Application (backward direction - writing) -----------------
+
+// Apply a RAAML stereotype to a UML element
+operation UML!Element applyRAAMLStereotype(stereotypeName : String) {
+    var stereo = getRAAMLStereotype(stereotypeName);
+    if (stereo.isUndefined() or stereo == null) {
+        throw 'Stereotype ' + stereotypeName + ' not found in RAAML profile';
+    }
+    self.applyStereotype(stereo);
+}
+
+// Set a tagged value on an applied stereotype
+operation UML!Element setTaggedValue(
+        stereotypeName : String, propertyName : String, value : Any) {
+    if (value.isUndefined() or value == null) return;
+    var stereo = self.getAppliedStereotypeByName(stereotypeName);
+    if (stereo.isUndefined() or stereo == null) {
+        self.applyRAAMLStereotype(stereotypeName);
+        stereo = self.getAppliedStereotypeByName(stereotypeName);
+    }
+    self.setValue(stereo, propertyName, value);
+}
+
+// --- Navigation (forward direction - reading containment) ------------------
+
+// For a UML Package with a RAAML stereotype, return its owned packaged
+// elements that have a specific stereotype applied.
+operation UML!Package getOwnedElementsByStereotype(
+        stereotypeName : String) : Sequence {
+    return self.packagedElement.select(e | e.hasStereotype(stereotypeName));
+}
+
+// For a UML Classifier, return owned nested classifiers with a stereotype
+operation UML!Classifier getNestedClassifiersByStereotype(
+        stereotypeName : String) : Sequence {
+    return self.nestedClassifier.select(e | e.hasStereotype(stereotypeName));
+}
+
+// --- Diagnostic helpers ----------------------------------------------------
+
+// Print all stereotypes applied to a UML element
+operation UML!Element printAppliedStereotypes() {
+    for (s in self.appliedStereotypes) {
+        ('  <<' + s.name + '>>').println();
+    }
+}

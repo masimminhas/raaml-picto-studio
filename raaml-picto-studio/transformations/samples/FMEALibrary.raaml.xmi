@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ASCII"?>
+<raaml.fmea:FMEALibrary xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:raaml.fmea="http://edu.kit.sdq/dsis/metamodels/raaml/fmea" xsi:schemaLocation="http://edu.kit.sdq/dsis/metamodels/raaml/fmea ../../../edu.kit.sdq.raaml/model/raaml.ecore#//fmea" id="FMEALibrary" name="FMEALibrary" description="OMG RAAML FMEA reusable library (transformed from FMEALibrary)"/>

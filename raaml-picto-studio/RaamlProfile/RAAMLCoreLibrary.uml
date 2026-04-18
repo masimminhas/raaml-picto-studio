@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:RAAMLCore="http:///schemas/RAAMLCore/_uGCxgKAFEe-5lJFO0wqhsw/33" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/RAAMLCore/_uGCxgKAFEe-5lJFO0wqhsw/33 platform:/plugin/RAAMLCore/model/RAAMLCoreProfile.profile.uml#_uGHqAKAFEe-5lJFO0wqhsw">
+  <uml:Model xmi:id="_MS8KMJ0iEe-Ctuig04vQUg" name="CoreLibrary">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_MTeVsJ0iEe-Ctuig04vQUg">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Class" xmi:id="_YR8S0J0iEe-Ctuig04vQUg" name="AnySituation" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_bV6NUKBHEe-s8rdeBiP94Q">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_LGKqcJ3lEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_xqxjUJ0iEe-Ctuig04vQUg" name="Causality" visibility="private" memberEnd="_xqyKYp0iEe-Ctuig04vQUg _xqyKY50iEe-Ctuig04vQUg" navigableOwnedEnd="_xqyKYp0iEe-Ctuig04vQUg _xqyKY50iEe-Ctuig04vQUg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xqyKYJ0iEe-Ctuig04vQUg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xqyKYZ0iEe-Ctuig04vQUg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_xqyKYp0iEe-Ctuig04vQUg" name="to" type="_YR8S0J0iEe-Ctuig04vQUg" association="_xqxjUJ0iEe-Ctuig04vQUg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5JFvAJ0iEe-Ctuig04vQUg"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5Jrk4J0iEe-Ctuig04vQUg" value="*"/>
+      </ownedEnd>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_xqyKY50iEe-Ctuig04vQUg" name="from" type="_YR8S0J0iEe-Ctuig04vQUg" association="_xqxjUJ0iEe-Ctuig04vQUg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6Ai7cJ0iEe-Ctuig04vQUg"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6BQGEJ0iEe-Ctuig04vQUg" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_lXroUaAHEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lXroUqAHEe-CguQRPH1laA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="platform:/plugin/RAAMLCore/model/RAAMLCoreProfile.profile.uml#_uGHqAKAFEe-5lJFO0wqhsw"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="platform:/plugin/RAAMLCore/model/RAAMLCoreProfile.profile.uml#_CFCnkHmbEe-_3MKC7IFIVQ"/>
+    </profileApplication>
+  </uml:Model>
+  <RAAMLCore:Situation xmi:id="_MNN9MKWoEe-BAqrHrfxnNQ" base_Class="_YR8S0J0iEe-Ctuig04vQUg"/>
+</xmi:XMI>

@@ -1,0 +1,33 @@
+[%
+// ============================================================================
+// forward-aggregator.egl
+// ----------------------------------------------------------------------------
+// Generates the top-level raamlProfileToEcore.etl that imports all
+// per-stereotype forward rules.
+// ============================================================================
+var stereotypedClasses = getAllStereotypedEClasses();
+%]// ============================================================================
+// raamlProfileToEcore.etl
+// ----------------------------------------------------------------------------
+// Auto-generated aggregator for the forward transformation
+// (UML profile instance -> RAAML Ecore instance)
+//
+// DO NOT EDIT MANUALLY. Regenerate via generateTransformations.egx.
+//
+// Rules: [%=stereotypedClasses.size()%]
+// ============================================================================
+
+import '../helpers/uml-helpers.eol';
+
+pre {
+    ('Forward transformation starting... '
+        + '[%=stereotypedClasses.size()%] rules loaded.').println();
+}
+
+[%for (cls in stereotypedClasses) {%]
+import 'forward/[%=cls.getRaamlStereotype()%]_forward.etl';
+[%}%]
+
+post {
+    'Forward transformation complete.'.println();
+}

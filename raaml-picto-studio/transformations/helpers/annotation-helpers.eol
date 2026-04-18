@@ -1,0 +1,134 @@
+// ============================================================================
+// annotation-helpers.eol
+// ----------------------------------------------------------------------------
+// Helper operations for querying the http://edu.kit.sdq/raaml/metaclass
+// annotations embedded in the RAAML Ecore metamodel.
+//
+// These annotations encode the mapping between OMG RAAML stereotypes
+// (with their UML base metaclasses) and Ecore EClasses, forming the
+// executable specification that drives the generated ETL transformations.
+//
+// Example annotation:
+//   <eClassifiers xsi:type="ecore:EClass" name="BasicEvent">
+//       <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+//           <details key="base" value="Class"/>
+//           <details key="stereotype" value="BasicEvent"/>
+//       </eAnnotations>
+//   </eClassifiers>
+//
+// Usage: called from EGL templates and EGX rules via import.
+// ============================================================================
+
+@cached
+operation getRaamlAnnotationSource() : String {
+    return 'http://edu.kit.sdq/raaml/metaclass';
+}
+
+// Returns the RAAML metaclass eAnnotation on an EClass, or null
+operation ECore!EClass getRaamlAnnotation() : ECore!EAnnotation {
+    return self.eAnnotations.selectOne(a |
+        a.source == getRaamlAnnotationSource());
+}
+
+// Returns true if an EClass has the RAAML metaclass annotation
+operation ECore!EClass hasRaamlAnnotation() : Boolean {
+    return self.getRaamlAnnotation() <> null;
+}
+
+// Returns the value of an annotation detail by key, or null
+operation ECore!EClass getAnnotationDetail(key : String) : String {
+    var ann = self.getRaamlAnnotation();
+    if (ann.isUndefined() or ann == null) return null;
+    var detail = ann.details.selectOne(d | d.key == key);
+    if (detail.isUndefined() or detail == null) return null;
+    return detail.value;
+}
+
+// Returns the RAAML stereotype name (e.g. "BasicEvent"), or null if the
+// EClass has no stereotype annotation (abstract superclasses, etc.)
+operation ECore!EClass getRaamlStereotype() : String {
+    return self.getAnnotationDetail('stereotype');
+}
+
+// Returns the UML base metaclass name (e.g. "Class", "Package", "Dependency")
+operation ECore!EClass getRaamlBaseMetaclass() : String {
+    return self.getAnnotationDetail('base');
+}
+
+// Returns true if the EClass represents a concrete RAAML stereotype
+// (as opposed to an abstract superclass or structural container)
+operation ECore!EClass isStereotypedEClass() : Boolean {
+    return self.hasRaamlAnnotation()
+           and self.getRaamlStereotype() <> null
+           and self.getRaamlStereotype() <> '';
+}
+
+// Returns the EClass name as used in ETL rule signatures.
+// We use just the EClass name (no sub-package prefix) because Epsilon
+// resolves type names across all sub-packages of a loaded metamodel.
+// The ETL syntax ModelName!TypeName only allows ONE '!' character.
+operation ECore!EClass getQualifiedEClassName() {
+    return self.name;
+}
+
+// Returns all EClasses across all sub-packages that have a stereotype
+// annotation (i.e., concrete RAAML elements - should be 100 of these).
+operation getAllStereotypedEClasses() {
+    var result = new Sequence;
+    for (cls in ECore!EClass.all) {
+        if (cls.isStereotypedEClass()) {
+            result.add(cls);
+        }
+    }
+    return result;
+}
+
+// Locates an EClass by stereotype name. Useful for reflective transformation.
+operation findEClassByStereotype(stereotypeName : String) : ECore!EClass {
+    for (cls in ECore!EClass.all) {
+        if (cls.getRaamlStereotype() == stereotypeName) return cls;
+    }
+    return null;
+}
+
+// Returns all concrete EAttributes for an EClass, including inherited ones.
+// Filters out attributes derived solely from inheritance traversal control.
+operation ECore!EClass getAllMappableAttributes() {
+    return self.eAllAttributes.select(a | not a.derived);
+}
+
+// Returns all EReferences that should be mapped to profile associations.
+// Excludes opposites of containment references (they are redundant).
+operation ECore!EClass getAllMappableReferences() {
+    return self.eAllReferences.select(r |
+        not (r.eOpposite.isDefined() and r.eOpposite.containment));
+}
+
+// Returns all containment EReferences for an EClass.
+operation ECore!EClass getContainmentReferences() {
+    return self.eAllReferences.select(r | r.containment);
+}
+
+// Determines if an EClass represents a package-level container
+// (those with base="Package" in the annotation)
+operation ECore!EClass isRAAMLPackageContainer() : Boolean {
+    return self.getRaamlBaseMetaclass() == 'Package';
+}
+
+// Determines if an EClass represents a relationship (Dependency-based)
+operation ECore!EClass isRAAMLRelationship() : Boolean {
+    return self.getRaamlBaseMetaclass() == 'Dependency'
+           or self.getRaamlBaseMetaclass() == 'Abstraction';
+}
+
+// Diagnostic: print a summary of all stereotype mappings
+operation printStereotypeInventory() {
+    var count = 0;
+    for (cls in getAllStereotypedEClasses()) {
+        count = count + 1;
+        (count + '. ' + cls.getRaamlBaseMetaclass()
+                  + ' <<' + cls.getRaamlStereotype() + '>> -> '
+                  + cls.getQualifiedEClassName()).println();
+    }
+    ('Total: ' + count + ' stereotype mappings').println();
+}

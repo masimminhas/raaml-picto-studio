@@ -6,4 +6,4 @@ Bundle-Version: 1.0.1.qualifier
 Require-Bundle: org.eclipse.swt,
  org.eclipse.jface
 Automatic-Module-Name: edu.kit.sdq.raaml
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21

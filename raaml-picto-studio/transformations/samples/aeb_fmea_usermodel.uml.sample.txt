@@ -1,0 +1,55 @@
+============================================================================
+Sample practical user FMEA model (Pattern 2: inheritance-based)
+============================================================================
+
+This is a TEMPLATE showing what a user-created UML FMEA model should look like
+when following the OMG RAAML "extend library classes" pattern.
+
+Create the actual .uml file in Papyrus with this structure:
+
+MODEL: AEB_FMEA (uml:Model)
+  Imports: FMEALibrary.uml, RAAMLGeneralLibrary.uml
+
+  PACKAGE: RadarSubsystemFMEA (uml:Package)
+
+    CLASS: RadarSignalLossFMEA
+      - generalization -> FMEAItem (from FMEALibrary)
+      - ownedAttribute name="RPN" defaultValue=280.0
+      - ownedAttribute name="SEV" defaultValue=10
+      - ownedAttribute name="OCC" defaultValue=4
+      - ownedAttribute name="DET" defaultValue=7
+
+    CLASS: RadarTransceiverFailure
+      - generalization -> LossOfFunciton (from FMEALibrary) [note typo in OMG]
+      - (represents the "failure mode" concept)
+
+    CLASS: NoObstacleDetection
+      - generalization -> LossOfFunciton
+      - (represents a specific failure consequence)
+
+  PACKAGE: CameraSubsystemFMEA (uml:Package)
+
+    CLASS: CameraBlindingFMEA
+      - generalization -> FMEAItem
+      - ownedAttribute name="RPN" defaultValue=192.0
+
+    CLASS: CameraSaturation
+      - generalization -> DegradationOfFunction (from FMEALibrary)
+
+============================================================================
+
+For the transformation to work:
+  1. The user's UML classes MUST generalize from library classes.
+  2. Attribute default values carry the FMEA numerical data.
+  3. Class names become FMEAItem ids in the Ecore output.
+
+The Pattern 2 transformation walks the inheritance hierarchy:
+  - If a class generalizes (directly or transitively) from FMEAItem, it's
+    transformed to a RAAML!FMEAItem instance.
+  - If it generalizes from a failure-mode subtype (LossOfFunciton,
+    DegradationOfFunction, etc.), it's transformed to the matching Ecore
+    type.
+
+Because we match on the generalization chain (not stereotype applications),
+this transformation WORKS even when UML profile resolution fails.
+============================================================================

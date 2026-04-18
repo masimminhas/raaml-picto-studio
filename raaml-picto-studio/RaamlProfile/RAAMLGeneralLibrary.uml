@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:IDCarrier="http:///schemas/IDCarrier/_zJo4YLCGEe-KBdPz5CASlg/63" xmlns:RAAMLGeneral="http:///schemas/RAAMLGeneral/_YaFQUK_oEe-Aif16E1IsBA/28" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/IDCarrier/_zJo4YLCGEe-KBdPz5CASlg/63 platform:/plugin/RAAMLCore/model/RAAMLCoreProfile.profile.uml#_zJo4YbCGEe-KBdPz5CASlg http:///schemas/RAAMLGeneral/_YaFQUK_oEe-Aif16E1IsBA/28 platform:/plugin/RAAMLCore/model/RAAMLGeneralProfile.profile.uml#_YaPBUK_oEe-Aif16E1IsBA">
+  <uml:Model xmi:id="_BLVq8J3jEe-N6_PTGLbkOQ" name="RAAMLGeneralLibrary">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_BLgDAJ3jEe-N6_PTGLbkOQ">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Class" xmi:id="_LGKqcJ3lEe-ilLWhdG1Bmw" name="Scenario" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_tzryYJ3lEe-ilLWhdG1Bmw">
+        <general xmi:type="uml:Class" href="RAAMLCoreLibrary.uml#_YR8S0J0iEe-Ctuig04vQUg"/>
+      </generalization>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_PobUs53lEe-ilLWhdG1Bmw" name="scenariostep" aggregation="composite" association="_PobUsJ3lEe-ilLWhdG1Bmw">
+        <type xmi:type="uml:Class" href="RAAMLCoreLibrary.uml#_YR8S0J0iEe-Ctuig04vQUg"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PogNMJ3lEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PoiCYJ3lEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_PobUsJ3lEe-ilLWhdG1Bmw" memberEnd="_PobUs53lEe-ilLWhdG1Bmw _PojQgJ3lEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_PobUsZ3lEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_PobUsp3lEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_PojQgJ3lEe-ilLWhdG1Bmw" type="_LGKqcJ3lEe-ilLWhdG1Bmw" association="_PobUsJ3lEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_jpczAJ3lEe-ilLWhdG1Bmw" name="AbstractRisk" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_mCIhoJ3lEe-ilLWhdG1Bmw" general="_LGKqcJ3lEe-ilLWhdG1Bmw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_7KrBo53lEe-ilLWhdG1Bmw" name="harmpotential" type="_yiJsoJ3lEe-ilLWhdG1Bmw" aggregation="composite" association="_7KrBoJ3lEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7KrBpJ3lEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7KrBpZ3lEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_VeM_0J3mEe-ilLWhdG1Bmw" name="score" isDerived="true"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_uk1tEp3mEe-ilLWhdG1Bmw" name="trigger" type="_aZRysJ3mEe-ilLWhdG1Bmw" aggregation="composite" association="_uk1GAJ3mEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uk1tE53mEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uk27MJ3mEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_6WEOUqApEe-s8rdeBiP94Q" name="harm" type="_NW_gwJ3pEe-ilLWhdG1Bmw" aggregation="composite">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6q7EAKApEe-s8rdeBiP94Q"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6q7EAaApEe-s8rdeBiP94Q" value="*"/>
+        <association xmi:type="uml:Association" href="STPALibrary.uml#_6WDnQKApEe-s8rdeBiP94Q"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_3q-VgqAzEe-s8rdeBiP94Q" name="harmPotential" type="_yiJsoJ3lEe-ilLWhdG1Bmw" aggregation="composite">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3q-Vg6AzEe-s8rdeBiP94Q"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3q-VhKAzEe-s8rdeBiP94Q" value="*"/>
+        <association xmi:type="uml:Association" href="STPALibrary.uml#_3q9ucKAzEe-s8rdeBiP94Q"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_Oj8QUKA_Ee-s8rdeBiP94Q" name="score" isDerived="true"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_yiJsoJ3lEe-ilLWhdG1Bmw" name="HarmPotential" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_IU2j8J3mEe-ilLWhdG1Bmw">
+        <general xmi:type="uml:Class" href="RAAMLCoreLibrary.uml#_YR8S0J0iEe-Ctuig04vQUg"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_7KrBoJ3lEe-ilLWhdG1Bmw" memberEnd="_7KrBo53lEe-ilLWhdG1Bmw _7KrBpp3lEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7KrBoZ3lEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7KrBop3lEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_7KrBpp3lEe-ilLWhdG1Bmw" type="_jpczAJ3lEe-ilLWhdG1Bmw" association="_7KrBoJ3lEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_NPaZcJ3mEe-ilLWhdG1Bmw" name="Hazard" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_Rfo4gJ3mEe-ilLWhdG1Bmw" general="_yiJsoJ3lEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_aZRysJ3mEe-ilLWhdG1Bmw" name="AbstractEvent" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_iUIJYJ3mEe-ilLWhdG1Bmw">
+        <general xmi:type="uml:Class" href="RAAMLCoreLibrary.uml#_YR8S0J0iEe-Ctuig04vQUg"/>
+      </generalization>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_eCn38J3mEe-ilLWhdG1Bmw" name="likelihood"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_uk1GAJ3mEe-ilLWhdG1Bmw" memberEnd="_uk1tEp3mEe-ilLWhdG1Bmw _uk27MZ3mEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_uk1tEJ3mEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_uk1tEZ3mEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_uk27MZ3mEe-ilLWhdG1Bmw" type="_jpczAJ3lEe-ilLWhdG1Bmw" association="_uk1GAJ3mEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_DZj5MJ3nEe-ilLWhdG1Bmw" name="DysfunctionalEvent" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_C-9LYJ3oEe-ilLWhdG1Bmw" general="_aZRysJ3mEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_U-rVwJ3nEe-ilLWhdG1Bmw" name="ErrorPropagation" memberEnd="_U-tyAJ3nEe-ilLWhdG1Bmw _U-tyAZ3nEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_U-r80J3nEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_U-sj4J3nEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_U-tyAJ3nEe-ilLWhdG1Bmw" name="fromError" type="_DZj5MJ3nEe-ilLWhdG1Bmw" association="_U-rVwJ3nEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rxdKAJ3nEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ryV60J3nEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_U-tyAZ3nEe-ilLWhdG1Bmw" name="toError" type="_DZj5MJ3nEe-ilLWhdG1Bmw" association="_U-rVwJ3nEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sX8iQJ3nEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sYulYJ3nEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_w2w28J3nEe-ilLWhdG1Bmw" name="ErrorRealization" memberEnd="_w2xeAp3nEe-ilLWhdG1Bmw _w2ysIJ3nEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_w2xeAJ3nEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_w2xeAZ3nEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_w2xeAp3nEe-ilLWhdG1Bmw" name="error" type="_DZj5MJ3nEe-ilLWhdG1Bmw" association="_w2w28J3nEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7_5ukJ3nEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8Ap8gJ3nEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_w2ysIJ3nEe-ilLWhdG1Bmw" name="failure" type="_DZj5MJ3nEe-ilLWhdG1Bmw" association="_w2w28J3nEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8hxFgJ3nEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8iUfIJ3nEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_GwC3YJ3oEe-ilLWhdG1Bmw" name="AbstractCause" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_OKPYEJ3oEe-ilLWhdG1Bmw" general="_aZRysJ3mEe-ilLWhdG1Bmw"/>
+      <generalization xmi:type="uml:Generalization" xmi:id="_jH90YKBHEe-s8rdeBiP94Q" general="_ald0YKAyEe-s8rdeBiP94Q"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_o3SpgJ3oEe-ilLWhdG1Bmw" name="occurrence"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_rjvosJ3oEe-ilLWhdG1Bmw" name="premitigationOccurrences" isOrdered="true" isUnique="false">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uETg8J3oEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uFBSoJ3oEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_JkGTYJ3oEe-ilLWhdG1Bmw" name="Cause" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_MdzEYJ3oEe-ilLWhdG1Bmw" general="_GwC3YJ3oEe-ilLWhdG1Bmw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_2KchoJ3oEe-ilLWhdG1Bmw" name="occurrence">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_2gV5IJ3oEe-ilLWhdG1Bmw" name="premitigationOccurences">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8T2v4J3oEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8UUC4J3oEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_aExQYJ3oEe-ilLWhdG1Bmw" memberEnd="_aExQY53oEe-ilLWhdG1Bmw _aExQZJ3oEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_aExQYZ3oEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_aExQYp3oEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_aExQY53oEe-ilLWhdG1Bmw" name="error" type="_DZj5MJ3nEe-ilLWhdG1Bmw" association="_aExQYJ3oEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iYAR4J3oEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iYHmoJ3oEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_aExQZJ3oEe-ilLWhdG1Bmw" name="fault" type="_GwC3YJ3oEe-ilLWhdG1Bmw" association="_aExQYJ3oEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ixB14J3oEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ixGuYJ3oEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Hl5E0J3pEe-ilLWhdG1Bmw" name="UndesiredState" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_YJbIkJ3pEe-ilLWhdG1Bmw" general="_DZj5MJ3nEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_NW_gwJ3pEe-ilLWhdG1Bmw" name="AbstractEffect" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_Wj7KYJ3pEe-ilLWhdG1Bmw" general="_DZj5MJ3nEe-ilLWhdG1Bmw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_SJipwJ3pEe-ilLWhdG1Bmw" name="severity">
+        <type xmi:type="uml:Enumeration" href="ISO26262Library.uml#_Xv6lwKBBEe-s8rdeBiP94Q"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_cQ7JcJ3pEe-ilLWhdG1Bmw" name="premitigationSeverities">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_eZEhsJ3pEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_eZpwgJ3pEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_hApA4J3pEe-ilLWhdG1Bmw" name="AbstractFailureMode" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_kSelEJ3pEe-ilLWhdG1Bmw" general="_Hl5E0J3pEe-ilLWhdG1Bmw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_lw_xgJ3pEe-ilLWhdG1Bmw" name="detectability"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_mE3vwJ3pEe-ilLWhdG1Bmw" name="premitigationDetectabilities"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_w6JQMJ3pEe-ilLWhdG1Bmw" name="FailureMode" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_4qXEMJ3pEe-ilLWhdG1Bmw" general="_hApA4J3pEe-ilLWhdG1Bmw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_C0FtQJ3qEe-ilLWhdG1Bmw" name="detectability">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_G-qQQJ3qEe-ilLWhdG1Bmw" name="premitigationDetectabilities">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JxK0IJ3qEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Jx3-wJ3qEe-ilLWhdG1Bmw" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_62e9gJ3pEe-ilLWhdG1Bmw" name="Effect" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_9qVlMJ3pEe-ilLWhdG1Bmw" general="_NW_gwJ3pEe-ilLWhdG1Bmw"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_zsU10KALEe-CguQRPH1laA" name="severity">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_2c3q0KALEe-CguQRPH1laA" name="premitigationSeverities">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_69cTAKALEe-CguQRPH1laA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_69yRQKALEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_V4qxcJ3qEe-ilLWhdG1Bmw" memberEnd="_V4r_kJ3qEe-ilLWhdG1Bmw _V4r_kZ3qEe-ilLWhdG1Bmw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_V4rYgJ3qEe-ilLWhdG1Bmw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_V4rYgZ3qEe-ilLWhdG1Bmw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_V4r_kJ3qEe-ilLWhdG1Bmw" name="harm" type="_NW_gwJ3pEe-ilLWhdG1Bmw" aggregation="composite" association="_V4qxcJ3qEe-ilLWhdG1Bmw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Y_y6cJ3qEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ZAL8AJ3qEe-ilLWhdG1Bmw" value="*"/>
+      </ownedEnd>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_V4r_kZ3qEe-ilLWhdG1Bmw" type="_jpczAJ3lEe-ilLWhdG1Bmw" association="_V4qxcJ3qEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_ald0YKAyEe-s8rdeBiP94Q" name="Factor" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_O2tsQKBIEe-s8rdeBiP94Q">
+        <general xmi:type="uml:Class" href="RAAMLCoreLibrary.uml#_YR8S0J0iEe-Ctuig04vQUg"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_dpBsAKAyEe-s8rdeBiP94Q" name="Limitation" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_lBNN8KBHEe-s8rdeBiP94Q" general="_ald0YKAyEe-s8rdeBiP94Q"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_l5tv0KAyEe-s8rdeBiP94Q" name="Loss" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_xV--0KAyEe-s8rdeBiP94Q" general="_NW_gwJ3pEe-ilLWhdG1Bmw"/>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_-TUb8KAGEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_cynJsAAfEfCn38LPCSw6MQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cynJsQAfEfCn38LPCSw6MQ" key="Version" value="0.0.64"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cynJsgAfEfCn38LPCSw6MQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cynJswAfEfCn38LPCSw6MQ" key="Copyright" value="KIT-SDQ KASTEL"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cynJtAAfEfCn38LPCSw6MQ" key="Date" value="2024-12-02"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cynJtQAfEfCn38LPCSw6MQ" key="Author" value="Muhammad Asim Minhas"/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-TWRIKAGEe-CguQRPH1laA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="platform:/plugin/RAAMLCore/model/RAAMLCoreProfile.profile.uml#_zJo4YbCGEe-KBdPz5CASlg"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="platform:/plugin/RAAMLCore/model/RAAMLCoreProfile.profile.uml#_CFCnkHmbEe-_3MKC7IFIVQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="__qiGgqAGEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_cyqNAAAfEfCn38LPCSw6MQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cyqNAQAfEfCn38LPCSw6MQ" key="Version" value="0.0.29"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cyqNAgAfEfCn38LPCSw6MQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cyqNAwAfEfCn38LPCSw6MQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cyqNBAAfEfCn38LPCSw6MQ" key="Date" value="2024-12-01"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cyqNBQAfEfCn38LPCSw6MQ" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__qj7sKAGEe-CguQRPH1laA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="platform:/plugin/RAAMLCore/model/RAAMLGeneralProfile.profile.uml#_YaPBUK_oEe-Aif16E1IsBA"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="platform:/plugin/RAAMLCore/model/RAAMLGeneralProfile.profile.uml#_rWmcEJqcEe-37_ge53UNtQ"/>
+    </profileApplication>
+  </uml:Model>
+  <IDCarrier:Situation xmi:id="_nq_84J3lEe-ilLWhdG1Bmw" base_Block_Class="_LGKqcJ3lEe-ilLWhdG1Bmw" base_Class="_LGKqcJ3lEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_oo8y4J3lEe-ilLWhdG1Bmw" base_Block_Class="_jpczAJ3lEe-ilLWhdG1Bmw" base_Class="_jpczAJ3lEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_OR_30J3mEe-ilLWhdG1Bmw" base_Block_Class="_yiJsoJ3lEe-ilLWhdG1Bmw" base_Class="_yiJsoJ3lEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_QlfkcJ3mEe-ilLWhdG1Bmw" base_Block_Class="_NPaZcJ3mEe-ilLWhdG1Bmw" base_Class="_NPaZcJ3mEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_czlR8J3mEe-ilLWhdG1Bmw" base_Block_Class="_aZRysJ3mEe-ilLWhdG1Bmw" base_Class="_aZRysJ3mEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_GOBk4J3nEe-ilLWhdG1Bmw" base_Block_Class="_DZj5MJ3nEe-ilLWhdG1Bmw" base_Class="_DZj5MJ3nEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_IgqgcJ3oEe-ilLWhdG1Bmw" base_Block_Class="_GwC3YJ3oEe-ilLWhdG1Bmw" base_Class="_GwC3YJ3oEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_J6NQ0J3pEe-ilLWhdG1Bmw" base_Block_Class="_JkGTYJ3oEe-ilLWhdG1Bmw" base_Class="_JkGTYJ3oEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_LqdtgJ3pEe-ilLWhdG1Bmw" base_Block_Class="_Hl5E0J3pEe-ilLWhdG1Bmw" base_Class="_Hl5E0J3pEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_OsIuwJ3pEe-ilLWhdG1Bmw" base_Block_Class="_NW_gwJ3pEe-ilLWhdG1Bmw" base_Class="_NW_gwJ3pEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_8cTEwJ3pEe-ilLWhdG1Bmw" base_Block_Class="_62e9gJ3pEe-ilLWhdG1Bmw" base_Class="_62e9gJ3pEe-ilLWhdG1Bmw"/>
+  <IDCarrier:Situation xmi:id="_gNIAcKAyEe-s8rdeBiP94Q" base_Block_Class="_dpBsAKAyEe-s8rdeBiP94Q" base_Class="_dpBsAKAyEe-s8rdeBiP94Q"/>
+  <IDCarrier:Situation xmi:id="_hBAUcKAyEe-s8rdeBiP94Q" base_Block_Class="_ald0YKAyEe-s8rdeBiP94Q" base_Class="_ald0YKAyEe-s8rdeBiP94Q"/>
+  <IDCarrier:Situation xmi:id="_uMdCEKAyEe-s8rdeBiP94Q" base_Block_Class="_l5tv0KAyEe-s8rdeBiP94Q" base_Class="_l5tv0KAyEe-s8rdeBiP94Q"/>
+  <RAAMLGeneral:FailureMode xmi:id="_fDvkEKKDEe-DKe4sX_2sbQ" base_Class="_hApA4J3pEe-ilLWhdG1Bmw"/>
+  <RAAMLGeneral:FailureMode xmi:id="_kFhb4KKDEe-DKe4sX_2sbQ" base_Class="_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+</xmi:XMI>

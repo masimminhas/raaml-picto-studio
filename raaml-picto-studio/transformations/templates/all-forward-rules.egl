@@ -1,0 +1,66 @@
+[%
+// ============================================================================
+// all-forward-rules.egl
+// ----------------------------------------------------------------------------
+// Generates the ENTIRE forward ETL (raamlProfileToEcore.etl) in a single
+// pass, inlining one rule per RAAML stereotype.
+//
+// Run via epsilon.egl (not epsilon.egx) - avoids needing the EGX ANT task.
+// ============================================================================
+
+import '../helpers/annotation-helpers.eol';
+
+var stereotypedClasses = getAllStereotypedEClasses();
+%]// ============================================================================
+// raamlProfileToEcore.etl  (AUTO-GENERATED - do not edit)
+// ----------------------------------------------------------------------------
+// Forward transformation: UML profile instance -> RAAML Ecore instance
+// Generated from raaml.ecore annotations by all-forward-rules.egl
+// Rules: [%=stereotypedClasses.size()%]
+// ============================================================================
+
+import '../helpers/uml-helpers.eol';
+
+pre {
+    ('Forward transformation starting... '
+        + '[%=stereotypedClasses.size()%] rules loaded.').println();
+}
+
+[%for (eClass in stereotypedClasses) {
+    var stereotype = eClass.getRaamlStereotype();
+    var base       = eClass.getRaamlBaseMetaclass();
+    var qname      = eClass.getQualifiedEClassName();
+    var ruleName   = 'Transform_' + stereotype;
+    var mappableAttrs = eClass.getAllMappableAttributes()
+        .select(a | a.name <> 'name');
+%]
+// ----------------------------------------------------------------------------
+// UML [%=base%] with <<[%=stereotype%]>> -> RAAML [%=qname%]
+// ----------------------------------------------------------------------------
+rule [%=ruleName%]
+    transform s : UML![%=base%]
+    to t : RAAML![%=qname%] {
+
+    guard : s.hasStereotype('[%=stereotype%]')
+
+[%  if (eClass.eAllAttributes.exists(a | a.name == 'name')) {%]    t.name = s.name;
+[%  }%]
+[%  for (attr in mappableAttrs) {%]    if (s.getTaggedValue('[%=stereotype%]', '[%=attr.name%]') <> null) {
+        t.[%=attr.name%] = s.getTaggedValue('[%=stereotype%]', '[%=attr.name%]');
+    }
+[%  }%]
+[%  if (eClass.isRAAMLPackageContainer()) {%]
+[%    for (ref in eClass.getContainmentReferences()) {%]
+[%      var targetType = ref.eType;%]
+[%      if (targetType.isKindOf(ECore!EClass) and targetType.isStereotypedEClass()) {%]    // Containment: owned elements with <<[%=targetType.getRaamlStereotype()%]>>
+    t.[%=ref.name%] ::= s.getOwnedElementsByStereotype('[%=targetType.getRaamlStereotype()%]');
+[%      }%]
+[%    }%]
+[%  }%]
+}
+
+[%}%]
+
+post {
+    'Forward transformation complete.'.println();
+}

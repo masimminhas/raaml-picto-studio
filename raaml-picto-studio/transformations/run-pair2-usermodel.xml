@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair2-usermodel.xml
+  ================================================================
+  Pair 2 (user-model) transformation runner.
+  Input: a user UML model where classes extend RAAML library classes.
+  Output: a valid RAAML Ecore XMI instance.
+
+  Before running, set the 'user.uml.source' property below to point to
+  the user FMEA model (e.g., aeb_fmea_usermodel.uml created in Papyrus).
+================================================================ -->
+<project default="run-forward" basedir=".">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="raaml.ecore"
+              location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
+
+    <!-- ==============================================================
+         CHANGE THIS to point to your user FMEA model.
+         Default points to a placeholder path the user must create.
+         ============================================================== -->
+    <property name="user.uml.source"
+              location="${basedir}/samples/aeb_fmea_usermodel.uml"/>
+    <property name="ecore.target"
+              location="${basedir}/samples/aeb_fmea_usermodel.raaml.xmi"/>
+
+    <target name="run-forward"
+            description="Transform a user UML FMEA model to RAAML Ecore">
+
+        <echo>================================================================</echo>
+        <echo>Pair 2 user-model FMEA forward transformation</echo>
+        <echo>  basedir:        ${basedir}</echo>
+        <echo>  Source (UML):   ${user.uml.source}</echo>
+        <echo>  Target (XMI):   ${ecore.target}</echo>
+        <echo>  Metamodel:      ${raaml.ecore}</echo>
+        <echo>================================================================</echo>
+
+        <available file="${user.uml.source}" property="src.exists"/>
+        <fail unless="src.exists">
+            User FMEA UML file not found: ${user.uml.source}
+
+            Please:
+              1. Create a practical FMEA UML model in Papyrus (see
+                 samples/aeb_fmea_usermodel.uml.sample.txt for structure)
+              2. Save it as: ${user.uml.source}
+              3. Re-run this ANT build
+        </fail>
+
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${user.uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.target}"
+                               metamodelfile="${raaml.ecore}"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair2-usermodel-fmea-forward.etl">
+            <model ref="UML"/>
+            <model ref="RAAML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Done. Inspect: ${ecore.target}</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

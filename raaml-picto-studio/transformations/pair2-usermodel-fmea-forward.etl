@@ -1,0 +1,297 @@
+// ============================================================================
+// pair2-usermodel-fmea-forward.etl
+// ----------------------------------------------------------------------------
+// Pair 2 (user-model) forward transformation for practical FMEA analyses.
+//
+// DUAL-STRATEGY detection:
+//   1. Inheritance-based (Pattern 2)  - user class generalizes from FMEAItem
+//   2. Stereotype-application-based (Pattern 3) - user class has <<FMEAItem>>
+//      applied, detected via direct XMI inspection (works even when UML2
+//      profile resolution fails in ANT contexts).
+//
+// Helper operations are INLINED (not imported) to avoid Epsilon import
+// resolution issues in some ANT environments.
+// ============================================================================
+
+// ===========================================================================
+// INLINED HELPERS (copied from helpers/uml-helpers.eol and omg-aliases.eol)
+// ===========================================================================
+
+@cached
+operation getFMEAItemAncestors() : Set {
+    return Set{'FMEAItem', 'AbstractFMEAItem'};
+}
+
+// Walk the UML generalization chain looking for a class whose name is in the
+// given set. Returns the matching ancestor (including self) or null.
+operation UML!Class findAncestorInSet(names : Collection) : UML!Class {
+    if (names.includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var ancestor = g.general.findAncestorInSet(names);
+            if (ancestor.isDefined() and ancestor <> null) return ancestor;
+        }
+    }
+    return null;
+}
+
+operation UML!Class hasAncestorInSet(names : Collection) : Boolean {
+    return self.findAncestorInSet(names) <> null;
+}
+
+// Return a numeric default value of a UML owned attribute, or null.
+operation UML!Class getDoubleProperty(propName : String) : Real {
+    var a = self.ownedAttribute.selectOne(p | p.name == propName);
+    if (a.isDefined() and a.defaultValue.isDefined()) {
+        var v = a.defaultValue.value;
+        if (v.isDefined() and v <> null) return v.asDouble();
+    }
+    return null;
+}
+
+// Scan all EObjects in a loaded EMF model via the Resource API and return
+// those whose eClass simple-name matches the given name. This locates
+// stereotype application elements without requiring UML2 profile resolution.
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) {
+            result.add(obj);
+        }
+    }
+    return result;
+}
+
+// Resolve a UML element by its xmi:id string. Iterates UML!Element.all
+// and returns the one whose Resource URI fragment matches the given id.
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            var frag = res.getURIFragment(e);
+            if (frag == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+// Extract the base_Class reference from a stereotype application EObject.
+// Handles two cases:
+//   (a) Profile resolved: base_Class is a regular EReference on the
+//       stereotype application's eClass.
+//   (b) Profile unresolved (AnyType): base_Class is stored as a string
+//       xmi:id inside the anyAttribute FeatureMap, and we must resolve it.
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    // Case (a): regular feature access (profile resolved)
+    var feature = stereoApp.eClass().getEStructuralFeature('base_Class');
+    if (feature.isDefined() and feature <> null) {
+        var v = stereoApp.eGet(feature);
+        if (v.isDefined() and v <> null) return v;
+    }
+
+    // Case (b): AnyType fallback - read from anyAttribute FeatureMap.
+    // AnyType has a getAnyAttribute() method that returns FeatureMap.
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            var f = entry.getEStructuralFeature();
+            if (f.name == 'base_Class') {
+                var val = entry.getValue();
+                // val is a String (xmi:id) in AnyType mode
+                return resolveUmlElementById(val);
+            }
+        }
+    }
+    return null;
+}
+
+// Return all UML Classes (from the given model) to which a stereotype of
+// the given name has been applied, via XMI-level scanning.
+operation findUmlClassesWithStereotype(mdl : Any,
+                                       stereotypeName : String) : Sequence {
+    var result = new Sequence;
+    var apps = findAllEObjectsByTypeName(mdl, stereotypeName);
+    for (app in apps) {
+        var baseClass = getStereotypeBaseClass(app);
+        if (baseClass.isDefined() and baseClass <> null) {
+            result.add(baseClass);
+        }
+    }
+    return result;
+}
+
+// Unified detection: returns user classes identified as FMEAItems by
+// either inheritance OR stereotype-application.
+operation getUserFMEAItemClasses() : Sequence {
+    var result = new Sequence;
+
+    // Pattern 2: inheritance from library FMEAItem (but not the library
+    // classes themselves).
+    var byInherit = UML!Class.all.select(c |
+        c.hasAncestorInSet(getFMEAItemAncestors())
+        and not getFMEAItemAncestors().includes(c.name));
+    for (c in byInherit) {
+        if (not result.includes(c)) result.add(c);
+    }
+
+    // Pattern 3: <<FMEAItem>> applied via stereotype (XMI-scanned).
+    var byStereo = findUmlClassesWithStereotype(UML, 'FMEAItem');
+    for (c in byStereo) {
+        if (c.isKindOf(UML!Class)
+            and not getFMEAItemAncestors().includes(c.name)
+            and not result.includes(c)) {
+            result.add(c);
+        }
+    }
+
+    return result;
+}
+
+// ===========================================================================
+// TRANSFORMATION RULES
+// ===========================================================================
+
+pre {
+    'Pair 2 user-model FMEA forward transformation starting...'.println();
+
+    // --- Deep diagnostic: what does Epsilon actually see? ---
+    ('=== DIAGNOSTIC ===').println();
+    ('UML!Model.all count:    ' + UML!Model.all.size()).println();
+    ('UML!Package.all count:  ' + UML!Package.all.size()).println();
+    ('UML!Class.all count:    ' + UML!Class.all.size()).println();
+    ('UML!Element.all count:  ' + UML!Element.all.size()).println();
+
+    // List all UML classes found (probably includes user class too)
+    ('').println();
+    ('All UML Classes:').println();
+    for (c in UML!Class.all) {
+        ('  - ' + c.name).println();
+    }
+
+    // Try to detect stereotype applications via XMI scanning
+    ('').println();
+    ('Pattern 3 detection (XMI scan for "FMEAItem" eClass):').println();
+    var stereoApps = findAllEObjectsByTypeName(UML, 'FMEAItem');
+    ('  Stereotype applications found: ' + stereoApps.size()).println();
+    for (app in stereoApps) {
+        ('    - xmi:id=' + app.toString()).println();
+    }
+
+    // Final detected user FMEA classes
+    ('').println();
+    var users = getUserFMEAItemClasses();
+    ('Total user FMEA classes detected (union): ' + users.size()).println();
+    for (c in users) {
+        var via = '';
+        if (c.hasAncestorInSet(getFMEAItemAncestors())) {
+            via = 'inheritance from '
+                  + c.findAncestorInSet(getFMEAItemAncestors()).name;
+        } else {
+            via = 'stereotype application';
+        }
+        ('    - ' + c.name + '  (via ' + via + ')').println();
+    }
+    ('=== END DIAGNOSTIC ===').println();
+    ('').println();
+}
+
+// ---------------------------------------------------------------------------
+// Root rule: UML Model -> SafetyAnalysis + FMEA analysis
+// ---------------------------------------------------------------------------
+rule UserModelToSafetyAnalysis
+    transform s : UML!Model
+    to sa : RAAML!SafetyAnalysis,
+       f  : RAAML!FMEA {
+
+    guard : s.name <> 'FMEALibrary'
+            and s.name <> 'RAAMLGeneralLibrary'
+            and s.name <> 'CoreLibrary'
+            and s.name <> 'PrimitiveTypes'
+
+    sa.id   = s.name;
+    sa.name = s.name;
+    sa.description = 'Safety analysis for ' + s.name;
+
+    f.id   = s.name + '_FMEA';
+    f.name = s.name + ' FMEA';
+    f.description = 'FMEA analysis for system ' + s.name;
+
+    f.fmeaItems ::= getUserFMEAItemClasses();
+
+    sa.analyses.add(f);
+}
+
+// ---------------------------------------------------------------------------
+// Rule: any detected user FMEA Class -> Ecore FMEAItem
+// ---------------------------------------------------------------------------
+rule UserFMEAClassToFMEAItem
+    transform s : UML!Class
+    to t : RAAML!FMEAItem {
+
+    guard : getUserFMEAItemClasses().includes(s)
+
+    t.id   = s.name;
+    t.name = s.name;
+
+    var via = '';
+    if (s.hasAncestorInSet(getFMEAItemAncestors())) {
+        via = 'inheritance-based';
+    } else {
+        via = 'stereotype-based';
+    }
+    t.description = 'User FMEA item: ' + s.name + ' (detected via ' + via + ')';
+
+    // Extract numeric values from UML ownedAttribute default values
+    var rpn = s.getDoubleProperty('RPN');
+    if (rpn <> null) { t.RPN = rpn; }
+
+    var sev = s.getDoubleProperty('SEV');
+    var occ = s.getDoubleProperty('OCC');
+    var det = s.getDoubleProperty('DET');
+    if (sev <> null and occ <> null and det <> null) {
+        var rpnCalc : new RAAML!RPNCalculation;
+        rpnCalc.id   = s.name + '_RPN';
+        rpnCalc.name = s.name + ' RPN calculation';
+        rpnCalc.SEV  = sev;
+        rpnCalc.OCC  = occ;
+        rpnCalc.DET  = det;
+        rpnCalc.RPN  = sev * occ * det;
+        t.rpnCalculation.add(rpnCalc);
+        if (rpn == null) { t.RPN = rpnCalc.RPN; }
+    }
+
+    // Mandatory placeholders so the Ecore instance validates.
+    var fm : new RAAML!LossOfFunction;
+    fm.id   = s.name + '__failureMode__placeholder';
+    fm.name = 'To be populated by user';
+    t.failureMode.add(fm);
+
+    var cs : new RAAML!LossOfFunction;
+    cs.id   = s.name + '__cause__placeholder';
+    cs.name = 'To be populated by user';
+    t.cause.add(cs);
+
+    var fe : new RAAML!LossOfFunction;
+    fe.id   = s.name + '__finalEffect__placeholder';
+    fe.name = 'To be populated by user';
+    t.finalEffect.add(fe);
+}
+
+// ---------------------------------------------------------------------------
+post {
+    'Pair 2 user-model FMEA forward transformation complete.'.println();
+    ('  SafetyAnalysis containers:  ' + RAAML!SafetyAnalysis.all.size()).println();
+    ('  FMEA analyses created:      ' + RAAML!FMEA.all.size()).println();
+    ('  FMEAItems created:          ' + RAAML!FMEAItem.all.size()).println();
+    ('  RPN calculations:           ' + RAAML!RPNCalculation.all.size()).println();
+    for (item in RAAML!FMEAItem.all) {
+        var rpnStr = '';
+        if (item.RPN <> null) rpnStr = ' (RPN=' + item.RPN + ')';
+        ('    - ' + item.name + rpnStr).println();
+    }
+}

@@ -1,0 +1,2501 @@
+// ============================================================================
+// ecoreToRaamlProfile.etl  (AUTO-GENERATED - do not edit)
+// ----------------------------------------------------------------------------
+// Backward transformation: RAAML Ecore instance -> UML profile instance
+// Generated from raaml.ecore annotations by all-backward-rules.egl
+// Rules: 100
+// ============================================================================
+
+import '../helpers/uml-helpers.eol';
+
+pre {
+    ('Backward transformation starting... '
+        + '100 rules loaded.').println();
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Situation -> UML Class with <<Situation>>
+// ----------------------------------------------------------------------------
+rule Reverse_Situation
+    transform s : RAAML!core!Situation
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Situation');
+        if (s.id <> null) {
+            t.setTaggedValue('Situation', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Situation', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Situation', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!FailureMode -> UML Class with <<FailureMode>>
+// ----------------------------------------------------------------------------
+rule Reverse_FailureMode
+    transform s : RAAML!core!FailureMode
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FailureMode');
+        if (s.id <> null) {
+            t.setTaggedValue('FailureMode', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FailureMode', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FailureMode', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Hazard -> UML Class with <<Hazard>>
+// ----------------------------------------------------------------------------
+rule Reverse_Hazard
+    transform s : RAAML!core!Hazard
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Hazard');
+        if (s.id <> null) {
+            t.setTaggedValue('Hazard', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Hazard', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Hazard', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Error -> UML Class with <<Error>>
+// ----------------------------------------------------------------------------
+rule Reverse_Error
+    transform s : RAAML!core!Error
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Error');
+        if (s.id <> null) {
+            t.setTaggedValue('Error', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Error', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Error', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Fault -> UML Class with <<Fault>>
+// ----------------------------------------------------------------------------
+rule Reverse_Fault
+    transform s : RAAML!core!Fault
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Fault');
+        if (s.id <> null) {
+            t.setTaggedValue('Fault', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Fault', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Fault', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Detection -> UML Class with <<Detection>>
+// ----------------------------------------------------------------------------
+rule Reverse_Detection
+    transform s : RAAML!core!Detection
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Detection');
+        if (s.id <> null) {
+            t.setTaggedValue('Detection', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Detection', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Detection', 'visibility', s.visibility);
+        }
+        if (s.affects <> null) {
+            t.setTaggedValue('Detection', 'affects', s.affects);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Recommendation -> UML Class with <<Recommendation>>
+// ----------------------------------------------------------------------------
+rule Reverse_Recommendation
+    transform s : RAAML!core!Recommendation
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Recommendation');
+        if (s.id <> null) {
+            t.setTaggedValue('Recommendation', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Recommendation', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Recommendation', 'visibility', s.visibility);
+        }
+        if (s.affects <> null) {
+            t.setTaggedValue('Recommendation', 'affects', s.affects);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Mitigation -> UML Class with <<Mitigation>>
+// ----------------------------------------------------------------------------
+rule Reverse_Mitigation
+    transform s : RAAML!core!Mitigation
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Mitigation');
+        if (s.id <> null) {
+            t.setTaggedValue('Mitigation', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Mitigation', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Mitigation', 'visibility', s.visibility);
+        }
+        if (s.affects <> null) {
+            t.setTaggedValue('Mitigation', 'affects', s.affects);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Prevention -> UML Class with <<Prevention>>
+// ----------------------------------------------------------------------------
+rule Reverse_Prevention
+    transform s : RAAML!core!Prevention
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Prevention');
+        if (s.id <> null) {
+            t.setTaggedValue('Prevention', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Prevention', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Prevention', 'visibility', s.visibility);
+        }
+        if (s.affects <> null) {
+            t.setTaggedValue('Prevention', 'affects', s.affects);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!FailureState -> UML State with <<FailureState>>
+// ----------------------------------------------------------------------------
+rule Reverse_FailureState
+    transform s : RAAML!core!FailureState
+    to t : UML!State {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FailureState');
+        if (s.id <> null) {
+            t.setTaggedValue('FailureState', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FailureState', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FailureState', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!RelevantTo -> UML Dependency with <<RelevantTo>>
+// ----------------------------------------------------------------------------
+rule Reverse_RelevantTo
+    transform s : RAAML!core!RelevantTo
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('RelevantTo');
+        if (s.id <> null) {
+            t.setTaggedValue('RelevantTo', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('RelevantTo', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('RelevantTo', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!PresentIn -> UML Dependency with <<PresentIn>>
+// ----------------------------------------------------------------------------
+rule Reverse_PresentIn
+    transform s : RAAML!core!PresentIn
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('PresentIn');
+        if (s.id <> null) {
+            t.setTaggedValue('PresentIn', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('PresentIn', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('PresentIn', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Violates -> UML Dependency with <<Violates>>
+// ----------------------------------------------------------------------------
+rule Reverse_Violates
+    transform s : RAAML!core!Violates
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Violates');
+        if (s.id <> null) {
+            t.setTaggedValue('Violates', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Violates', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Violates', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Item -> UML Class with <<Item>>
+// ----------------------------------------------------------------------------
+rule Reverse_Item
+    transform s : RAAML!core!Item
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Item');
+        if (s.id <> null) {
+            t.setTaggedValue('Item', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Item', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Item', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!SingleElementItem -> UML Class with <<SingleElementItem>>
+// ----------------------------------------------------------------------------
+rule Reverse_SingleElementItem
+    transform s : RAAML!core!SingleElementItem
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SingleElementItem');
+        if (s.id <> null) {
+            t.setTaggedValue('SingleElementItem', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SingleElementItem', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SingleElementItem', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!ElementGroup -> UML Class with <<ElementGroup>>
+// ----------------------------------------------------------------------------
+rule Reverse_ElementGroup
+    transform s : RAAML!core!ElementGroup
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ElementGroup');
+        if (s.id <> null) {
+            t.setTaggedValue('ElementGroup', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ElementGroup', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ElementGroup', 'visibility', s.visibility);
+        }
+        if (s.groupCriterion <> null) {
+            t.setTaggedValue('ElementGroup', 'groupCriterion', s.groupCriterion);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!ElementGroupBasedItem -> UML Class with <<ElementGroupBasedItem>>
+// ----------------------------------------------------------------------------
+rule Reverse_ElementGroupBasedItem
+    transform s : RAAML!core!ElementGroupBasedItem
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ElementGroupBasedItem');
+        if (s.id <> null) {
+            t.setTaggedValue('ElementGroupBasedItem', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ElementGroupBasedItem', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ElementGroupBasedItem', 'visibility', s.visibility);
+        }
+        if (s.groupCriterion <> null) {
+            t.setTaggedValue('ElementGroupBasedItem', 'groupCriterion', s.groupCriterion);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Factor -> UML Class with <<Factor>>
+// ----------------------------------------------------------------------------
+rule Reverse_Factor
+    transform s : RAAML!core!Factor
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Factor');
+        if (s.id <> null) {
+            t.setTaggedValue('Factor', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Factor', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Factor', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!ProcessModelFlaw -> UML Class with <<ProcessModelFlaw>>
+// ----------------------------------------------------------------------------
+rule Reverse_ProcessModelFlaw
+    transform s : RAAML!core!ProcessModelFlaw
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ProcessModelFlaw');
+        if (s.id <> null) {
+            t.setTaggedValue('ProcessModelFlaw', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ProcessModelFlaw', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ProcessModelFlaw', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!HarmPotential -> UML Class with <<HarmPotential>>
+// ----------------------------------------------------------------------------
+rule Reverse_HarmPotential
+    transform s : RAAML!core!HarmPotential
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('HarmPotential');
+        if (s.id <> null) {
+            t.setTaggedValue('HarmPotential', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('HarmPotential', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('HarmPotential', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML core!Scenario -> UML Class with <<Scenario>>
+// ----------------------------------------------------------------------------
+rule Reverse_Scenario
+    transform s : RAAML!core!Scenario
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Scenario');
+        if (s.id <> null) {
+            t.setTaggedValue('Scenario', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Scenario', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Scenario', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!Requirement -> UML Class with <<Requirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_Requirement
+    transform s : RAAML!req!Requirement
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Requirement');
+        if (s.id <> null) {
+            t.setTaggedValue('Requirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Requirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Requirement', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('Requirement', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('Requirement', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('Requirement', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('Requirement', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!DeriveRequirement -> UML Abstraction with <<DeriveRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_DeriveRequirement
+    transform s : RAAML!req!DeriveRequirement
+    to t : UML!Abstraction {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('DeriveRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('DeriveRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('DeriveRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('DeriveRequirement', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!IndependenceRequirement -> UML Abstraction with <<IndependenceRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_IndependenceRequirement
+    transform s : RAAML!req!IndependenceRequirement
+    to t : UML!Abstraction {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('IndependenceRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('IndependenceRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('IndependenceRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('IndependenceRequirement', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!ASILDecompose -> UML Abstraction with <<ASILDecompose>>
+// ----------------------------------------------------------------------------
+rule Reverse_ASILDecompose
+    transform s : RAAML!req!ASILDecompose
+    to t : UML!Abstraction {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ASILDecompose');
+        if (s.id <> null) {
+            t.setTaggedValue('ASILDecompose', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ASILDecompose', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ASILDecompose', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!Satisfy -> UML Abstraction with <<Satisfy>>
+// ----------------------------------------------------------------------------
+rule Reverse_Satisfy
+    transform s : RAAML!req!Satisfy
+    to t : UML!Abstraction {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Satisfy');
+        if (s.id <> null) {
+            t.setTaggedValue('Satisfy', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Satisfy', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Satisfy', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!UserInfoRequirement -> UML Abstraction with <<UserInfoRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_UserInfoRequirement
+    transform s : RAAML!req!UserInfoRequirement
+    to t : UML!Abstraction {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('UserInfoRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('UserInfoRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('UserInfoRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('UserInfoRequirement', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!RecoveryRequirement -> UML Abstraction with <<RecoveryRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_RecoveryRequirement
+    transform s : RAAML!req!RecoveryRequirement
+    to t : UML!Abstraction {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('RecoveryRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('RecoveryRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('RecoveryRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('RecoveryRequirement', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!DependabilityRequirement -> UML Class with <<DependabilityRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_DependabilityRequirement
+    transform s : RAAML!req!DependabilityRequirement
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('DependabilityRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('DependabilityRequirement', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!FunctionalSafetyRequirement -> UML Class with <<FunctionalSafetyRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_FunctionalSafetyRequirement
+    transform s : RAAML!req!FunctionalSafetyRequirement
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FunctionalSafetyRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('FunctionalSafetyRequirement', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!SoftwareSafetyRequirement -> UML Class with <<SoftwareSafetyRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_SoftwareSafetyRequirement
+    transform s : RAAML!req!SoftwareSafetyRequirement
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SoftwareSafetyRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('SoftwareSafetyRequirement', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!HardwareSafetyRequirement -> UML Class with <<HardwareSafetyRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_HardwareSafetyRequirement
+    transform s : RAAML!req!HardwareSafetyRequirement
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('HardwareSafetyRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('HardwareSafetyRequirement', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!TechnicalSafetyRequirement -> UML Class with <<TechnicalSafetyRequirement>>
+// ----------------------------------------------------------------------------
+rule Reverse_TechnicalSafetyRequirement
+    transform s : RAAML!req!TechnicalSafetyRequirement
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('TechnicalSafetyRequirement');
+        if (s.id <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('TechnicalSafetyRequirement', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!SafetyGoal -> UML Class with <<SafetyGoal>>
+// ----------------------------------------------------------------------------
+rule Reverse_SafetyGoal
+    transform s : RAAML!req!SafetyGoal
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SafetyGoal');
+        if (s.id <> null) {
+            t.setTaggedValue('SafetyGoal', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SafetyGoal', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SafetyGoal', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('SafetyGoal', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('SafetyGoal', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('SafetyGoal', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('SafetyGoal', 'status', s.status);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!SafeState -> UML Dependency with <<SafeState>>
+// ----------------------------------------------------------------------------
+rule Reverse_SafeState
+    transform s : RAAML!req!SafeState
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SafeState');
+        if (s.id <> null) {
+            t.setTaggedValue('SafeState', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SafeState', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SafeState', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!OperatingMode -> UML Dependency with <<OperatingMode>>
+// ----------------------------------------------------------------------------
+rule Reverse_OperatingMode
+    transform s : RAAML!req!OperatingMode
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('OperatingMode');
+        if (s.id <> null) {
+            t.setTaggedValue('OperatingMode', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('OperatingMode', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('OperatingMode', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!HazardAndRiskAssessment -> UML Class with <<HazardAndRiskAssessment>>
+// ----------------------------------------------------------------------------
+rule Reverse_HazardAndRiskAssessment
+    transform s : RAAML!req!HazardAndRiskAssessment
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('HazardAndRiskAssessment');
+        if (s.id <> null) {
+            t.setTaggedValue('HazardAndRiskAssessment', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('HazardAndRiskAssessment', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('HazardAndRiskAssessment', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML req!ISO26262SafetyRequirementTemplate -> UML Class with <<ISO26262SafetyRequirementTemplate>>
+// ----------------------------------------------------------------------------
+rule Reverse_ISO26262SafetyRequirementTemplate
+    transform s : RAAML!req!ISO26262SafetyRequirementTemplate
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ISO26262SafetyRequirementTemplate');
+        if (s.id <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'visibility', s.visibility);
+        }
+        if (s.text <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'text', s.text);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'type', s.type);
+        }
+        if (s.priority <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'priority', s.priority);
+        }
+        if (s.status <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'status', s.status);
+        }
+        if (s.ASIL <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'ASIL', s.ASIL);
+        }
+        if (s.FTTI <> null) {
+            t.setTaggedValue('ISO26262SafetyRequirementTemplate', 'FTTI', s.FTTI);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML library!GeneralLibrary -> UML Package with <<GeneralLibrary>>
+// ----------------------------------------------------------------------------
+rule Reverse_GeneralLibrary
+    transform s : RAAML!library!GeneralLibrary
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('GeneralLibrary');
+        if (s.id <> null) {
+            t.setTaggedValue('GeneralLibrary', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('GeneralLibrary', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('GeneralLibrary', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!FTA -> UML Package with <<FTA>>
+// ----------------------------------------------------------------------------
+rule Reverse_FTA
+    transform s : RAAML!fta!FTA
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FTA');
+        if (s.id <> null) {
+            t.setTaggedValue('FTA', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FTA', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FTA', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!BasicEvent -> UML Class with <<BasicEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_BasicEvent
+    transform s : RAAML!fta!BasicEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('BasicEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('BasicEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('BasicEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('BasicEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('BasicEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('BasicEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!IntermediateEvent -> UML Class with <<IntermediateEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_IntermediateEvent
+    transform s : RAAML!fta!IntermediateEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('IntermediateEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('IntermediateEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('IntermediateEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('IntermediateEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('IntermediateEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('IntermediateEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!TopEvent -> UML Class with <<TopEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_TopEvent
+    transform s : RAAML!fta!TopEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('TopEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('TopEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('TopEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('TopEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('TopEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('TopEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!ConditionalEvent -> UML Class with <<ConditionalEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_ConditionalEvent
+    transform s : RAAML!fta!ConditionalEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ConditionalEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('ConditionalEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ConditionalEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ConditionalEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('ConditionalEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('ConditionalEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!DormantEvent -> UML Class with <<DormantEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_DormantEvent
+    transform s : RAAML!fta!DormantEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('DormantEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('DormantEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('DormantEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('DormantEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('DormantEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('DormantEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!UndevelopedEvent -> UML Class with <<UndevelopedEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_UndevelopedEvent
+    transform s : RAAML!fta!UndevelopedEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('UndevelopedEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('UndevelopedEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('UndevelopedEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('UndevelopedEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('UndevelopedEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('UndevelopedEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!HouseEvent -> UML Class with <<HouseEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_HouseEvent
+    transform s : RAAML!fta!HouseEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('HouseEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('HouseEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('HouseEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('HouseEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('HouseEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('HouseEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!ZeroEvent -> UML Class with <<ZeroEvent>>
+// ----------------------------------------------------------------------------
+rule Reverse_ZeroEvent
+    transform s : RAAML!fta!ZeroEvent
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ZeroEvent');
+        if (s.id <> null) {
+            t.setTaggedValue('ZeroEvent', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ZeroEvent', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ZeroEvent', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('ZeroEvent', 'likelihood', s.likelihood);
+        }
+        if (s.probability <> null) {
+            t.setTaggedValue('ZeroEvent', 'probability', s.probability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!AND -> UML Class with <<AND>>
+// ----------------------------------------------------------------------------
+rule Reverse_AND
+    transform s : RAAML!fta!AND
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('AND');
+        if (s.id <> null) {
+            t.setTaggedValue('AND', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('AND', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('AND', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!OR -> UML Class with <<OR>>
+// ----------------------------------------------------------------------------
+rule Reverse_OR
+    transform s : RAAML!fta!OR
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('OR');
+        if (s.id <> null) {
+            t.setTaggedValue('OR', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('OR', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('OR', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!NOT -> UML Class with <<NOT>>
+// ----------------------------------------------------------------------------
+rule Reverse_NOT
+    transform s : RAAML!fta!NOT
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('NOT');
+        if (s.id <> null) {
+            t.setTaggedValue('NOT', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('NOT', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('NOT', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!XOR -> UML Class with <<XOR>>
+// ----------------------------------------------------------------------------
+rule Reverse_XOR
+    transform s : RAAML!fta!XOR
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('XOR');
+        if (s.id <> null) {
+            t.setTaggedValue('XOR', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('XOR', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('XOR', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!SEQ -> UML Class with <<SEQ>>
+// ----------------------------------------------------------------------------
+rule Reverse_SEQ
+    transform s : RAAML!fta!SEQ
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SEQ');
+        if (s.id <> null) {
+            t.setTaggedValue('SEQ', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SEQ', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SEQ', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!INHIBIT -> UML Class with <<INHIBIT>>
+// ----------------------------------------------------------------------------
+rule Reverse_INHIBIT
+    transform s : RAAML!fta!INHIBIT
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('INHIBIT');
+        if (s.id <> null) {
+            t.setTaggedValue('INHIBIT', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('INHIBIT', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('INHIBIT', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!MAJORITY_VOTE -> UML Class with <<MAJORITY_VOTE>>
+// ----------------------------------------------------------------------------
+rule Reverse_MAJORITY_VOTE
+    transform s : RAAML!fta!MAJORITY_VOTE
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('MAJORITY_VOTE');
+        if (s.id <> null) {
+            t.setTaggedValue('MAJORITY_VOTE', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('MAJORITY_VOTE', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('MAJORITY_VOTE', 'visibility', s.visibility);
+        }
+        if (s.m <> null) {
+            t.setTaggedValue('MAJORITY_VOTE', 'm', s.m);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!FTATree -> UML Class with <<FTATree>>
+// ----------------------------------------------------------------------------
+rule Reverse_FTATree
+    transform s : RAAML!fta!FTATree
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FTATree');
+        if (s.id <> null) {
+            t.setTaggedValue('FTATree', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FTATree', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FTATree', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fta!FTALibrary -> UML Package with <<FTALibrary>>
+// ----------------------------------------------------------------------------
+rule Reverse_FTALibrary
+    transform s : RAAML!fta!FTALibrary
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FTALibrary');
+        if (s.id <> null) {
+            t.setTaggedValue('FTALibrary', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FTALibrary', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FTALibrary', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!FMEA -> UML Package with <<FMEA>>
+// ----------------------------------------------------------------------------
+rule Reverse_FMEA
+    transform s : RAAML!fmea!FMEA
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FMEA');
+        if (s.id <> null) {
+            t.setTaggedValue('FMEA', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FMEA', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FMEA', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!RPNCalculation -> UML Class with <<RPNCalculation>>
+// ----------------------------------------------------------------------------
+rule Reverse_RPNCalculation
+    transform s : RAAML!fmea!RPNCalculation
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('RPNCalculation');
+        if (s.id <> null) {
+            t.setTaggedValue('RPNCalculation', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('RPNCalculation', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('RPNCalculation', 'visibility', s.visibility);
+        }
+        if (s.RPN <> null) {
+            t.setTaggedValue('RPNCalculation', 'RPN', s.RPN);
+        }
+        if (s.SEV <> null) {
+            t.setTaggedValue('RPNCalculation', 'SEV', s.SEV);
+        }
+        if (s.OCC <> null) {
+            t.setTaggedValue('RPNCalculation', 'OCC', s.OCC);
+        }
+        if (s.DET <> null) {
+            t.setTaggedValue('RPNCalculation', 'DET', s.DET);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!FMEAItem -> UML Class with <<FMEAItem>>
+// ----------------------------------------------------------------------------
+rule Reverse_FMEAItem
+    transform s : RAAML!fmea!FMEAItem
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FMEAItem');
+        if (s.id <> null) {
+            t.setTaggedValue('FMEAItem', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FMEAItem', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FMEAItem', 'visibility', s.visibility);
+        }
+        if (s.RPN <> null) {
+            t.setTaggedValue('FMEAItem', 'RPN', s.RPN);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!LossOfFunction -> UML Class with <<LossOfFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_LossOfFunction
+    transform s : RAAML!fmea!LossOfFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('LossOfFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('LossOfFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('LossOfFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('LossOfFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('LossOfFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('LossOfFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!DegradationOfFunction -> UML Class with <<DegradationOfFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_DegradationOfFunction
+    transform s : RAAML!fmea!DegradationOfFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('DegradationOfFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('DegradationOfFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('DegradationOfFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('DegradationOfFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('DegradationOfFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('DegradationOfFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!IntermittentFunction -> UML Class with <<IntermittentFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_IntermittentFunction
+    transform s : RAAML!fmea!IntermittentFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('IntermittentFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('IntermittentFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('IntermittentFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('IntermittentFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('IntermittentFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('IntermittentFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!PartialFunction -> UML Class with <<PartialFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_PartialFunction
+    transform s : RAAML!fmea!PartialFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('PartialFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('PartialFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('PartialFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('PartialFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('PartialFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('PartialFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!ExceedingFunction -> UML Class with <<ExceedingFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_ExceedingFunction
+    transform s : RAAML!fmea!ExceedingFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ExceedingFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('ExceedingFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ExceedingFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ExceedingFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('ExceedingFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('ExceedingFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!UnintendedFunction -> UML Class with <<UnintendedFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_UnintendedFunction
+    transform s : RAAML!fmea!UnintendedFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('UnintendedFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('UnintendedFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('UnintendedFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('UnintendedFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('UnintendedFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('UnintendedFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!DelayedFunction -> UML Class with <<DelayedFunction>>
+// ----------------------------------------------------------------------------
+rule Reverse_DelayedFunction
+    transform s : RAAML!fmea!DelayedFunction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('DelayedFunction');
+        if (s.id <> null) {
+            t.setTaggedValue('DelayedFunction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('DelayedFunction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('DelayedFunction', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('DelayedFunction', 'likelihood', s.likelihood);
+        }
+        if (s.detectability <> null) {
+            t.setTaggedValue('DelayedFunction', 'detectability', s.detectability);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML fmea!FMEALibrary -> UML Package with <<FMEALibrary>>
+// ----------------------------------------------------------------------------
+rule Reverse_FMEALibrary
+    transform s : RAAML!fmea!FMEALibrary
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('FMEALibrary');
+        if (s.id <> null) {
+            t.setTaggedValue('FMEALibrary', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('FMEALibrary', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('FMEALibrary', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!ISO26262 -> UML Package with <<ISO26262>>
+// ----------------------------------------------------------------------------
+rule Reverse_ISO26262
+    transform s : RAAML!hara!ISO26262
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ISO26262');
+        if (s.id <> null) {
+            t.setTaggedValue('ISO26262', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ISO26262', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ISO26262', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!OperationalSituation -> UML Class with <<OperationalSituation>>
+// ----------------------------------------------------------------------------
+rule Reverse_OperationalSituation
+    transform s : RAAML!hara!OperationalSituation
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('OperationalSituation');
+        if (s.id <> null) {
+            t.setTaggedValue('OperationalSituation', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('OperationalSituation', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('OperationalSituation', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!MalfunctioningBehaviour -> UML Class with <<MalfunctioningBehaviour>>
+// ----------------------------------------------------------------------------
+rule Reverse_MalfunctioningBehaviour
+    transform s : RAAML!hara!MalfunctioningBehaviour
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('MalfunctioningBehaviour');
+        if (s.id <> null) {
+            t.setTaggedValue('MalfunctioningBehaviour', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('MalfunctioningBehaviour', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('MalfunctioningBehaviour', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!Verified -> UML Class with <<Verified>>
+// ----------------------------------------------------------------------------
+rule Reverse_Verified
+    transform s : RAAML!hara!Verified
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Verified');
+        if (s.id <> null) {
+            t.setTaggedValue('Verified', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Verified', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Verified', 'visibility', s.visibility);
+        }
+        if (s.result <> null) {
+            t.setTaggedValue('Verified', 'result', s.result);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!Confirmed -> UML Class with <<Confirmed>>
+// ----------------------------------------------------------------------------
+rule Reverse_Confirmed
+    transform s : RAAML!hara!Confirmed
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Confirmed');
+        if (s.id <> null) {
+            t.setTaggedValue('Confirmed', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Confirmed', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Confirmed', 'visibility', s.visibility);
+        }
+        if (s.result <> null) {
+            t.setTaggedValue('Confirmed', 'result', s.result);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!ASILAssignment -> UML Class with <<ASILAssignment>>
+// ----------------------------------------------------------------------------
+rule Reverse_ASILAssignment
+    transform s : RAAML!hara!ASILAssignment
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ASILAssignment');
+        if (s.id <> null) {
+            t.setTaggedValue('ASILAssignment', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ASILAssignment', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ASILAssignment', 'visibility', s.visibility);
+        }
+        if (s.ASIL <> null) {
+            t.setTaggedValue('ASILAssignment', 'ASIL', s.ASIL);
+        }
+        if (s.ASILOverride <> null) {
+            t.setTaggedValue('ASILAssignment', 'ASILOverride', s.ASILOverride);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!SystemLevelEffect -> UML Class with <<SystemLevelEffect>>
+// ----------------------------------------------------------------------------
+rule Reverse_SystemLevelEffect
+    transform s : RAAML!hara!SystemLevelEffect
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SystemLevelEffect');
+        if (s.id <> null) {
+            t.setTaggedValue('SystemLevelEffect', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SystemLevelEffect', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SystemLevelEffect', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('SystemLevelEffect', 'likelihood', s.likelihood);
+        }
+        if (s.severity <> null) {
+            t.setTaggedValue('SystemLevelEffect', 'severity', s.severity);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!VehicleLevelEffect -> UML Class with <<VehicleLevelEffect>>
+// ----------------------------------------------------------------------------
+rule Reverse_VehicleLevelEffect
+    transform s : RAAML!hara!VehicleLevelEffect
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('VehicleLevelEffect');
+        if (s.id <> null) {
+            t.setTaggedValue('VehicleLevelEffect', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('VehicleLevelEffect', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('VehicleLevelEffect', 'visibility', s.visibility);
+        }
+        if (s.likelihood <> null) {
+            t.setTaggedValue('VehicleLevelEffect', 'likelihood', s.likelihood);
+        }
+        if (s.severity <> null) {
+            t.setTaggedValue('VehicleLevelEffect', 'severity', s.severity);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML hara!ISO26262Library -> UML Package with <<ISO26262Library>>
+// ----------------------------------------------------------------------------
+rule Reverse_ISO26262Library
+    transform s : RAAML!hara!ISO26262Library
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ISO26262Library');
+        if (s.id <> null) {
+            t.setTaggedValue('ISO26262Library', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ISO26262Library', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ISO26262Library', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!STPA -> UML Package with <<STPA>>
+// ----------------------------------------------------------------------------
+rule Reverse_STPA
+    transform s : RAAML!stpa!STPA
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('STPA');
+        if (s.id <> null) {
+            t.setTaggedValue('STPA', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('STPA', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('STPA', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!Loss -> UML Class with <<Loss>>
+// ----------------------------------------------------------------------------
+rule Reverse_Loss
+    transform s : RAAML!stpa!Loss
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Loss');
+        if (s.id <> null) {
+            t.setTaggedValue('Loss', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Loss', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Loss', 'visibility', s.visibility);
+        }
+        if (s.category <> null) {
+            t.setTaggedValue('Loss', 'category', s.category);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!ControlStructure -> UML Class with <<ControlStructure>>
+// ----------------------------------------------------------------------------
+rule Reverse_ControlStructure
+    transform s : RAAML!stpa!ControlStructure
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ControlStructure');
+        if (s.id <> null) {
+            t.setTaggedValue('ControlStructure', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ControlStructure', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ControlStructure', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!Controller -> UML Class with <<Controller>>
+// ----------------------------------------------------------------------------
+rule Reverse_Controller
+    transform s : RAAML!stpa!Controller
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Controller');
+        if (s.id <> null) {
+            t.setTaggedValue('Controller', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Controller', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Controller', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!ControlledProcess -> UML Class with <<ControlledProcess>>
+// ----------------------------------------------------------------------------
+rule Reverse_ControlledProcess
+    transform s : RAAML!stpa!ControlledProcess
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ControlledProcess');
+        if (s.id <> null) {
+            t.setTaggedValue('ControlledProcess', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ControlledProcess', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ControlledProcess', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!Actuator -> UML Class with <<Actuator>>
+// ----------------------------------------------------------------------------
+rule Reverse_Actuator
+    transform s : RAAML!stpa!Actuator
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Actuator');
+        if (s.id <> null) {
+            t.setTaggedValue('Actuator', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Actuator', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Actuator', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!Sensor -> UML Class with <<Sensor>>
+// ----------------------------------------------------------------------------
+rule Reverse_Sensor
+    transform s : RAAML!stpa!Sensor
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Sensor');
+        if (s.id <> null) {
+            t.setTaggedValue('Sensor', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Sensor', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Sensor', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!ControlAction -> UML Class with <<ControlAction>>
+// ----------------------------------------------------------------------------
+rule Reverse_ControlAction
+    transform s : RAAML!stpa!ControlAction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ControlAction');
+        if (s.id <> null) {
+            t.setTaggedValue('ControlAction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ControlAction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ControlAction', 'visibility', s.visibility);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('ControlAction', 'type', s.type);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!Feedback -> UML Class with <<Feedback>>
+// ----------------------------------------------------------------------------
+rule Reverse_Feedback
+    transform s : RAAML!stpa!Feedback
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Feedback');
+        if (s.id <> null) {
+            t.setTaggedValue('Feedback', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Feedback', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Feedback', 'visibility', s.visibility);
+        }
+        if (s.type <> null) {
+            t.setTaggedValue('Feedback', 'type', s.type);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!UndesiredControlAction -> UML Class with <<UndesiredControlAction>>
+// ----------------------------------------------------------------------------
+rule Reverse_UndesiredControlAction
+    transform s : RAAML!stpa!UndesiredControlAction
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('UndesiredControlAction');
+        if (s.id <> null) {
+            t.setTaggedValue('UndesiredControlAction', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('UndesiredControlAction', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('UndesiredControlAction', 'visibility', s.visibility);
+        }
+        if (s.unsafeType <> null) {
+            t.setTaggedValue('UndesiredControlAction', 'unsafeType', s.unsafeType);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML stpa!STPALibrary -> UML Package with <<STPALibrary>>
+// ----------------------------------------------------------------------------
+rule Reverse_STPALibrary
+    transform s : RAAML!stpa!STPALibrary
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('STPALibrary');
+        if (s.id <> null) {
+            t.setTaggedValue('STPALibrary', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('STPALibrary', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('STPALibrary', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!GSN -> UML Package with <<GSN>>
+// ----------------------------------------------------------------------------
+rule Reverse_GSN
+    transform s : RAAML!gsn!GSN
+    to t : UML!Package {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('GSN');
+        if (s.id <> null) {
+            t.setTaggedValue('GSN', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('GSN', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('GSN', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Goal -> UML Class with <<Goal>>
+// ----------------------------------------------------------------------------
+rule Reverse_Goal
+    transform s : RAAML!gsn!Goal
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Goal');
+        if (s.id <> null) {
+            t.setTaggedValue('Goal', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Goal', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Goal', 'visibility', s.visibility);
+        }
+        if (s.nodeId <> null) {
+            t.setTaggedValue('Goal', 'nodeId', s.nodeId);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Strategy -> UML Class with <<Strategy>>
+// ----------------------------------------------------------------------------
+rule Reverse_Strategy
+    transform s : RAAML!gsn!Strategy
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Strategy');
+        if (s.id <> null) {
+            t.setTaggedValue('Strategy', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Strategy', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Strategy', 'visibility', s.visibility);
+        }
+        if (s.nodeId <> null) {
+            t.setTaggedValue('Strategy', 'nodeId', s.nodeId);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Solution -> UML Class with <<Solution>>
+// ----------------------------------------------------------------------------
+rule Reverse_Solution
+    transform s : RAAML!gsn!Solution
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Solution');
+        if (s.id <> null) {
+            t.setTaggedValue('Solution', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Solution', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Solution', 'visibility', s.visibility);
+        }
+        if (s.nodeId <> null) {
+            t.setTaggedValue('Solution', 'nodeId', s.nodeId);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Context -> UML Class with <<Context>>
+// ----------------------------------------------------------------------------
+rule Reverse_Context
+    transform s : RAAML!gsn!Context
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Context');
+        if (s.id <> null) {
+            t.setTaggedValue('Context', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Context', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Context', 'visibility', s.visibility);
+        }
+        if (s.contextId <> null) {
+            t.setTaggedValue('Context', 'contextId', s.contextId);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Justification -> UML Class with <<Justification>>
+// ----------------------------------------------------------------------------
+rule Reverse_Justification
+    transform s : RAAML!gsn!Justification
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Justification');
+        if (s.id <> null) {
+            t.setTaggedValue('Justification', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Justification', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Justification', 'visibility', s.visibility);
+        }
+        if (s.contextId <> null) {
+            t.setTaggedValue('Justification', 'contextId', s.contextId);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Assumption -> UML Class with <<Assumption>>
+// ----------------------------------------------------------------------------
+rule Reverse_Assumption
+    transform s : RAAML!gsn!Assumption
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Assumption');
+        if (s.id <> null) {
+            t.setTaggedValue('Assumption', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Assumption', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Assumption', 'visibility', s.visibility);
+        }
+        if (s.contextId <> null) {
+            t.setTaggedValue('Assumption', 'contextId', s.contextId);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!InContextOf -> UML Dependency with <<InContextOf>>
+// ----------------------------------------------------------------------------
+rule Reverse_InContextOf
+    transform s : RAAML!gsn!InContextOf
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('InContextOf');
+        if (s.id <> null) {
+            t.setTaggedValue('InContextOf', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('InContextOf', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('InContextOf', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!SupportedBy -> UML Dependency with <<SupportedBy>>
+// ----------------------------------------------------------------------------
+rule Reverse_SupportedBy
+    transform s : RAAML!gsn!SupportedBy
+    to t : UML!Dependency {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('SupportedBy');
+        if (s.id <> null) {
+            t.setTaggedValue('SupportedBy', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('SupportedBy', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('SupportedBy', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!Rationale -> UML Class with <<Rationale>>
+// ----------------------------------------------------------------------------
+rule Reverse_Rationale
+    transform s : RAAML!gsn!Rationale
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('Rationale');
+        if (s.id <> null) {
+            t.setTaggedValue('Rationale', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('Rationale', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('Rationale', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!ASILOverrideRationale -> UML Class with <<ASILOverrideRationale>>
+// ----------------------------------------------------------------------------
+rule Reverse_ASILOverrideRationale
+    transform s : RAAML!gsn!ASILOverrideRationale
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('ASILOverrideRationale');
+        if (s.id <> null) {
+            t.setTaggedValue('ASILOverrideRationale', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('ASILOverrideRationale', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('ASILOverrideRationale', 'visibility', s.visibility);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// RAAML gsn!LessonLearned -> UML Class with <<LessonLearned>>
+// ----------------------------------------------------------------------------
+rule Reverse_LessonLearned
+    transform s : RAAML!gsn!LessonLearned
+    to t : UML!Class {
+
+    if (s.name <> null) { t.name = s.name; }
+    post {
+        t.applyRAAMLStereotype('LessonLearned');
+        if (s.id <> null) {
+            t.setTaggedValue('LessonLearned', 'id', s.id);
+        }
+        if (s.description <> null) {
+            t.setTaggedValue('LessonLearned', 'description', s.description);
+        }
+        if (s.visibility <> null) {
+            t.setTaggedValue('LessonLearned', 'visibility', s.visibility);
+        }
+    }
+}
+
+
+post {
+    'Backward transformation complete.'.println();
+}

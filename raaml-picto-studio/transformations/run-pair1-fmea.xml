@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair1-fmea.xml
+  ================================================================
+  Pair 1 (metamodel-level) transformation runner for FMEALibrary.
+  Loads the OMG FMEALibrary.uml and transforms it to an Ecore
+  instance conforming to raaml.ecore.
+
+  Usage (Eclipse):
+    1. Right-click -> Run As -> Ant Build...
+    2. JRE tab -> "Run in the same JRE as the workspace"
+    3. Run
+================================================================ -->
+<project default="run-forward">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/emc/uml2/tasks/tasks.xml"
+             onerror="ignore"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <!--
+      Paths resolved relative to the ANT buildfile location (${basedir}).
+      Expected structure (adjust if your layout differs):
+           <workspace>/<RAAML project>/transformations/run-pair1-fmea.xml
+           <workspace>/<RAAML project>/RaamlProfile/FMEALibrary.uml
+           <workspace>/edu.kit.sdq.raaml/model/raaml.ecore
+    -->
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="raaml.ecore"
+              location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="uml.source"
+              location="${project.dir}/RaamlProfile/FMEALibrary.uml"/>
+    <property name="ecore.target"
+              location="${basedir}/samples/FMEALibrary.raaml.xmi"/>
+
+    <target name="run-forward"
+            description="Transform OMG FMEALibrary.uml to RAAML Ecore instance">
+
+        <echo>================================================================</echo>
+        <echo>Pair 1 forward transformation: FMEALibrary</echo>
+        <echo>  basedir:        ${basedir}</echo>
+        <echo>  project.dir:    ${project.dir}</echo>
+        <echo>  workspace.dir:  ${workspace.dir}</echo>
+        <echo>  Source (UML):   ${uml.source}</echo>
+        <echo>  Target (XMI):   ${ecore.target}</echo>
+        <echo>  Metamodel:      ${raaml.ecore}</echo>
+        <echo>================================================================</echo>
+
+        <!-- Sanity check: warn if source file is missing -->
+        <available file="${uml.source}" property="source.exists"/>
+        <fail unless="source.exists">
+            Source UML file not found: ${uml.source}
+
+            Please verify:
+              1. The RaamlProfile folder exists relative to this project
+              2. FMEALibrary.uml is inside it
+              3. If your layout differs, adjust the 'uml.source' property in this ANT file
+        </fail>
+
+        <!-- Load the source UML library -->
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <!-- Create the target RAAML model (empty, to be populated) -->
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.target}"
+                               metamodelfile="${raaml.ecore}"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <!-- Run the forward ETL -->
+        <epsilon.etl src="pair1-fmealibrary-forward.etl">
+            <model ref="UML"/>
+            <model ref="RAAML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Done. Inspect: ${ecore.target}</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

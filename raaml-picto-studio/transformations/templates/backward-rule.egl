@@ -1,0 +1,47 @@
+[%
+// ============================================================================
+// backward-rule.egl
+// ----------------------------------------------------------------------------
+// Generates one ETL rule that transforms an Ecore instance back to a
+// UML element with the corresponding RAAML stereotype applied.
+//
+// Input: an ECore!EClass with the RAAML metaclass annotation
+// Output: an ETL rule for the backward direction
+// ============================================================================
+
+var stereotype = eClass.getRaamlStereotype();
+var base       = eClass.getRaamlBaseMetaclass();
+var qname      = eClass.getQualifiedEClassName();
+var ruleName   = 'Reverse_' + stereotype;
+
+var mappableAttrs = eClass.getAllMappableAttributes()
+    .select(a | a.name <> 'name');
+
+%]// ============================================================================
+// Auto-generated backward rule
+// Source: RAAML [%=qname%]
+// Target: UML [%=base%] with <<[%=stereotype%]>> applied
+// ============================================================================
+rule [%=ruleName%]
+    transform s : RAAML![%=qname%]
+    to t : UML![%=base%] {
+
+    // UML name attribute
+    [%if (eClass.eAllAttributes.exists(a | a.name == 'name')) {%]
+    if (s.name <> null) {
+        t.name = s.name;
+    }
+    [%}%]
+
+    // Post-processing: apply stereotype and set tagged values
+    // (stereotype application requires the element to exist first)
+    post {
+        t.applyRAAMLStereotype('[%=stereotype%]');
+
+        [%for (attr in mappableAttrs) {%]
+        if (s.[%=attr.name%] <> null) {
+            t.setTaggedValue('[%=stereotype%]', '[%=attr.name%]', s.[%=attr.name%]);
+        }
+        [%}%]
+    }
+}

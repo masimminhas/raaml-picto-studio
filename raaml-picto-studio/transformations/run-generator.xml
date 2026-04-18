@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-generator.xml
+  ================================================================
+  Reads raaml.ecore annotations and emits two aggregated ETL files:
+      generated/raamlProfileToEcore.etl
+      generated/ecoreToRaamlProfile.etl
+
+  Uses EGL (not EGX) so it works with the standard Epsilon workflow
+  bundle. Each EGL template contains an internal loop that iterates
+  over all stereotyped EClasses and inlines one rule per stereotype.
+
+  Usage (Eclipse):
+    1. Right-click this file -> Run As -> Ant Build...
+    2. JRE tab -> "Run in the same JRE as the workspace"
+    3. Click Run
+================================================================ -->
+<project default="generate">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <!-- Explicit taskdefs to be robust across distributions -->
+    <taskdef name="epsilon.egl"
+             classname="org.eclipse.epsilon.workflow.tasks.EglTask"
+             onerror="ignore"/>
+    <taskdef name="epsilon.eol"
+             classname="org.eclipse.epsilon.workflow.tasks.EolTask"
+             onerror="ignore"/>
+
+    <property name="raaml.ecore"
+              value="../../edu.kit.sdq.raaml/model/raaml.ecore"/>
+
+    <target name="generate"
+            description="Generate forward and backward ETL from annotations">
+
+        <echo>================================================================</echo>
+        <echo>RAAML Transformation Generator</echo>
+        <echo>Reading metamodel annotations from: ${raaml.ecore}</echo>
+        <echo>================================================================</echo>
+
+        <mkdir dir="generated"/>
+
+        <!-- Load raaml.ecore as a MODEL (conforming to Ecore metametamodel) -->
+        <epsilon.emf.loadModel name="ECore"
+                               modelfile="${raaml.ecore}"
+                               metamodeluri="http://www.eclipse.org/emf/2002/Ecore"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <!-- Generate forward ETL -->
+        <epsilon.egl src="templates/all-forward-rules.egl"
+                     target="generated/raamlProfileToEcore.etl">
+            <model ref="ECore"/>
+        </epsilon.egl>
+
+        <!-- Generate backward ETL -->
+        <epsilon.egl src="templates/all-backward-rules.egl"
+                     target="generated/ecoreToRaamlProfile.etl">
+            <model ref="ECore"/>
+        </epsilon.egl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Generation complete.</echo>
+        <echo>  Forward:  generated/raamlProfileToEcore.etl</echo>
+        <echo>  Backward: generated/ecoreToRaamlProfile.etl</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

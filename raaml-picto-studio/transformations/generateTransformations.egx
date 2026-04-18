@@ -1,0 +1,74 @@
+// ============================================================================
+// generateTransformations.egx
+// ----------------------------------------------------------------------------
+// EGX orchestrator that generates the complete forward and backward ETL
+// transformations from the RAAML Ecore metamodel annotations.
+//
+// For each EClass in raaml.ecore that carries the annotation
+//   http://edu.kit.sdq/raaml/metaclass
+// with both 'base' and 'stereotype' details, this orchestrator emits:
+//   - one forward ETL rule (UML profile instance -> Ecore instance)
+//   - one backward ETL rule (Ecore instance -> UML profile instance)
+//
+// It also emits the two aggregator files that import all generated rules.
+//
+// Usage: see validate-all.xml or run-generator.xml ANT workflows.
+// ============================================================================
+
+import 'helpers/annotation-helpers.eol';
+
+// ----------------------------------------------------------------------------
+// Per-stereotype rule generation
+// ----------------------------------------------------------------------------
+
+rule GenerateForwardRule
+    transform eClass : ECore!EClass {
+
+    guard : eClass.isStereotypedEClass()
+
+    parameters : Map {
+        'eClass' = eClass
+    }
+
+    template : 'templates/forward-rule.egl'
+    target   : 'generated/forward/' + eClass.getRaamlStereotype() + '_forward.etl'
+    overwrite: true
+}
+
+rule GenerateBackwardRule
+    transform eClass : ECore!EClass {
+
+    guard : eClass.isStereotypedEClass()
+
+    parameters : Map {
+        'eClass' = eClass
+    }
+
+    template : 'templates/backward-rule.egl'
+    target   : 'generated/backward/' + eClass.getRaamlStereotype() + '_backward.etl'
+    overwrite: true
+}
+
+// ----------------------------------------------------------------------------
+// Top-level aggregator generation (one-off per package)
+// ----------------------------------------------------------------------------
+
+rule GenerateForwardAggregator
+    transform pkg : ECore!EPackage {
+
+    guard : pkg.name == 'raaml'
+
+    template : 'templates/forward-aggregator.egl'
+    target   : 'generated/raamlProfileToEcore.etl'
+    overwrite: true
+}
+
+rule GenerateBackwardAggregator
+    transform pkg : ECore!EPackage {
+
+    guard : pkg.name == 'raaml'
+
+    template : 'templates/backward-aggregator.egl'
+    target   : 'generated/ecoreToRaamlProfile.etl'
+    overwrite: true
+}

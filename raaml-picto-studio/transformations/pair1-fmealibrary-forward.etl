@@ -1,0 +1,123 @@
+// ============================================================================
+// pair1-fmealibrary-forward.etl
+// ----------------------------------------------------------------------------
+// Pair 1 (metamodel-level) forward transformation:
+//   OMG RAAML FMEALibrary.uml  ->  RAAML Ecore instance of FMEALibrary
+//
+// Strategy:
+//   - Identify library classes by NAME (not by stereotype), because profile
+//     applications in the OMG libraries reference platform:/plugin/... URIs
+//     that Epsilon cannot resolve in the ANT execution context.
+//   - This is equivalent to stereotype-based matching because each library
+//     class has a known, stable name.
+//   - Both AbstractFMEAItem and FMEAItem (UML) -> concrete FMEAItem (Ecore),
+//     since the Ecore AbstractFMEAItem is abstract.
+//   - The <<FailureMode>>-stereotyped library classes (LossOfFunciton, etc.)
+//     correspond to Ecore EClass DEFINITIONS and are not instance data.
+// ============================================================================
+
+import 'helpers/uml-helpers.eol';
+import 'helpers/omg-aliases.eol';
+
+// Library classes that should become FMEAItem instances in the Ecore library.
+// Matched by UML Class name.
+@cached
+operation getFMEAItemLibraryClassNames() : Set {
+    return Set{'AbstractFMEAItem', 'FMEAItem'};
+}
+
+pre {
+    'Pair1 FMEALibrary forward transformation starting...'.println();
+    ('  Total UML!Class visible: ' + UML!Class.all.size()).println();
+
+    // Show which library classes we will target
+    var targets = UML!Class.all.select(c |
+        getFMEAItemLibraryClassNames().includes(c.name));
+    ('  Target library classes found: ' + targets.size()).println();
+    for (c in targets) {
+        ('    - ' + c.name).println();
+    }
+    ('').println();
+}
+
+// ---------------------------------------------------------------------------
+// Root rule: UML Model "FMEALibrary" -> Ecore FMEALibrary container
+// ---------------------------------------------------------------------------
+rule FMEALibraryModelToFMEALibrary
+    transform s : UML!Model
+    to t : RAAML!FMEALibrary {
+
+    guard : s.name == 'FMEALibrary'
+
+    t.id   = 'FMEALibrary';
+    t.name = s.name;
+    t.description = 'OMG RAAML FMEA reusable library (transformed from '
+                    + s.name + ')';
+
+    // Populate abstractFMEAItems with library classes matched by name.
+    // packagedElement contains all classes owned by the Model.
+    t.abstractFMEAItems ::= s.packagedElement
+        .select(e | e.isKindOf(UML!Class)
+                    and getFMEAItemLibraryClassNames().includes(e.name));
+}
+
+// ---------------------------------------------------------------------------
+// Rule: UML library Class named AbstractFMEAItem or FMEAItem
+//       -> concrete Ecore FMEAItem instance
+//
+// The Ecore metamodel requires [1..*] populated values for failureMode,
+// cause, and finalEffect. Since library classes are templates (not data),
+// we synthesize one placeholder element per mandatory slot. These
+// placeholders carry the marker 'library-template-slot' in their id so
+// the backward transformation can remove them cleanly.
+// ---------------------------------------------------------------------------
+rule FMEAItemLibraryClassToEcore
+    transform s : UML!Class
+    to t : RAAML!FMEAItem {
+
+    guard : getFMEAItemLibraryClassNames().includes(s.name)
+
+    t.id   = s.name;
+    t.name = s.name;
+    t.description = 'Library concept: ' + s.name
+                    + ' (from OMG FMEALibrary, matched by name)';
+
+    // --- Synthesize placeholder failure mode slot ---
+    var fm : new RAAML!LossOfFunction;
+    fm.id   = s.name + '__failureMode__library-template-slot';
+    fm.name = 'unspecified';
+    fm.description = 'Library template placeholder (not instance data)';
+    t.failureMode.add(fm);
+
+    // --- Synthesize placeholder cause slot ---
+    var cs : new RAAML!LossOfFunction;
+    cs.id   = s.name + '__cause__library-template-slot';
+    cs.name = 'unspecified';
+    cs.description = 'Library template placeholder (not instance data)';
+    t.cause.add(cs);
+
+    // --- Synthesize placeholder final-effect slot ---
+    var fe : new RAAML!LossOfFunction;
+    fe.id   = s.name + '__finalEffect__library-template-slot';
+    fe.name = 'unspecified';
+    fe.description = 'Library template placeholder (not instance data)';
+    t.finalEffect.add(fe);
+}
+
+post {
+    'Pair1 FMEALibrary forward transformation complete.'.println();
+    var libCount  = RAAML!FMEALibrary.all.size();
+    var itemCount = RAAML!FMEAItem.all.size();
+    ('  FMEALibrary containers created: ' + libCount).println();
+    ('  FMEAItem instances created:     ' + itemCount).println();
+    for (it in RAAML!FMEAItem.all) {
+        ('    - ' + it.name + '  (id=' + it.id + ')').println();
+    }
+    ('').println();
+    ('Note on non-preservation:').println();
+    ('  <<FailureMode>>-stereotyped library classes (LossOfFunciton,').println();
+    ('  DegradationOfFunction, etc.) correspond to Ecore EClass').println();
+    ('  DEFINITIONS in raaml.fmea package, not to library instance').println();
+    ('  data. They are preserved at the metamodel level, not the').println();
+    ('  instance level.').println();
+}

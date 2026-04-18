@@ -1,0 +1,108 @@
+// ============================================================================
+// omg-aliases.eol
+// ----------------------------------------------------------------------------
+// Maps between clean Ecore names and their corresponding names in the
+// OMG RAAML v1.0 profile and library artifacts.
+//
+// DESIGN DECISION (Option 1): The Ecore metamodel uses clean/corrected names
+// (e.g., LossOfFunction) while the OMG RAAML artifacts contain typos and
+// variants (e.g., LossOfFunciton). These helper maps translate between the
+// two during forward/backward transformations, preserving fidelity to the
+// published OMG spec.
+//
+// All aliases document known discrepancies in OMG RAAML v1.0 (formal/2023-06-01).
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Stereotype name aliases (profile)
+// Direction: Ecore clean name -> OMG profile stereotype name
+// ---------------------------------------------------------------------------
+@cached
+operation getStereotypeAliasMap() : Map {
+    var m = new Map;
+    // Ecore clean name                    OMG profile stereotype name (as-found)
+    m.put('ZeroEvent',                     'ZEROEVENT');              // case
+    m.put('MalfunctioningBehaviour',       'MalfunctioningBehavior'); // US/UK spelling
+    m.put('OperationalSituation',          'OperationalSitation');    // typo in profile
+    m.put('ASILOverrideRationale',         'ASILOverrrideRationale'); // triple-r typo
+    m.put('DeriveRequirement',             'DeriveReqt');             // abbreviation
+    m.put('FTATree',                       'Tree');                   // different name
+    m.put('UndevelopedEvent',              'Undeveloped');             // different name
+    m.put('Item',                          'item');                   // lowercase
+    m.put('RelevantTo',                    'RelevantTo');             // correct form
+    // Note: RAAMLCoreProfile also has ReleventTo (typo) - we handle that case
+    //       in lookup: if RelevantTo not found, try ReleventTo
+    return m;
+}
+
+// ---------------------------------------------------------------------------
+// Library class name aliases (library models)
+// Direction: Ecore clean name -> OMG library class name (as-found)
+// ---------------------------------------------------------------------------
+@cached
+operation getLibraryClassAliasMap() : Map {
+    var m = new Map;
+    m.put('LossOfFunction',   'LossOfFunciton');     // typo in FMEALibrary
+    m.put('HazardousEvent',   'HazartdousEvent');    // typo in ISO26262Library
+    return m;
+}
+
+// ---------------------------------------------------------------------------
+// Reverse lookups (for backward transformation)
+// ---------------------------------------------------------------------------
+
+// Given an OMG stereotype name, return the clean Ecore name
+operation omgStereotypeToEcoreName(omgName : String) : String {
+    var aliases = getStereotypeAliasMap();
+    // Also handle the additional RAAMLCore typo
+    if (omgName == 'ReleventTo') return 'RelevantTo';
+    for (ecoreName in aliases.keySet()) {
+        if (aliases.get(ecoreName) == omgName) return ecoreName;
+    }
+    // If no alias, assume same name
+    return omgName;
+}
+
+// Given an OMG library class name, return the clean Ecore EClass name
+operation omgLibraryClassToEcoreName(omgName : String) : String {
+    var aliases = getLibraryClassAliasMap();
+    for (ecoreName in aliases.keySet()) {
+        if (aliases.get(ecoreName) == omgName) return ecoreName;
+    }
+    return omgName;
+}
+
+// ---------------------------------------------------------------------------
+// Forward lookups (for forward transformation / generator)
+// ---------------------------------------------------------------------------
+
+// Given a clean Ecore EClass name, return the OMG stereotype name.
+// If no alias entry, the name is identical in both representations.
+operation ecoreNameToOmgStereotype(ecoreName : String) : String {
+    var aliases = getStereotypeAliasMap();
+    if (aliases.containsKey(ecoreName)) return aliases.get(ecoreName);
+    return ecoreName;
+}
+
+// Given a clean Ecore EClass name, return the OMG library class name.
+operation ecoreNameToOmgLibraryClass(ecoreName : String) : String {
+    var aliases = getLibraryClassAliasMap();
+    if (aliases.containsKey(ecoreName)) return aliases.get(ecoreName);
+    return ecoreName;
+}
+
+// ---------------------------------------------------------------------------
+// Diagnostic
+// ---------------------------------------------------------------------------
+operation printAliasInventory() {
+    ('=== STEREOTYPE ALIASES (Ecore -> OMG profile) ===').println();
+    var m = getStereotypeAliasMap();
+    for (ecoreName in m.keySet()) {
+        ('  ' + ecoreName + '  <->  ' + m.get(ecoreName)).println();
+    }
+    ('=== LIBRARY CLASS ALIASES (Ecore -> OMG library) ===').println();
+    m = getLibraryClassAliasMap();
+    for (ecoreName in m.keySet()) {
+        ('  ' + ecoreName + '  <->  ' + m.get(ecoreName)).println();
+    }
+}

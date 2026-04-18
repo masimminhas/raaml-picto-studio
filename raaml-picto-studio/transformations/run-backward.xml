@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-backward.xml
+  ================================================================
+  Runs the backward ETL transformation:
+      RAAML Ecore instance (.xmi) -> UML profile instance (.uml)
+
+  Usage (Eclipse):
+    1. Right-click this file -> Run As -> Ant Build...
+    2. JRE tab -> "Run in the same JRE as the workspace"
+    3. Click Run
+================================================================ -->
+<project default="run-backward">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <!-- Explicit taskdefs for ETL -->
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+    <taskdef name="epsilon.eol"
+             classname="org.eclipse.epsilon.workflow.tasks.EolTask"
+             onerror="ignore"/>
+
+    <property name="raaml.ecore"   value="../../edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="ecore.source"  value="samples/sample_fmea.xmi"/>
+    <property name="uml.target"    value="samples/sample_fmea_roundtrip.uml"/>
+
+    <target name="run-backward"
+            description="Run backward ETL on a RAAML Ecore model">
+
+        <echo>================================================================</echo>
+        <echo>Running backward transformation</echo>
+        <echo>  Source (RAAML Ecore): ${ecore.source}</echo>
+        <echo>  Target (UML): ${uml.target}</echo>
+        <echo>================================================================</echo>
+
+        <!-- Load the source RAAML Ecore model -->
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.source}"
+                               metamodelfile="${raaml.ecore}"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <!-- Create empty target UML model -->
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${uml.target}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="false"
+                               store="true"/>
+
+        <!-- Execute the generated backward ETL -->
+        <epsilon.etl src="generated/ecoreToRaamlProfile.etl">
+            <model ref="RAAML"/>
+            <model ref="UML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Backward transformation complete. Output: ${uml.target}</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

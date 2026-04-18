@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: raaml.presentation.RaamlEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: raaml.core.presentation,
  raaml.fmea.presentation,
  raaml.fta.presentation,

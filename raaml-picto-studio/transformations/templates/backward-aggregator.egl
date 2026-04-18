@@ -1,0 +1,33 @@
+[%
+// ============================================================================
+// backward-aggregator.egl
+// ----------------------------------------------------------------------------
+// Generates the top-level ecoreToRaamlProfile.etl that imports all
+// per-stereotype backward rules.
+// ============================================================================
+var stereotypedClasses = getAllStereotypedEClasses();
+%]// ============================================================================
+// ecoreToRaamlProfile.etl
+// ----------------------------------------------------------------------------
+// Auto-generated aggregator for the backward transformation
+// (RAAML Ecore instance -> UML profile instance)
+//
+// DO NOT EDIT MANUALLY. Regenerate via generateTransformations.egx.
+//
+// Rules: [%=stereotypedClasses.size()%]
+// ============================================================================
+
+import '../helpers/uml-helpers.eol';
+
+pre {
+    ('Backward transformation starting... '
+        + '[%=stereotypedClasses.size()%] rules loaded.').println();
+}
+
+[%for (cls in stereotypedClasses) {%]
+import 'backward/[%=cls.getRaamlStereotype()%]_backward.etl';
+[%}%]
+
+post {
+    'Backward transformation complete.'.println();
+}

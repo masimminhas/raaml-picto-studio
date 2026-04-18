@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FMEA="http:///schemas/FMEA/_p0mcELAMEe-vx_8OMBl3Yg/15" xmlns:RAAMLGeneral="http:///schemas/RAAMLGeneral/_YaFQUK_oEe-Aif16E1IsBA/28" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/FMEA/_p0mcELAMEe-vx_8OMBl3Yg/15 platform:/plugin/RAAMLCore/model/FMEAProfile.profile.uml#_p0nDILAMEe-vx_8OMBl3Yg http:///schemas/RAAMLGeneral/_YaFQUK_oEe-Aif16E1IsBA/28 platform:/plugin/RAAMLCore/model/RAAMLGeneralProfile.profile.uml#_YaPBUK_oEe-Aif16E1IsBA">
+  <uml:Model xmi:id="_sTCGUKAGEe-CguQRPH1laA" name="FMEALibrary">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_ZAEggKAJEe-CguQRPH1laA" annotatedElement="_DXrRMKAIEe-CguQRPH1laA">
+      <body>harm potential is not used in FMEA hence redefined with Multiplicity[0]</body>
+    </ownedComment>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_sTrmkKAGEe-CguQRPH1laA">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Class" xmi:id="_DXrRMKAIEe-CguQRPH1laA" name="AbstractFMEAItem">
+      <generalization xmi:type="uml:Generalization" xmi:id="_IcZIQKAIEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_jpczAJ3lEe-ilLWhdG1Bmw"/>
+      </generalization>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_RJOgEKAJEe-CguQRPH1laA" name="RPN"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_UXyGwKAJEe-CguQRPH1laA" name="previousRPNValues" isOrdered="true" isUnique="false">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_WVwPUKAJEe-CguQRPH1laA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WWHbsKAJEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_lkoX0KAKEe-CguQRPH1laA" name="failureMode" aggregation="composite" association="_lkLE0KAKEe-CguQRPH1laA">
+        <type xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_hApA4J3pEe-ilLWhdG1Bmw"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_uXSgQ6AKEe-CguQRPH1laA" name="cause" aggregation="composite" association="_uXSgQKAKEe-CguQRPH1laA">
+        <type xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_GwC3YJ3oEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uXSgRaAKEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_ysAdw6AKEe-CguQRPH1laA" name="finalEffect" aggregation="composite" association="_ysAdwKAKEe-CguQRPH1laA">
+        <type xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_NW_gwJ3pEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ysAdxaAKEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_lkLE0KAKEe-CguQRPH1laA" memberEnd="_lkoX0KAKEe-CguQRPH1laA _lko-4qAKEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lkMS8KAKEe-CguQRPH1laA" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lkMS8aAKEe-CguQRPH1laA" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_lko-4qAKEe-CguQRPH1laA" type="_DXrRMKAIEe-CguQRPH1laA" association="_lkLE0KAKEe-CguQRPH1laA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_uXSgQKAKEe-CguQRPH1laA" memberEnd="_uXSgQ6AKEe-CguQRPH1laA _uXTHUKAKEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_uXSgQaAKEe-CguQRPH1laA" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_uXSgQqAKEe-CguQRPH1laA" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_uXTHUKAKEe-CguQRPH1laA" type="_DXrRMKAIEe-CguQRPH1laA" association="_uXSgQKAKEe-CguQRPH1laA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_ysAdwKAKEe-CguQRPH1laA" memberEnd="_ysAdw6AKEe-CguQRPH1laA _ysAdxqAKEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ysAdwaAKEe-CguQRPH1laA" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ysAdwqAKEe-CguQRPH1laA" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_ysAdxqAKEe-CguQRPH1laA" type="_DXrRMKAIEe-CguQRPH1laA" association="_ysAdwKAKEe-CguQRPH1laA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_9lFgIKAKEe-CguQRPH1laA" name="FMEAItem">
+      <generalization xmi:type="uml:Generalization" xmi:id="_EYzPoKALEe-CguQRPH1laA" general="_DXrRMKAIEe-CguQRPH1laA"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_N8rZoKALEe-CguQRPH1laA" name="RPN">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_Qgc98KALEe-CguQRPH1laA" name="previousRPNValues">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ToDBAKALEe-CguQRPH1laA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ToaNYKALEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_1mMsEqAMEe-CguQRPH1laA" name="finalEffect" aggregation="composite" association="_1mMFAKAMEe-CguQRPH1laA">
+        <type xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_62e9gJ3pEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1mNTIKAMEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_BGITEqANEe-CguQRPH1laA" name="cause" aggregation="composite" association="_BGHsAKANEe-CguQRPH1laA">
+        <type xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_JkGTYJ3oEe-ilLWhdG1Bmw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BGITFKANEe-CguQRPH1laA" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_Lw7B0qANEe-CguQRPH1laA" name="failureMode" aggregation="composite" association="_Lw6awKANEe-CguQRPH1laA">
+        <type xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_1mMFAKAMEe-CguQRPH1laA" memberEnd="_1mMsEqAMEe-CguQRPH1laA _1mNTIaAMEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1mMsEKAMEe-CguQRPH1laA" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1mMsEaAMEe-CguQRPH1laA" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_1mNTIaAMEe-CguQRPH1laA" type="_9lFgIKAKEe-CguQRPH1laA" association="_1mMFAKAMEe-CguQRPH1laA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_BGHsAKANEe-CguQRPH1laA" memberEnd="_BGITEqANEe-CguQRPH1laA _BGITFaANEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BGITEKANEe-CguQRPH1laA" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BGITEaANEe-CguQRPH1laA" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_BGITFaANEe-CguQRPH1laA" type="_9lFgIKAKEe-CguQRPH1laA" association="_BGHsAKANEe-CguQRPH1laA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_Lw6awKANEe-CguQRPH1laA" memberEnd="_Lw7B0qANEe-CguQRPH1laA _Lw7B1aANEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Lw7B0KANEe-CguQRPH1laA" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Lw7B0aANEe-CguQRPH1laA" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_Lw7B1aANEe-CguQRPH1laA" type="_9lFgIKAKEe-CguQRPH1laA" association="_Lw6awKANEe-CguQRPH1laA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_YSr5QKANEe-CguQRPH1laA" name="LossOfFunciton" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_TqRHMKAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_02J5wKANEe-CguQRPH1laA" name="DegradationOfFunction" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_UUCc8KAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_8NSfYKANEe-CguQRPH1laA" name="IntermittentFunction" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_Uh7H8KAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_-9xC8KANEe-CguQRPH1laA" name="PartialFunction" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_UyJVQKAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_CEVLQKAOEe-CguQRPH1laA" name="UnintendedFunction" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_VBL20KAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_FBb1kKAOEe-CguQRPH1laA" name="ExceedingFunction" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_VWGW4KAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_InEfgKAOEe-CguQRPH1laA" name="DelayedFunction">
+      <generalization xmi:type="uml:Generalization" xmi:id="_VtBCEKAOEe-CguQRPH1laA">
+        <general xmi:type="uml:Class" href="RAAMLGeneralLibrary.uml#_w6JQMJ3pEe-ilLWhdG1Bmw"/>
+      </generalization>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_wt2noKANEe-CguQRPH1laA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xss58CElEfG3YJqdsSGbHw" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xsthACElEfG3YJqdsSGbHw" key="Version" value="0.0.29"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xsthASElEfG3YJqdsSGbHw" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xsthAiElEfG3YJqdsSGbHw" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xsthAyElEfG3YJqdsSGbHw" key="Date" value="2024-12-01"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xsthBCElEfG3YJqdsSGbHw" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_wt2noaANEe-CguQRPH1laA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="platform:/plugin/RAAMLCore/model/RAAMLGeneralProfile.profile.uml#_YaPBUK_oEe-Aif16E1IsBA"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="platform:/plugin/RAAMLCore/model/RAAMLGeneralProfile.profile.uml#_rWmcEJqcEe-37_ge53UNtQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_gr544KJ8Ee-agYy_9FYquA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xtMCICElEfG3YJqdsSGbHw" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xtMCISElEfG3YJqdsSGbHw" key="Version" value="0.0.16"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xtMCIiElEfG3YJqdsSGbHw" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xtMCIyElEfG3YJqdsSGbHw" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xtMCJCElEfG3YJqdsSGbHw" key="Date" value="2024-12-01"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xtMCJSElEfG3YJqdsSGbHw" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gr8VIKJ8Ee-agYy_9FYquA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="platform:/plugin/RAAMLCore/model/FMEAProfile.profile.uml#_p0nDILAMEe-vx_8OMBl3Yg"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="platform:/plugin/RAAMLCore/model/FMEAProfile.profile.uml#_dhjD4Jq0Ee-9I5-Bokb-EQ"/>
+    </profileApplication>
+  </uml:Model>
+  <RAAMLGeneral:FailureMode xmi:id="_x-5_0KANEe-CguQRPH1laA" base_Class="_YSr5QKANEe-CguQRPH1laA"/>
+  <RAAMLGeneral:FailureMode xmi:id="_6slhoKANEe-CguQRPH1laA" base_Class="_02J5wKANEe-CguQRPH1laA"/>
+  <RAAMLGeneral:FailureMode xmi:id="_-Z7WEKANEe-CguQRPH1laA" base_Class="_8NSfYKANEe-CguQRPH1laA"/>
+  <RAAMLGeneral:FailureMode xmi:id="_BQQqAKAOEe-CguQRPH1laA" base_Class="_-9xC8KANEe-CguQRPH1laA"/>
+  <RAAMLGeneral:FailureMode xmi:id="_EPR_4KAOEe-CguQRPH1laA" base_Class="_CEVLQKAOEe-CguQRPH1laA"/>
+  <RAAMLGeneral:FailureMode xmi:id="_HMOSIKAOEe-CguQRPH1laA" base_Class="_FBb1kKAOEe-CguQRPH1laA"/>
+  <RAAMLGeneral:FailureMode xmi:id="_KOlP4KAOEe-CguQRPH1laA" base_Class="_InEfgKAOEe-CguQRPH1laA"/>
+  <FMEA:FMEAItem xmi:id="_p-poAKNrEe-A2LDW-6MWbg" base_Class="_DXrRMKAIEe-CguQRPH1laA"/>
+  <FMEA:FMEAItem xmi:id="_tBpe8KNrEe-A2LDW-6MWbg" base_Class="_9lFgIKAKEe-CguQRPH1laA"/>
+</xmi:XMI>

@@ -1,0 +1,66 @@
+[%
+// ============================================================================
+// forward-rule.egl
+// ----------------------------------------------------------------------------
+// Generates one ETL rule that transforms a UML element with a RAAML
+// stereotype applied into the corresponding Ecore instance.
+//
+// Input: an ECore!EClass with the http://edu.kit.sdq/raaml/metaclass
+//        annotation (accessed via `eClass` parameter from the EGX rule)
+// Output: an ETL rule for the forward direction
+// ============================================================================
+
+var stereotype = eClass.getRaamlStereotype();
+var base       = eClass.getRaamlBaseMetaclass();
+var pkgName    = eClass.ePackage.name;
+var qname      = eClass.getQualifiedEClassName();
+var ruleName   = 'Transform_' + stereotype;
+
+// Attributes to map (skip 'name' because it maps to UML Element.name directly)
+var mappableAttrs = eClass.getAllMappableAttributes()
+    .select(a | a.name <> 'name');
+
+%]// ============================================================================
+// Auto-generated forward rule
+// Source: UML [%=base%] with <<[%=stereotype%]>> applied
+// Target: RAAML [%=qname%]
+// ============================================================================
+rule [%=ruleName%]
+    transform s : UML![%=base%]
+    to t : RAAML![%=qname%] {
+
+    guard : s.hasStereotype('[%=stereotype%]')
+
+    // UML name attribute -> EAttribute 'name' (inherited from NamedElement)
+    [%if (eClass.eAllAttributes.exists(a | a.name == 'name')) {%]
+    t.name = s.name;
+    [%}%]
+
+    [%for (attr in mappableAttrs) {%]
+    // Tagged value: [%=stereotype%]::[%=attr.name%] -> [%=attr.eType.name%]
+    if (s.getTaggedValue('[%=stereotype%]', '[%=attr.name%]') <> null) {
+        t.[%=attr.name%] = s.getTaggedValue('[%=stereotype%]', '[%=attr.name%]');
+    }
+    [%}%]
+
+    [%if (eClass.isRAAMLPackageContainer()) {%]
+    [%// Handle containment references for package-level containers like FMEA, FTA, STPA%]
+    [%for (ref in eClass.getContainmentReferences()) {%]
+    [%  var targetType = ref.eType;%]
+    [%  if (targetType.isKindOf(ECore!EClass) and targetType.isStereotypedEClass()) {%]
+    // Containment: [%=ref.name%] -> owned elements with <<[%=targetType.getRaamlStereotype()%]>>
+    t.[%=ref.name%] ::= s.getOwnedElementsByStereotype(
+        '[%=targetType.getRaamlStereotype()%]');
+    [%  } else if (targetType.isKindOf(ECore!EClass)) {%]
+    // Containment: [%=ref.name%] -> owned elements of type [%=targetType.name%]
+    // (abstract target - collect all elements whose stereotype corresponds to a subtype)
+    t.[%=ref.name%] ::= s.packagedElement.select(e |
+        e.appliedStereotypes.exists(st |
+            findEClassByStereotype(st.name).isDefined()
+            and findEClassByStereotype(st.name).eAllSuperTypes.includes(
+                    RAAML!ECore!EClass.all.selectOne(c |
+                        c.name == '[%=targetType.name%]'))));
+    [%  }%]
+    [%}%]
+    [%}%]
+}

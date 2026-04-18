@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ASCII"?>
+<raaml:SafetyAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml" xmlns:raaml.fmea="http://edu.kit.sdq/dsis/metamodels/raaml/fmea" xsi:schemaLocation="http://edu.kit.sdq/dsis/metamodels/raaml ../../../edu.kit.sdq.raaml/model/raaml.ecore http://edu.kit.sdq/dsis/metamodels/raaml/fmea ../../../edu.kit.sdq.raaml/model/raaml.ecore#//fmea" id="sysmlmodel" name="sysmlmodel" description="Safety analysis for sysmlmodel">
+  <analyses xsi:type="raaml.fmea:FMEA" id="sysmlmodel_FMEA" name="sysmlmodel FMEA" description="FMEA analysis for system sysmlmodel"/>
+</raaml:SafetyAnalysis>

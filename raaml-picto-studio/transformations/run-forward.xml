@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-forward.xml
+  ================================================================
+  Runs the forward ETL transformation:
+      UML profile instance (.uml) -> RAAML Ecore instance (.xmi)
+
+  Prerequisites:
+    - Generated ETL rules exist under generated/forward/
+    - A sample UML profile instance exists in samples/
+    - RAAML profile is loaded/registered
+
+  Usage (Eclipse):
+    1. Right-click this file -> Run As -> Ant Build...
+    2. JRE tab -> "Run in the same JRE as the workspace"
+    3. Click Run
+================================================================ -->
+<project default="run-forward">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/emc/uml2/tasks/tasks.xml"
+             onerror="ignore"/>
+
+    <!-- Explicit taskdefs for ETL -->
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+    <taskdef name="epsilon.eol"
+             classname="org.eclipse.epsilon.workflow.tasks.EolTask"
+             onerror="ignore"/>
+
+    <property name="raaml.ecore"
+              value="../../edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="uml.source"   value="samples/sample_fmea.uml"/>
+    <property name="ecore.target" value="samples/sample_fmea.xmi"/>
+
+    <target name="run-forward"
+            description="Run forward ETL on a sample UML model">
+
+        <echo>================================================================</echo>
+        <echo>Running forward transformation</echo>
+        <echo>  Source (UML): ${uml.source}</echo>
+        <echo>  Target (RAAML Ecore): ${ecore.target}</echo>
+        <echo>================================================================</echo>
+
+        <!-- Load the source UML model with profile applications -->
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true"
+                               store="false"/>
+
+        <!-- Load the RAAML metamodel and create an empty target model -->
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.target}"
+                               metamodelfile="${raaml.ecore}"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <!-- Execute the generated forward ETL -->
+        <epsilon.etl src="generated/raamlProfileToEcore.etl">
+            <model ref="UML"/>
+            <model ref="RAAML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Forward transformation complete. Output: ${ecore.target}</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

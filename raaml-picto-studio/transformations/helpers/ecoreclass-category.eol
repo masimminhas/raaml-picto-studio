@@ -1,0 +1,141 @@
+// ============================================================================
+// ecoreclass-category.eol
+// ----------------------------------------------------------------------------
+// Categorizes each Ecore EClass according to its relationship to the OMG
+// RAAML profile and library artifacts:
+//
+//   "profile-backed"  -> stereotype exists in a RAAML profile
+//   "library-backed"  -> class exists in a RAAML library (stereotyped)
+//   "both"            -> present in profile AND library (e.g., FMEAItem)
+//   "ecore-only"      -> no UML equivalent (synthesized Ecore enhancement)
+//
+// Used by the EGL generator to emit appropriate ETL rule variants.
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Ecore-only EClasses (no UML profile / library equivalent)
+// These are structural enhancements added in the Ecore metamodel.
+// ---------------------------------------------------------------------------
+@cached
+operation getEcoreOnlyClassNames() : Set {
+    var s = new Set;
+    // Package-level analysis containers
+    s.add('SafetyAnalysis');
+    s.add('FMEA');
+    s.add('FTA');
+    s.add('STPA');
+    s.add('ISO26262');
+    s.add('GSN');
+
+    // Library containers
+    s.add('FMEALibrary');
+    s.add('FTALibrary');
+    s.add('STPALibrary');
+    s.add('ISO26262Library');
+    s.add('GeneralLibrary');
+
+    // Structural helper EClasses without profile/library counterpart
+    s.add('RequirementsModel');
+    s.add('RPNCalculation');
+    s.add('ISO26262SafetyRequirementTemplate');
+    s.add('TechnicalSafetyRequirement');
+    return s;
+}
+
+// ---------------------------------------------------------------------------
+// Library-backed EClasses (stereotyped library classes in OMG libraries)
+// Map: Ecore EClass name -> { library, stereotype }
+// ---------------------------------------------------------------------------
+@cached
+operation getLibraryBackedMap() : Map {
+    var m = new Map;
+
+    // FMEA library - stereotyped <<FMEAItem>>
+    m.put('AbstractFMEAItem', Map{'library'='FMEALibrary', 'stereotype'='FMEAItem'});
+    m.put('FMEAItem',         Map{'library'='FMEALibrary', 'stereotype'='FMEAItem'});
+
+    // FMEA library - stereotyped <<FailureMode>> (function-type subclasses)
+    m.put('LossOfFunction',         Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+    m.put('DegradationOfFunction',  Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+    m.put('IntermittentFunction',   Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+    m.put('PartialFunction',        Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+    m.put('UnintendedFunction',     Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+    m.put('ExceedingFunction',      Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+    m.put('DelayedFunction',        Map{'library'='FMEALibrary', 'stereotype'='FailureMode'});
+
+    // RAAMLGeneral library
+    m.put('AnySituation',       Map{'library'='RAAMLCoreLibrary',    'stereotype'='Situation'});
+    m.put('AbstractCause',      Map{'library'='RAAMLGeneralLibrary', 'stereotype'='FailureMode'});
+    m.put('AbstractEffect',     Map{'library'='RAAMLGeneralLibrary', 'stereotype'='FailureMode'});
+    m.put('AbstractEvent',      Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+    m.put('AbstractFailureMode',Map{'library'='RAAMLGeneralLibrary', 'stereotype'='FailureMode'});
+    m.put('AbstractRisk',       Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+    m.put('DysfunctionalEvent', Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+    m.put('Factor',             Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+    m.put('HarmPotential',      Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+    m.put('Scenario',           Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+    m.put('UndesiredState',     Map{'library'='RAAMLGeneralLibrary', 'stereotype'='Situation'});
+
+    // FTA library
+    m.put('FTAElement',         Map{'library'='FTALibrary', 'stereotype'='Event'});
+
+    // STPA library
+    m.put('ProcessModelFlaw',   Map{'library'='STPALibrary', 'stereotype'='Situation'});
+
+    // ISO 26262 library
+    m.put('AccidentScenario',           Map{'library'='ISO26262Library', 'stereotype'='Situation'});
+    m.put('OperationalCondition',       Map{'library'='ISO26262Library', 'stereotype'='Situation'});
+    m.put('AbstractOperationalSituation', Map{'library'='ISO26262Library', 'stereotype'='Situation'});
+    m.put('AnyMalfunction',             Map{'library'='ISO26262Library', 'stereotype'='FailureMode'});
+    m.put('AutomotiveEffect',           Map{'library'='ISO26262Library', 'stereotype'='FailureMode'});
+    m.put('SystemLevelEffect',          Map{'library'='ISO26262Library', 'stereotype'='FailureMode'});
+    m.put('VehicleLevelEffect',         Map{'library'='ISO26262Library', 'stereotype'='FailureMode'});
+    m.put('HazardousEvent',             Map{'library'='ISO26262Library', 'stereotype'='Situation'});
+
+    return m;
+}
+
+// ---------------------------------------------------------------------------
+// Category dispatcher
+// ---------------------------------------------------------------------------
+operation ECore!EClass categorize() : String {
+    if (getEcoreOnlyClassNames().includes(self.name)) return 'ecore-only';
+    if (getLibraryBackedMap().containsKey(self.name)) return 'library-backed';
+    if (self.getRaamlStereotype() <> null) return 'profile-backed';
+    return 'unmapped';
+}
+
+// Get the OMG library name for a library-backed Ecore class
+operation ECore!EClass getSourceLibrary() : String {
+    var m = getLibraryBackedMap();
+    if (m.containsKey(self.name)) return m.get(self.name).get('library');
+    return null;
+}
+
+// Get the stereotype applied in the library for a library-backed Ecore class
+operation ECore!EClass getLibraryStereotype() : String {
+    var m = getLibraryBackedMap();
+    if (m.containsKey(self.name)) return m.get(self.name).get('stereotype');
+    return null;
+}
+
+// ---------------------------------------------------------------------------
+// Diagnostic: categorize all stereotyped EClasses
+// ---------------------------------------------------------------------------
+operation printCategorization() {
+    var counts = Map{'profile-backed'=0, 'library-backed'=0,
+                     'ecore-only'=0, 'unmapped'=0};
+    for (cls in ECore!EClass.all) {
+        if (cls.hasRaamlAnnotation() or
+            getEcoreOnlyClassNames().includes(cls.name)) {
+            var cat = cls.categorize();
+            counts.put(cat, counts.get(cat) + 1);
+            (cat.toUpperCase() + '  ' + cls.name).println();
+        }
+    }
+    ('').println();
+    ('=== SUMMARY ===').println();
+    for (k in counts.keySet()) {
+        ('  ' + k + ': ' + counts.get(k)).println();
+    }
+}
