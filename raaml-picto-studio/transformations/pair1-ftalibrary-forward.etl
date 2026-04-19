@@ -1,0 +1,156 @@
+// ============================================================================
+// pair1-ftalibrary-forward.etl
+// ----------------------------------------------------------------------------
+// Pair 1 (metamodel-level) forward transformation:
+//   OMG RAAML FTALibrary.uml  ->  RAAML Ecore instance of FTALibrary
+//
+// Implementation: directly creates Ecore instances inline (no per-subtype
+// rules dispatched via ::= or equivalent()), because Epsilon ETL's
+// rule-dispatch mechanism produced inconsistent containment behaviour for
+// multi-typed concrete subtypes assigned to abstract-typed references.
+// Direct construction is verbose but deterministic.
+// ============================================================================
+
+@cached
+operation getFTAEventClassNames() : Set {
+    return Set{'BasicEvent', 'IntermediateEvent', 'TopEvent',
+               'ConditionalEvent', 'DormantEvent', 'UndevelopedEvent',
+               'HouseEvent', 'ZeroEvent'};
+}
+
+@cached
+operation getFTAGateClassNames() : Set {
+    return Set{'AND', 'OR', 'NOT', 'XOR', 'SEQ', 'INHIBIT', 'MAJORITY_VOTE'};
+}
+
+// Helper: populate common fields on a freshly-created FTA element
+operation fillCommonFTA(elem : Any, libName : String, kind : String) {
+    elem.id = libName;
+    elem.name = libName;
+    elem.description = 'Library concept (FTA ' + kind + '): ' + libName;
+}
+
+// Construct an Ecore Event of the requested concrete type. Each branch
+// uses `var x : new ...` form, which reliably registers the new EObject
+// with the active RAAML model.
+operation createEventInstance(libName : String) : Any {
+    if (libName == 'BasicEvent') {
+        var e : new RAAML!BasicEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'IntermediateEvent') {
+        var e : new RAAML!IntermediateEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'TopEvent') {
+        var e : new RAAML!TopEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'ConditionalEvent') {
+        var e : new RAAML!ConditionalEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'DormantEvent') {
+        var e : new RAAML!DormantEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'UndevelopedEvent') {
+        var e : new RAAML!UndevelopedEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'HouseEvent') {
+        var e : new RAAML!HouseEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    if (libName == 'ZeroEvent') {
+        var e : new RAAML!ZeroEvent; fillCommonFTA(e, libName, 'event'); return e;
+    }
+    return null;
+}
+
+// Construct an Ecore Gate with mandatory targetEvent placeholder.
+operation createGateInstance(libName : String) : Any {
+    var g;
+    if (libName == 'AND') {
+        g = new RAAML!AND;
+    } else if (libName == 'OR') {
+        g = new RAAML!OR;
+    } else if (libName == 'NOT') {
+        g = new RAAML!NOT;
+    } else if (libName == 'XOR') {
+        g = new RAAML!XOR;
+    } else if (libName == 'SEQ') {
+        g = new RAAML!SEQ;
+    } else if (libName == 'INHIBIT') {
+        g = new RAAML!INHIBIT;
+    } else if (libName == 'MAJORITY_VOTE') {
+        g = new RAAML!MAJORITY_VOTE;
+        g.m = 2;
+    } else {
+        return null;
+    }
+    fillCommonFTA(g, libName, 'gate');
+
+    // Placeholder targetEvent satisfies Gate.targetEvent [1..1] mandatory.
+    var target : new RAAML!BasicEvent;
+    target.id   = libName + '__targetEvent__library-template-slot';
+    target.name = 'unspecified';
+    target.description = 'Library template placeholder';
+    g.targetEvent = target;
+
+    return g;
+}
+
+pre {
+    'Pair 1 FTALibrary forward transformation starting...'.println();
+    var events = UML!Class.all.select(c | getFTAEventClassNames().includes(c.name));
+    var gates  = UML!Class.all.select(c | getFTAGateClassNames().includes(c.name));
+    ('  Library Event classes found: ' + events.size()).println();
+    for (e in events) { ('    - ' + e.name).println(); }
+    ('  Library Gate classes found:  ' + gates.size()).println();
+    for (g in gates) { ('    - ' + g.name).println(); }
+    ('').println();
+}
+
+// ---------------------------------------------------------------------------
+// Single root rule: UML Model "FTALibrary" -> Ecore FTALibrary
+// All Event and Gate Ecore instances are created INLINE (not via rule
+// dispatch), then added to ftaElements / gates containments.
+// ---------------------------------------------------------------------------
+rule FTALibraryModelToFTALibrary
+    transform s : UML!Model
+    to t : RAAML!FTALibrary {
+
+    guard : s.name == 'FTALibrary'
+
+    t.id   = 'FTALibrary';
+    t.name = s.name;
+    t.description = 'OMG RAAML FTA reusable library (transformed from '
+                    + s.name + ')';
+
+    // Use UML!Class.all to find events anywhere in the FTALibrary,
+    // including nested packages (FTALibrary places events under a
+    // Package "Events", not as direct packagedElement of the Model).
+    for (uc in UML!Class.all
+                .select(c | getFTAEventClassNames().includes(c.name))) {
+        var ev = createEventInstance(uc.name);
+        if (ev <> null) { t.ftaElements.add(ev); }
+    }
+
+    for (uc in UML!Class.all
+                .select(c | getFTAGateClassNames().includes(c.name))) {
+        var g = createGateInstance(uc.name);
+        if (g <> null) { t.gates.add(g); }
+    }
+}
+
+post {
+    'Pair 1 FTALibrary forward transformation complete.'.println();
+    ('  RAAML!FTALibrary count:  ' + RAAML!FTALibrary.all.size()).println();
+    ('  RAAML!Event subclasses:  ' + RAAML!Event.all.size()).println();
+    ('  RAAML!Gate subclasses:   ' + RAAML!Gate.all.size()).println();
+    for (lib in RAAML!FTALibrary.all) {
+        ('  Library: ' + lib.name).println();
+        ('    ftaElements (' + lib.ftaElements.size() + '):').println();
+        for (e in lib.ftaElements) {
+            ('      - ' + e.eClass().name + ': ' + e.name).println();
+        }
+        ('    gates (' + lib.gates.size() + '):').println();
+        for (g in lib.gates) {
+            ('      - ' + g.eClass().name + ': ' + g.name).println();
+        }
+    }
+}

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair2-fta.xml
+  ================================================================
+  Pair 2 user-model FTA forward transformation runner.
+  Input: a user UML model with classes stereotyped or extending FTA
+         library elements (BasicEvent, TopEvent, AND, OR, etc.).
+  Output: Ecore SafetyAnalysis containing an FTA with detected events
+          and gates.
+================================================================ -->
+<project default="run-forward" basedir=".">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="raaml.ecore"
+              location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
+
+    <!-- CHANGE this to point at your user FTA UML file -->
+    <property name="user.uml.source"
+              location="${basedir}/samples/aeb_fta_usermodel.uml"/>
+    <property name="ecore.target"
+              location="${basedir}/samples/aeb_fta_usermodel.raaml.xmi"/>
+
+    <target name="run-forward"
+            description="Transform a user UML FTA model to RAAML Ecore">
+
+        <echo>================================================================</echo>
+        <echo>Pair 2 user-model FTA forward transformation</echo>
+        <echo>  basedir:        ${basedir}</echo>
+        <echo>  Source (UML):   ${user.uml.source}</echo>
+        <echo>  Target (XMI):   ${ecore.target}</echo>
+        <echo>================================================================</echo>
+
+        <available file="${user.uml.source}" property="src.exists"/>
+        <fail unless="src.exists">
+            User FTA UML file not found: ${user.uml.source}
+
+            Create a Papyrus model that contains UML Classes either:
+              (a) generalising from FTALibrary classes (BasicEvent, AND, ...)
+              (b) stereotyped with &lt;&lt;BasicEvent&gt;&gt;, &lt;&lt;AND&gt;&gt;, etc.
+            Save it as: ${user.uml.source}
+        </fail>
+
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${user.uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.target}"
+                               metamodeluri="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/library"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair2-usermodel-fta-forward.etl">
+            <model ref="UML"/>
+            <model ref="RAAML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Done. Inspect: ${ecore.target}</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

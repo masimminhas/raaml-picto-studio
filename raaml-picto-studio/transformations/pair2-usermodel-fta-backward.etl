@@ -1,0 +1,112 @@
+// ============================================================================
+// pair2-usermodel-fta-backward.etl
+// ----------------------------------------------------------------------------
+// Pair 2 (user-model) BACKWARD transformation:
+//   RAAML Ecore SafetyAnalysis with FTA  ->  UML user model
+//
+// Strategy:
+//   - Skip placeholder elements (id contains '__placeholder' or
+//     '__library-template-slot').
+//   - Recreate UML Classes by name for each non-placeholder Event/Gate
+//     contained in any FTA analysis under the SafetyAnalysis.
+// ============================================================================
+
+operation Any isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__placeholder') > -1
+        or self.id.indexOf('__library-template-slot') > -1;
+}
+
+pre {
+    'Pair 2 user-model FTA backward transformation starting...'.println();
+    ('  RAAML!SafetyAnalysis count: ' + RAAML!SafetyAnalysis.all.size()).println();
+    ('  RAAML!FTA count:            ' + RAAML!FTA.all.size()).println();
+    ('  RAAML!Event count:          ' + RAAML!Event.all.size()).println();
+    ('  RAAML!Gate count:           ' + RAAML!Gate.all.size()).println();
+
+    ('').println();
+    ('Containment walk:').println();
+    for (sa in RAAML!SafetyAnalysis.all) {
+        ('  SafetyAnalysis: ' + sa.name).println();
+        for (a in sa.analyses) {
+            ('    analysis (' + a.eClass().name + '): ' + a.name).println();
+            if (a.isKindOf(RAAML!FTA)) {
+                ('      events:').println();
+                for (e in a.events) {
+                    ('        - ' + e.eClass().name + ': ' + e.name
+                        + ' [placeholder=' + e.isPlaceholder() + ']').println();
+                }
+                ('      gates:').println();
+                for (g in a.gates) {
+                    ('        - ' + g.eClass().name + ': ' + g.name
+                        + ' [placeholder=' + g.isPlaceholder() + ']').println();
+                }
+            }
+        }
+    }
+    ('').println();
+}
+
+// ---------------------------------------------------------------------------
+// Root: SafetyAnalysis -> UML Model
+// ---------------------------------------------------------------------------
+rule SafetyAnalysisToUMLModel
+    transform s : RAAML!SafetyAnalysis
+    to t : UML!Model {
+
+    t.name = s.name;
+
+    var seenNames = new Set;
+
+    // Helper: emit a UML Class for an Ecore element if not placeholder
+    var emit = new Sequence;
+
+    for (a in s.analyses) {
+        if (a.isKindOf(RAAML!FTA)) {
+            // Trees: emit the tree itself + its (non-placeholder) topEvent
+            for (tree in a.trees) {
+                if (not tree.isPlaceholder() and not seenNames.includes(tree.name)) {
+                    emit.add(tree);
+                    seenNames.add(tree.name);
+                }
+                if (tree.topEvent.isDefined() and tree.topEvent <> null
+                        and not tree.topEvent.isPlaceholder()
+                        and not seenNames.includes(tree.topEvent.name)) {
+                    emit.add(tree.topEvent);
+                    seenNames.add(tree.topEvent.name);
+                }
+            }
+            // Events directly under FTA
+            for (e in a.events) {
+                if (not e.isPlaceholder() and not seenNames.includes(e.name)) {
+                    emit.add(e);
+                    seenNames.add(e.name);
+                }
+            }
+            // Gates
+            for (g in a.gates) {
+                if (not g.isPlaceholder() and not seenNames.includes(g.name)) {
+                    emit.add(g);
+                    seenNames.add(g.name);
+                }
+            }
+        }
+    }
+
+    // Direct construction: create UML Class for each element
+    for (el in emit) {
+        var c : new UML!Class;
+        c.name = el.name;
+        t.packagedElement.add(c);
+    }
+}
+
+// ---------------------------------------------------------------------------
+post {
+    'Pair 2 user-model FTA backward transformation complete.'.println();
+    ('  UML!Model count: ' + UML!Model.all.size()).println();
+    ('  UML!Class count: ' + UML!Class.all.size()).println();
+    for (c in UML!Class.all) {
+        ('    - ' + c.name).println();
+    }
+}

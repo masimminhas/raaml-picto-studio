@@ -1,0 +1,369 @@
+// ============================================================================
+// pair2-usermodel-fta-forward.etl
+// ----------------------------------------------------------------------------
+// Pair 2 (user-model) forward transformation for practical FTA analyses.
+//
+// DUAL-STRATEGY detection (same approach as FMEA Pair 2):
+//   - Pattern 2 (inheritance): user class generalizes from a library
+//     event/gate class.
+//   - Pattern 3 (stereotype application): user class has <<BasicEvent>>,
+//     <<TopEvent>>, <<AND>>, <<OR>>, etc. applied -- detected via direct
+//     XMI scan for AnyType elements.
+//
+// Output structure:
+//   SafetyAnalysis
+//     |- analyses (FTA)
+//          |- events  : detected events (excl. library classes themselves)
+//          |- gates   : detected gates with placeholder targetEvent
+//
+// Limitation:
+//   Topology between events and gates (which events feed which gates) is
+//   not preserved -- it is encoded by user UML connectors / attribute
+//   typings that vary by modelling style. Topology preservation is future
+//   work; this transformation captures the SET of fault-tree elements.
+// ============================================================================
+
+@cached
+operation getFTAEventStereotypes() : Set {
+    return Set{'BasicEvent', 'IntermediateEvent', 'TopEvent',
+               'ConditionalEvent', 'DormantEvent', 'UndevelopedEvent',
+               'HouseEvent', 'ZeroEvent', 'Event'};
+}
+
+@cached
+operation getFTAGateStereotypes() : Set {
+    return Set{'AND', 'OR', 'NOT', 'XOR', 'SEQ', 'INHIBIT',
+               'MAJORITY_VOTE', 'Gate'};
+}
+
+@cached
+operation getFTATreeStereotypes() : Set {
+    // <<Tree>> in FTAProfile maps to FTATree EClass.
+    return Set{'Tree', 'FTATree'};
+}
+
+@cached
+operation getFTALibraryClassNames() : Set {
+    var s = new Set;
+    for (n in getFTAEventStereotypes()) { s.add(n); }
+    for (n in getFTAGateStereotypes())  { s.add(n); }
+    for (n in getFTATreeStereotypes())  { s.add(n); }
+    return s;
+}
+
+// ---------------------------------------------------------------------------
+// Inheritance walk
+// ---------------------------------------------------------------------------
+operation UML!Class findFTAAncestor() : UML!Class {
+    if (getFTALibraryClassNames().includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var a = g.general.findFTAAncestor();
+            if (a.isDefined() and a <> null) return a;
+        }
+    }
+    return null;
+}
+
+// ---------------------------------------------------------------------------
+// Pattern 3: scan EMF Resource for stereotype application AnyType elements
+// ---------------------------------------------------------------------------
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) { result.add(obj); }
+    }
+    return result;
+}
+
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            var frag = res.getURIFragment(e);
+            if (frag == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    var feature = stereoApp.eClass().getEStructuralFeature('base_Class');
+    if (feature.isDefined() and feature <> null) {
+        var v = stereoApp.eGet(feature);
+        if (v.isDefined() and v <> null) return v;
+    }
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            var f = entry.getEStructuralFeature();
+            if (f.name == 'base_Class') {
+                return resolveUmlElementById(entry.getValue());
+            }
+        }
+    }
+    return null;
+}
+
+// ---------------------------------------------------------------------------
+// Detect user FTA elements (events + gates)
+// Returns a Map<UML!Class, String> where the value is the matched stereotype
+// or library-ancestor name (used to choose the Ecore type).
+// ---------------------------------------------------------------------------
+operation getUserFTAClassToTypeName() : Map {
+    var result = new Map;
+
+    // Pattern 2: inheritance from a library FTA class
+    for (c in UML!Class.all) {
+        var ancestor = c.findFTAAncestor();
+        if (ancestor.isDefined() and ancestor <> null
+                and not getFTALibraryClassNames().includes(c.name)) {
+            result.put(c, ancestor.name);
+        }
+    }
+
+    // Pattern 3: stereotype applications via XMI scan.
+    // Note: we do NOT exclude classes whose name matches a library class
+    // name. In Pattern 3 the user attaches a profile stereotype to their
+    // own class; the user's class name is arbitrary and may legitimately
+    // coincide with a library concept name (e.g. user names their root
+    // tree class "FTATree").
+    for (stereoName in getFTALibraryClassNames()) {
+        for (app in findAllEObjectsByTypeName(UML, stereoName)) {
+            var base = getStereotypeBaseClass(app);
+            if (base.isDefined() and base.isKindOf(UML!Class)) {
+                if (not result.containsKey(base)) {
+                    result.put(base, stereoName);
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// Construct concrete Ecore Event / Gate by type name
+// ---------------------------------------------------------------------------
+operation createEcoreEventOfType(typeName : String, srcName : String) : Any {
+    if (typeName == 'BasicEvent' or typeName == 'Event') {
+        var e : new RAAML!BasicEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName + ' (mapped to BasicEvent)';
+        return e;
+    }
+    if (typeName == 'IntermediateEvent') {
+        var e : new RAAML!IntermediateEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    if (typeName == 'TopEvent') {
+        var e : new RAAML!TopEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    if (typeName == 'ConditionalEvent') {
+        var e : new RAAML!ConditionalEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    if (typeName == 'DormantEvent') {
+        var e : new RAAML!DormantEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    if (typeName == 'UndevelopedEvent') {
+        var e : new RAAML!UndevelopedEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    if (typeName == 'HouseEvent') {
+        var e : new RAAML!HouseEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    if (typeName == 'ZeroEvent') {
+        var e : new RAAML!ZeroEvent;
+        e.id = srcName; e.name = srcName;
+        e.description = 'User FTA event: ' + srcName;
+        return e;
+    }
+    return null;
+}
+
+operation createEcoreGateOfType(typeName : String, srcName : String) : Any {
+    var g;
+    if (typeName == 'AND')                  { g = new RAAML!AND;           }
+    else if (typeName == 'OR')              { g = new RAAML!OR;            }
+    else if (typeName == 'NOT')             { g = new RAAML!NOT;           }
+    else if (typeName == 'XOR')             { g = new RAAML!XOR;           }
+    else if (typeName == 'SEQ')             { g = new RAAML!SEQ;           }
+    else if (typeName == 'INHIBIT')         { g = new RAAML!INHIBIT;       }
+    else if (typeName == 'MAJORITY_VOTE')   { g = new RAAML!MAJORITY_VOTE;
+                                              g.m = 2;                    }
+    else if (typeName == 'Gate')            { g = new RAAML!AND;           }  // default
+    else { return null; }
+
+    g.id = srcName;
+    g.name = srcName;
+    g.description = 'User FTA gate: ' + srcName + ' (type: ' + typeName + ')';
+
+    // Mandatory targetEvent placeholder
+    var target : new RAAML!BasicEvent;
+    target.id   = srcName + '__targetEvent__placeholder';
+    target.name = 'unspecified';
+    target.description = 'User-model template placeholder';
+    g.targetEvent = target;
+
+    return g;
+}
+
+pre {
+    'Pair 2 user-model FTA forward transformation starting...'.println();
+    var userClasses = getUserFTAClassToTypeName();
+    ('  Total user FTA classes detected: ' + userClasses.size()).println();
+    for (c in userClasses.keySet()) {
+        ('    - ' + c.name + '  (type: ' + userClasses.get(c) + ')').println();
+    }
+    ('').println();
+}
+
+// ---------------------------------------------------------------------------
+// Root rule: UML Model -> SafetyAnalysis + FTA analysis
+//
+// Bucketing strategy:
+//   - <<Tree>>      classes  -> FTATree containers
+//   - <<TopEvent>>  classes  -> placed INSIDE an FTATree if any tree exists,
+//                               otherwise placed in FTA.events
+//   - other events           -> FTA.events
+//   - gates                  -> FTA.gates (with placeholder targetEvent)
+// ---------------------------------------------------------------------------
+rule UserModelToSafetyAnalysis
+    transform s : UML!Model
+    to sa : RAAML!SafetyAnalysis,
+       fta : RAAML!FTA {
+
+    guard : s.name <> 'FMEALibrary'
+            and s.name <> 'FTALibrary'
+            and s.name <> 'STPALibrary'
+            and s.name <> 'ISO26262Library'
+            and s.name <> 'RAAMLGeneralLibrary'
+            and s.name <> 'CoreLibrary'
+            and s.name <> 'PrimitiveTypes'
+
+    sa.id = s.name; sa.name = s.name;
+    sa.description = 'Safety analysis for ' + s.name;
+
+    fta.id = s.name + '_FTA'; fta.name = s.name + ' FTA';
+    fta.description = 'FTA analysis for system ' + s.name;
+
+    var userClasses = getUserFTAClassToTypeName();
+
+    // Bucket the detected classes by category
+    var treeClasses     = new Sequence;
+    var topEventClasses = new Sequence;
+    var otherEventClasses = new Sequence;
+    var gateClasses     = new Sequence;
+    for (uc in userClasses.keySet()) {
+        var typeName = userClasses.get(uc);
+        if (getFTATreeStereotypes().includes(typeName)) {
+            treeClasses.add(uc);
+        } else if (typeName == 'TopEvent') {
+            topEventClasses.add(uc);
+        } else if (getFTAEventStereotypes().includes(typeName)) {
+            otherEventClasses.add(uc);
+        } else if (getFTAGateStereotypes().includes(typeName)) {
+            gateClasses.add(uc);
+        }
+    }
+
+    // Create FTATrees and consume TopEvents into them (mandatory topEvent)
+    var consumedTopEvents = new Set;
+    for (treeUC in treeClasses) {
+        var t : new RAAML!FTATree;
+        t.id = treeUC.name;
+        t.name = treeUC.name;
+        t.description = 'User FTATree (from <<Tree>>): ' + treeUC.name;
+
+        var topEvUC = topEventClasses.selectOne(te |
+            not consumedTopEvents.includes(te));
+        if (topEvUC.isDefined() and topEvUC <> null) {
+            var topEv = createEcoreEventOfType('TopEvent', topEvUC.name);
+            if (topEv <> null) {
+                t.topEvent = topEv;
+                consumedTopEvents.add(topEvUC);
+            }
+        }
+        // Synthesize placeholder if no TopEvent was claimed
+        if (t.topEvent.isUndefined() or t.topEvent == null) {
+            var placeholder : new RAAML!TopEvent;
+            placeholder.id   = treeUC.name + '__topEvent__placeholder';
+            placeholder.name = 'unspecified';
+            placeholder.description = 'User-model template placeholder';
+            t.topEvent = placeholder;
+        }
+        fta.trees.add(t);
+    }
+
+    // Any TopEvents not claimed by a tree -> FTA.events
+    for (te in topEventClasses) {
+        if (not consumedTopEvents.includes(te)) {
+            var ev = createEcoreEventOfType('TopEvent', te.name);
+            if (ev <> null) { fta.events.add(ev); }
+        }
+    }
+
+    // Other events -> FTA.events
+    for (uc in otherEventClasses) {
+        var typeName = userClasses.get(uc);
+        var ev = createEcoreEventOfType(typeName, uc.name);
+        if (ev <> null) { fta.events.add(ev); }
+    }
+
+    // Gates -> FTA.gates
+    for (uc in gateClasses) {
+        var typeName = userClasses.get(uc);
+        var g = createEcoreGateOfType(typeName, uc.name);
+        if (g <> null) { fta.gates.add(g); }
+    }
+
+    sa.analyses.add(fta);
+}
+
+// ---------------------------------------------------------------------------
+post {
+    'Pair 2 user-model FTA forward transformation complete.'.println();
+    ('  SafetyAnalysis containers: ' + RAAML!SafetyAnalysis.all.size()).println();
+    ('  FTA analyses created:      ' + RAAML!FTA.all.size()).println();
+    ('  FTATrees created:          ' + RAAML!FTATree.all.size()).println();
+    ('  Events created (total):    ' + RAAML!Event.all.size()).println();
+    ('  Gates created (total):     ' + RAAML!Gate.all.size()).println();
+    for (fta in RAAML!FTA.all) {
+        ('  FTA: ' + fta.name).println();
+        ('    trees:').println();
+        for (tree in fta.trees) {
+            ('      - FTATree: ' + tree.name
+                + '  topEvent: ' + tree.topEvent.eClass().name
+                + ': ' + tree.topEvent.name).println();
+        }
+        ('    events:').println();
+        for (e in fta.events) {
+            ('      - ' + e.eClass().name + ': ' + e.name).println();
+        }
+        ('    gates:').println();
+        for (g in fta.gates) {
+            ('      - ' + g.eClass().name + ': ' + g.name).println();
+        }
+    }
+}

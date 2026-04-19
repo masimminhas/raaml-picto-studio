@@ -1,0 +1,170 @@
+// ============================================================================
+// pair1-ftalibrary-backward.etl
+// ----------------------------------------------------------------------------
+// Pair 1 FTA backward transformation: Ecore FTALibrary -> UML library Model.
+//
+// NOTE: Uses per-subtype rules (not abstract source dispatch) because
+// Epsilon ETL's :: operator dispatch on abstract source types is unreliable
+// for some metamodel configurations. The verbose-but-reliable approach.
+// ============================================================================
+
+operation Any isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__library-template-slot') > -1
+        or self.id.indexOf('__placeholder') > -1;
+}
+
+pre {
+    'Pair 1 FTALibrary backward transformation starting...'.println();
+    ('  RAAML!FTALibrary count: ' + RAAML!FTALibrary.all.size()).println();
+    ('  RAAML!BasicEvent count: ' + RAAML!BasicEvent.all.size()).println();
+    ('  RAAML!IntermediateEvent count: '
+        + RAAML!IntermediateEvent.all.size()).println();
+    ('  RAAML!TopEvent count: ' + RAAML!TopEvent.all.size()).println();
+    ('  RAAML!HouseEvent count: ' + RAAML!HouseEvent.all.size()).println();
+    ('  RAAML!AND count: ' + RAAML!AND.all.size()).println();
+    ('  RAAML!OR count: ' + RAAML!OR.all.size()).println();
+
+    // Walk containment to confirm what's in the FTALibrary
+    ('').println();
+    ('Containment walk:').println();
+    for (lib in RAAML!FTALibrary.all) {
+        ('  FTALibrary ' + lib.name).println();
+        ('    ftaElements:').println();
+        for (e in lib.ftaElements) {
+            ('      - ' + e.eClass().name + ': ' + e.name
+                + ' [placeholder=' + e.isPlaceholder() + ']').println();
+        }
+        ('    gates:').println();
+        for (g in lib.gates) {
+            ('      - ' + g.eClass().name + ': ' + g.name
+                + ' [placeholder=' + g.isPlaceholder() + ']').println();
+        }
+    }
+    ('').println();
+}
+
+// ---------------------------------------------------------------------------
+// Root: FTALibrary -> UML Model
+// ---------------------------------------------------------------------------
+rule FTALibraryToUMLModel
+    transform s : RAAML!FTALibrary
+    to t : UML!Model {
+
+    t.name = s.name;
+
+    var events = s.ftaElements.select(e | not e.isPlaceholder());
+    var gates  = s.gates.select(g | not g.isPlaceholder());
+
+    var all = new Sequence;
+    for (e in events) { all.add(e); }
+    for (g in gates)  { all.add(g); }
+
+    ('Root rule: ' + all.size() + ' elements to transform').println();
+    t.packagedElement ::= all;
+}
+
+// ---------------------------------------------------------------------------
+// Per-subtype rules for Events
+// ---------------------------------------------------------------------------
+rule BasicEventToUMLClass
+    transform s : RAAML!BasicEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule IntermediateEventToUMLClass
+    transform s : RAAML!IntermediateEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule TopEventToUMLClass
+    transform s : RAAML!TopEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule ConditionalEventToUMLClass
+    transform s : RAAML!ConditionalEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule DormantEventToUMLClass
+    transform s : RAAML!DormantEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule UndevelopedEventToUMLClass
+    transform s : RAAML!UndevelopedEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule HouseEventToUMLClass
+    transform s : RAAML!HouseEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule ZeroEventToUMLClass
+    transform s : RAAML!ZeroEvent to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+// ---------------------------------------------------------------------------
+// Per-subtype rules for Gates
+// ---------------------------------------------------------------------------
+rule ANDToUMLClass
+    transform s : RAAML!AND to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule ORToUMLClass
+    transform s : RAAML!OR to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule NOTToUMLClass
+    transform s : RAAML!NOT to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule XORToUMLClass
+    transform s : RAAML!XOR to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule SEQToUMLClass
+    transform s : RAAML!SEQ to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule INHIBITToUMLClass
+    transform s : RAAML!INHIBIT to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+rule MAJORITY_VOTEToUMLClass
+    transform s : RAAML!MAJORITY_VOTE to t : UML!Class {
+    guard : not s.isPlaceholder()
+    t.name = s.name;
+}
+
+post {
+    'Pair 1 FTALibrary backward transformation complete.'.println();
+    ('  UML!Model count: ' + UML!Model.all.size()).println();
+    ('  UML!Class count: ' + UML!Class.all.size()).println();
+    for (c in UML!Class.all) {
+        ('    - ' + c.name).println();
+    }
+}

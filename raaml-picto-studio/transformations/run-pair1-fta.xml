@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair1-fta.xml
+  ================================================================
+  Pair 1 FTA forward transformation runner.
+  Transforms OMG FTALibrary.uml -> Ecore FTALibrary instance.
+
+  Usage (Eclipse):
+    1. Right-click -> Run As -> Ant Build...
+    2. JRE tab -> "Run in the same JRE as the workspace"
+    3. Run
+================================================================ -->
+<project default="run-forward" basedir=".">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="raaml.ecore"
+              location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="uml.source"
+              location="${project.dir}/RaamlProfile/FTALibrary.uml"/>
+    <property name="ecore.target"
+              location="${basedir}/samples/FTALibrary.raaml.xmi"/>
+
+    <target name="run-forward"
+            description="Transform OMG FTALibrary.uml to RAAML Ecore instance">
+
+        <echo>================================================================</echo>
+        <echo>Pair 1 FTA forward transformation</echo>
+        <echo>  basedir:        ${basedir}</echo>
+        <echo>  Source (UML):   ${uml.source}</echo>
+        <echo>  Target (XMI):   ${ecore.target}</echo>
+        <echo>  Metamodel:      ${raaml.ecore}</echo>
+        <echo>================================================================</echo>
+
+        <available file="${uml.source}" property="src.exists"/>
+        <fail unless="src.exists">
+            Source FTALibrary not found: ${uml.source}
+        </fail>
+
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.target}"
+                               metamodeluri="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/library"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair1-ftalibrary-forward.etl">
+            <model ref="UML"/>
+            <model ref="RAAML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Done. Inspect: ${ecore.target}</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>
