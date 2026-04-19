@@ -71,10 +71,12 @@
                                store="false"
                                expand="true"/>
 
-        <!-- Create the target RAAML model (empty, to be populated) -->
+        <!-- Create the target RAAML model using metamodeluri so the saved
+             XMI uses URI-based schema references consistent with plugin.xml
+             registration, enabling clean round-trip via the backward runner. -->
         <epsilon.emf.loadModel name="RAAML"
                                modelfile="${ecore.target}"
-                               metamodelfile="${raaml.ecore}"
+                               metamodeluri="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/library"
                                read="false"
                                store="true"
                                expand="true"/>

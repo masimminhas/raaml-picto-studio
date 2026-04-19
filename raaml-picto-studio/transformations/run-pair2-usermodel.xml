@@ -62,9 +62,12 @@
                                store="false"
                                expand="true"/>
 
+        <!-- Use metamodeluri (not metamodelfile) so the saved XMI uses
+             URI-based type references consistent with plugin.xml registration.
+             This ensures the output loads cleanly in the backward transformation. -->
         <epsilon.emf.loadModel name="RAAML"
                                modelfile="${ecore.target}"
-                               metamodelfile="${raaml.ecore}"
+                               metamodeluri="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/library"
                                read="false"
                                store="true"
                                expand="true"/>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair1-fmea-backward.xml
+  ================================================================
+  Pair 1 BACKWARD transformation runner:
+      Ecore FMEALibrary.raaml.xmi  ->  UML library Model
+
+  Usage (Eclipse):
+    1. Right-click -> Run As -> Ant Build...
+    2. JRE tab -> "Run in the same JRE as the workspace"
+    3. Run
+================================================================ -->
+<project default="run-backward" basedir=".">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="raaml.ecore"
+              location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="ecore.source"
+              location="${basedir}/samples/FMEALibrary.raaml.xmi"/>
+    <property name="uml.target"
+              location="${basedir}/samples/FMEALibrary_roundtrip.uml"/>
+
+    <target name="run-backward"
+            description="Transform RAAML FMEALibrary Ecore instance back to UML">
+
+        <echo>================================================================</echo>
+        <echo>Pair 1 BACKWARD transformation: FMEALibrary (Ecore -> UML)</echo>
+        <echo>  basedir:       ${basedir}</echo>
+        <echo>  Source (XMI):  ${ecore.source}</echo>
+        <echo>  Target (UML):  ${uml.target}</echo>
+        <echo>  Metamodel:     ${raaml.ecore}</echo>
+        <echo>================================================================</echo>
+
+        <available file="${ecore.source}" property="src.exists"/>
+        <fail unless="src.exists">
+            Source Ecore XMI not found: ${ecore.source}
+
+            Run the forward transformation first (run-pair1-fmea.xml).
+        </fail>
+
+        <!-- Load the source RAAML Ecore instance using metamodeluri for
+             all sub-packages so containment references resolve correctly. -->
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.source}"
+                               metamodeluri="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/library"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <!-- Create the target UML model (empty, to be populated) -->
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${uml.target}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair1-fmealibrary-backward.etl">
+            <model ref="RAAML"/>
+            <model ref="UML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>================================================================</echo>
+        <echo>Done. Inspect: ${uml.target}</echo>
+        <echo>Compare with original: RaamlProfile/FMEALibrary.uml</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

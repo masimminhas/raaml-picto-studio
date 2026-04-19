@@ -1,0 +1,171 @@
+// ============================================================================
+// pair2-usermodel-fmea-backward.etl
+// ----------------------------------------------------------------------------
+// Pair 2 (user-model) BACKWARD transformation:
+//   RAAML Ecore SafetyAnalysis instance  ->  UML user model
+//
+// Strategy:
+//   - For each SafetyAnalysis, create a UML Model of the same name.
+//   - For each FMEAItem inside the FMEA analyses (excluding placeholders),
+//     create a UML Class with the original name, under the Model.
+//   - If the Ecore FMEAItem has a RPNCalculation child, re-create
+//     UML ownedAttribute entries for SEV, OCC, DET, RPN with their numeric
+//     default values -- enabling round-trip of the quantitative data.
+//   - Stereotype applications ARE NOT recreated here (would require the
+//     RAAML profile to be loaded/resolvable). The backward produces plain
+//     UML classes; the user may re-apply <<FMEAItem>> in Papyrus if
+//     desired, or a secondary profile-aware transformation may do it.
+//
+// Round-trip preservation:
+//   - Class names: PRESERVED
+//   - RPN / SEV / OCC / DET: PRESERVED (carried as UML ownedAttribute defaults)
+//   - Stereotype applications: NOT PRESERVED in output (documented limitation)
+// ============================================================================
+
+pre {
+    'Pair 2 user-model FMEA backward transformation starting...'.println();
+    ('  RAAML!SafetyAnalysis count: ' + RAAML!SafetyAnalysis.all.size()).println();
+    ('  RAAML!FMEA count:           ' + RAAML!FMEA.all.size()).println();
+    ('  RAAML!FMEAItem count:       ' + RAAML!FMEAItem.all.size()).println();
+    ('  RAAML!AbstractFMEAItem count: '
+        + RAAML!AbstractFMEAItem.all.size()).println();
+    ('  RAAML!RPNCalculation count: ' + RAAML!RPNCalculation.all.size()).println();
+
+    // Walk the containment tree to see what's really loaded
+    ('').println();
+    ('Deep diagnostic - walking containment tree:').println();
+    for (sa in RAAML!SafetyAnalysis.all) {
+        ('  SafetyAnalysis: ' + sa.name).println();
+        for (a in sa.analyses) {
+            ('    analysis (' + a.eClass().name + '): ' + a.name).println();
+            // Low-level EMF check: list ALL contained EObjects regardless
+            // of what the typed reference says.
+            ('    Using eContents():').println();
+            for (c in a.eContents()) {
+                ('      child (' + c.eClass().name + ')').println();
+                for (cc in c.eContents()) {
+                    ('        subchild (' + cc.eClass().name + ')').println();
+                }
+            }
+            ('    Using a.fmeaItems reference:').println();
+            if (a.isKindOf(RAAML!FMEA)) {
+                for (item in a.fmeaItems) {
+                    ('      fmeaItem (' + item.eClass().name + '): '
+                         + item.name).println();
+                }
+            }
+        }
+    }
+    ('').println();
+}
+
+operation RAAML!FMEAItem isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__placeholder') > -1
+        or self.id.indexOf('__library-template-slot') > -1;
+}
+
+// Find the RPNCalculation owned by an FMEAItem (if any).
+operation RAAML!FMEAItem getRPNCalc() : Any {
+    if (self.rpnCalculation.isUndefined() or self.rpnCalculation.isEmpty()) {
+        return null;
+    }
+    return self.rpnCalculation.first();
+}
+
+// ---------------------------------------------------------------------------
+// Root rule: RAAML SafetyAnalysis -> UML Model
+// ---------------------------------------------------------------------------
+rule SafetyAnalysisToUMLModel
+    transform s : RAAML!SafetyAnalysis
+    to t : UML!Model {
+
+    t.name = s.name;
+
+    // Collect every non-placeholder FMEAItem across all FMEA analyses
+    // and transform them into packagedElement Classes.
+    var allItems = new Sequence;
+    for (a in s.analyses) {
+        if (a.isKindOf(RAAML!FMEA)) {
+            for (it in a.fmeaItems) {
+                if (not it.isPlaceholder()) {
+                    allItems.add(it);
+                }
+            }
+        }
+    }
+    t.packagedElement ::= allItems;
+}
+
+// ---------------------------------------------------------------------------
+// Rule: RAAML FMEAItem -> UML Class (with RPN attributes when available)
+// ---------------------------------------------------------------------------
+rule FMEAItemToUMLClass
+    transform s : RAAML!FMEAItem
+    to t : UML!Class {
+
+    guard : not s.isPlaceholder()
+
+    t.name = s.name;
+
+    // Recreate UML ownedAttributes carrying RPN numerical data.
+    // This preserves the quantitative FMEA data through the round-trip.
+    var rpnCalc = s.getRPNCalc();
+    if (rpnCalc <> null) {
+        // RPN attribute
+        if (rpnCalc.RPN <> null) {
+            var rpnAttr : new UML!Property;
+            rpnAttr.name = 'RPN';
+            var rpnLit : new UML!LiteralReal;
+            rpnLit.value = rpnCalc.RPN;
+            rpnAttr.defaultValue = rpnLit;
+            t.ownedAttribute.add(rpnAttr);
+        }
+        // SEV
+        if (rpnCalc.SEV <> null) {
+            var attr : new UML!Property;
+            attr.name = 'SEV';
+            var lit : new UML!LiteralReal;
+            lit.value = rpnCalc.SEV;
+            attr.defaultValue = lit;
+            t.ownedAttribute.add(attr);
+        }
+        // OCC
+        if (rpnCalc.OCC <> null) {
+            var attr : new UML!Property;
+            attr.name = 'OCC';
+            var lit : new UML!LiteralReal;
+            lit.value = rpnCalc.OCC;
+            attr.defaultValue = lit;
+            t.ownedAttribute.add(attr);
+        }
+        // DET
+        if (rpnCalc.DET <> null) {
+            var attr : new UML!Property;
+            attr.name = 'DET';
+            var lit : new UML!LiteralReal;
+            lit.value = rpnCalc.DET;
+            attr.defaultValue = lit;
+            t.ownedAttribute.add(attr);
+        }
+    } else if (s.RPN <> null and s.RPN <> 0.0) {
+        // Fallback: if no RPNCalculation child but aggregated RPN is set
+        var attr : new UML!Property;
+        attr.name = 'RPN';
+        var lit : new UML!LiteralReal;
+        lit.value = s.RPN;
+        attr.defaultValue = lit;
+        t.ownedAttribute.add(attr);
+    }
+}
+
+// ---------------------------------------------------------------------------
+post {
+    'Pair 2 user-model FMEA backward transformation complete.'.println();
+    ('  UML!Model count: ' + UML!Model.all.size()).println();
+    ('  UML!Class count: ' + UML!Class.all.size()).println();
+    for (c in UML!Class.all) {
+        var attrs = c.ownedAttribute.size();
+        ('    - ' + c.name + '  (' + attrs + ' ownedAttributes)').println();
+    }
+}
