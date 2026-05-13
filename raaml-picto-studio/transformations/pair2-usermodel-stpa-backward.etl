@@ -1,0 +1,141 @@
+// ============================================================================
+// pair2-usermodel-stpa-backward.etl
+// Ecore SafetyAnalysis with STPA -> UML user model.
+// Strips placeholders. Recreates each non-placeholder element as UML Class.
+// ============================================================================
+
+operation Any isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__placeholder') > -1
+        or self.id.indexOf('__library-template-slot') > -1;
+}
+
+operation addRaamlProvenance(umlClass : Any,
+                             ecoreType : String,
+                             stereotype : String,
+                             profile : String,
+                             baseMetaclass : String,
+                             technique : String) {
+    var ann : new UML!EAnnotation;
+    ann.source = 'http://edu.kit.sdq/raaml/roundtrip-trace';
+    ann.details.put('ecoreType',      ecoreType);
+    ann.details.put('stereotype',     stereotype);
+    ann.details.put('profile',        profile);
+    ann.details.put('baseMetaclass',  baseMetaclass);
+    ann.details.put('technique',      technique);
+    ann.details.put('roundtripDate',  'forward->Ecore->backward->UML');
+    umlClass.eAnnotations.add(ann);
+}
+
+// Map STPA Ecore types to their stereotype and profile.
+// Note: Hazard stereotype comes from RAAMLGeneralProfile, not STPAProfile.
+operation getProfileForSTPA(ecoreTypeName : String) : String {
+    if (ecoreTypeName == 'Hazard')             return 'RAAMLGeneralProfile';
+    if (ecoreTypeName == 'ProcessModelFlaw')   return 'STPAProfile';
+    return 'STPAProfile';
+}
+
+pre {
+    'Pair 2 user-model STPA backward starting...'.println();
+    ('  RAAML!STPA count: ' + RAAML!STPA.all.size()).println();
+    ('  RAAML!Loss count: ' + RAAML!Loss.all.size()).println();
+    ('  RAAML!Hazard count: ' + RAAML!Hazard.all.size()).println();
+    ('  RAAML!ControlStructure count: ' + RAAML!ControlStructure.all.size()).println();
+    ('  RAAML!UndesiredControlAction count: '
+        + RAAML!UndesiredControlAction.all.size()).println();
+}
+
+rule SafetyAnalysisToUMLModel
+    transform s : RAAML!SafetyAnalysis
+    to t : UML!Model {
+
+    t.name = s.name;
+    var seenNames = new Set;
+    var emit = new Sequence;
+
+    for (a in s.analyses) {
+        if (a.isKindOf(RAAML!STPA)) {
+            for (l in a.losses) {
+                if (not l.isPlaceholder() and not seenNames.includes(l.name)) {
+                    emit.add(l); seenNames.add(l.name);
+                }
+            }
+            for (h in a.hazards) {
+                if (not h.isPlaceholder() and not seenNames.includes(h.name)) {
+                    emit.add(h); seenNames.add(h.name);
+                }
+            }
+            for (uca in a.unsafeControlActions) {
+                if (not uca.isPlaceholder() and not seenNames.includes(uca.name)) {
+                    emit.add(uca); seenNames.add(uca.name);
+                }
+            }
+            for (cf in a.controlFlaws) {
+                if (not cf.isPlaceholder() and not seenNames.includes(cf.name)) {
+                    emit.add(cf); seenNames.add(cf.name);
+                }
+            }
+            for (cs in a.controlStructures) {
+                if (not cs.isPlaceholder() and not seenNames.includes(cs.name)
+                        and cs.name <> 'DefaultControlStructure') {
+                    emit.add(cs); seenNames.add(cs.name);
+                }
+                for (c in cs.controllers) {
+                    if (not c.isPlaceholder() and not seenNames.includes(c.name)
+                            and c.name <> 'DefaultController') {
+                        emit.add(c); seenNames.add(c.name);
+                    }
+                    // Extract ControlActions and Feedback contained in Controller
+                    for (ca in c.controlActions) {
+                        if (not ca.isPlaceholder()
+                                and not seenNames.includes(ca.name)) {
+                            emit.add(ca); seenNames.add(ca.name);
+                        }
+                    }
+                    for (fb in c.feedback) {
+                        if (not fb.isPlaceholder()
+                                and not seenNames.includes(fb.name)) {
+                            emit.add(fb); seenNames.add(fb.name);
+                        }
+                    }
+                }
+                for (p in cs.controlledProcesses) {
+                    if (not p.isPlaceholder() and not seenNames.includes(p.name)
+                            and p.name <> 'DefaultControlledProcess') {
+                        emit.add(p); seenNames.add(p.name);
+                    }
+                }
+                for (act in cs.actuators) {
+                    if (not act.isPlaceholder() and not seenNames.includes(act.name)) {
+                        emit.add(act); seenNames.add(act.name);
+                    }
+                }
+                for (sn in cs.sensors) {
+                    if (not sn.isPlaceholder() and not seenNames.includes(sn.name)) {
+                        emit.add(sn); seenNames.add(sn.name);
+                    }
+                }
+            }
+        }
+    }
+
+    for (el in emit) {
+        var c : new UML!Class;
+        c.name = el.name;
+        t.packagedElement.add(c);
+
+        var ecoreType = el.eClass().name;
+        addRaamlProvenance(c,
+                           ecoreType,
+                           ecoreType,  // STPA stereotype names match Ecore names
+                           getProfileForSTPA(ecoreType),
+                           'Class',
+                           'STPA');
+    }
+}
+
+post {
+    'Pair 2 user-model STPA backward complete.'.println();
+    ('  UML!Class count: ' + UML!Class.all.size()).println();
+    for (c in UML!Class.all) { ('    - ' + c.name).println(); }
+}

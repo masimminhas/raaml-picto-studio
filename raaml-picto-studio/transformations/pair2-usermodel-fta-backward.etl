@@ -17,6 +17,31 @@ operation Any isPlaceholder() : Boolean {
         or self.id.indexOf('__library-template-slot') > -1;
 }
 
+operation addRaamlProvenance(umlClass : Any,
+                             ecoreType : String,
+                             stereotype : String,
+                             profile : String,
+                             baseMetaclass : String,
+                             technique : String) {
+    var ann : new UML!EAnnotation;
+    ann.source = 'http://edu.kit.sdq/raaml/roundtrip-trace';
+    ann.details.put('ecoreType',      ecoreType);
+    ann.details.put('stereotype',     stereotype);
+    ann.details.put('profile',        profile);
+    ann.details.put('baseMetaclass',  baseMetaclass);
+    ann.details.put('technique',      technique);
+    ann.details.put('roundtripDate',  'forward->Ecore->backward->UML');
+    umlClass.eAnnotations.add(ann);
+}
+
+// Resolve OMG stereotype name for an FTA Ecore type (handles aliases)
+operation getOmgStereotypeNameForFTA(ecoreTypeName : String) : String {
+    if (ecoreTypeName == 'FTATree')         return 'Tree';
+    if (ecoreTypeName == 'ZeroEvent')       return 'ZEROEVENT';
+    if (ecoreTypeName == 'UndevelopedEvent') return 'Undeveloped';
+    return ecoreTypeName;
+}
+
 pre {
     'Pair 2 user-model FTA backward transformation starting...'.println();
     ('  RAAML!SafetyAnalysis count: ' + RAAML!SafetyAnalysis.all.size()).println();
@@ -98,6 +123,15 @@ rule SafetyAnalysisToUMLModel
         var c : new UML!Class;
         c.name = el.name;
         t.packagedElement.add(c);
+
+        // RAAML provenance annotation
+        var ecoreType = el.eClass().name;
+        addRaamlProvenance(c,
+                           ecoreType,
+                           getOmgStereotypeNameForFTA(ecoreType),
+                           'FTAProfile',
+                           'Class',
+                           'FTA');
     }
 }
 

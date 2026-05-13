@@ -1,0 +1,192 @@
+[%
+// ── Per-package class diagram for the new bifurcated metamodels ─
+// Renders a single EPackage (pkg) as a Graphviz record-style class
+// diagram: classes, attributes, inheritance edges, containment and
+// non-containment references. Cross-package supertypes from sister
+// packages (e.g. core::Analysis) are shown as ghost nodes so the
+// diagram still hints at where the analysis hooks into the core
+// metamodel.
+
+var classes = pkg.eClassifiers
+    .select(c | c.isKindOf(EClass));
+
+// Foreign supertypes referenced from this package but living
+// in another EPackage (e.g. fmea::FMEA -> core::Analysis).
+var foreignSupers = Set {};
+for (cls in classes) {
+    for (sup in cls.eSuperTypes) {
+        if (sup.isDefined()
+            and sup.ePackage.isDefined()
+            and sup.ePackage <> pkg) {
+            foreignSupers.add(sup);
+        }
+    }
+}
+
+// Foreign reference targets shown as ghosts in this diagram.
+var foreignRefs = Set {};
+for (cls in classes) {
+    for (ref in cls.eStructuralFeatures
+            .select(f | f.isKindOf(EReference))) {
+        var t = ref.eType;
+        if (t.isDefined()
+            and t.isKindOf(EClass)
+            and t.ePackage.isDefined()
+            and t.ePackage <> pkg) {
+            foreignRefs.add(t);
+        }
+    }
+}
+%]
+digraph [%=pkg.name.replace(" ", "_")%]_pkg {
+    graph [
+        rankdir=BT
+        fontname="Arial"
+        fontsize=11
+        bgcolor="white"
+        label="[%=pkg.name%] Package — RAAML Metamodel"
+        labelloc=t
+        pad=0.4
+    ]
+    node [
+        fontname="Courier New"
+        fontsize=9
+        shape=record
+        style="filled,rounded"
+        color="#336699"
+    ]
+    edge [
+        fontname="Arial"
+        fontsize=8
+    ]
+
+[%
+// ── Local class nodes ───────────────────────────────────────────
+for (cls in classes) {
+    var fillColor = "#DDEEFF";
+    if (cls.abstract)  { fillColor = "#F5F5DC"; }
+    if (cls.interface) { fillColor = "#EEFFEE"; }
+
+    var stereotype = "";
+    if (cls.abstract)  { stereotype = "abstract "; }
+    if (cls.interface) { stereotype = "interface "; }
+
+    var attrStr = "";
+    for (attr in cls.eStructuralFeatures
+            .select(f | f.isKindOf(EAttribute))) {
+        var reqMark = "";
+        if (attr.lowerBound > 0) { reqMark = " [r]"; }
+        var typeName = "?";
+        if (attr.eType.isDefined()) { typeName = attr.eType.name; }
+        attrStr = attrStr + attr.name
+            + " : " + typeName
+            + reqMark + "\\l";
+    }
+    if (attrStr = "") { attrStr = " \\l"; }
+%]
+    [%=cls.name%] [
+        fillcolor="[%=fillColor%]"
+        label="{ [%=stereotype%][%=cls.name%] | [%=attrStr%] }"
+    ]
+[% } %]
+
+[%
+// ── Foreign supertype ghosts ───────────────────────────────────
+for (fsup in foreignSupers) {
+%]
+    [%=fsup.name%] [
+        shape=record
+        style="dashed,filled"
+        color="#999999"
+        fillcolor="#F0F0F0"
+        label="{ \<\<from [%=fsup.ePackage.name%]\>\> | [%=fsup.name%] }"
+    ]
+[% } %]
+
+[%
+// ── Foreign reference target ghosts ────────────────────────────
+for (tgt in foreignRefs) {
+    if (not foreignSupers.includes(tgt)) {
+%]
+    [%=tgt.name%] [
+        shape=record
+        style="dashed,filled"
+        color="#999999"
+        fillcolor="#F7F7F7"
+        label="{ \<\<from [%=tgt.ePackage.name%]\>\> | [%=tgt.name%] }"
+    ]
+[%  }
+} %]
+
+[%
+// ── Inheritance edges (intra- and cross-package) ───────────────
+for (cls in classes) {
+    for (superType in cls.eSuperTypes) {
+        if (classes.includes(superType)
+            or foreignSupers.includes(superType)) {
+%]
+    [%=cls.name%] -> [%=superType.name%] [
+        arrowhead=empty
+        arrowsize=1.5
+        color="#336699"
+        penwidth=1.5
+        style=solid
+    ]
+[%      }
+    }
+} %]
+
+[%
+// ── Containment edges ──────────────────────────────────────────
+for (cls in classes) {
+    for (ref in cls.eStructuralFeatures
+            .select(f |
+                f.isKindOf(EReference)
+                and f.containment)) {
+        var targetCls = ref.eType;
+        if (targetCls.isDefined()
+            and targetCls.isKindOf(EClass)
+            and (classes.includes(targetCls)
+                 or foreignRefs.includes(targetCls))) {
+            var upper = ref.upperBound = -1
+                ? "*"
+                : ref.upperBound.asString();
+            var mult = ref.lowerBound.asString()
+                + ".." + upper;
+%]
+    [%=cls.name%] -> [%=targetCls.name%] [
+        arrowhead=diamond
+        arrowsize=1.2
+        color="#CC3300"
+        label="[%=ref.name%] [%=mult%]"
+        fontsize=8
+        style=solid
+    ]
+[%      }
+    }
+} %]
+
+[%
+// ── Non-containment reference edges ────────────────────────────
+for (cls in classes) {
+    for (ref in cls.eStructuralFeatures
+            .select(f |
+                f.isKindOf(EReference)
+                and not f.containment)) {
+        var targetCls = ref.eType;
+        if (targetCls.isDefined()
+            and targetCls.isKindOf(EClass)
+            and (classes.includes(targetCls)
+                 or foreignRefs.includes(targetCls))) {
+%]
+    [%=cls.name%] -> [%=targetCls.name%] [
+        arrowhead=open
+        style=dashed
+        color="#666666"
+        label="[%=ref.name%]"
+        fontsize=8
+    ]
+[%      }
+    }
+} %]
+}

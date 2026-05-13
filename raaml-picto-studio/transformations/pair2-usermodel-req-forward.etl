@@ -1,0 +1,223 @@
+// ============================================================================
+// pair2-usermodel-req-forward.etl
+// User UML Requirements model -> Ecore SafetyAnalysis with RequirementsModel.
+// ============================================================================
+
+@cached
+operation getReqSafetyGoalStereos() : Set { return Set{'SafetyGoal'}; }
+
+@cached
+operation getReqFSRStereos() : Set { return Set{'FunctionalSafetyRequirement'}; }
+
+@cached
+operation getReqTSRStereos() : Set { return Set{'TechnicalSafetyRequirement'}; }
+
+@cached
+operation getReqHSRStereos() : Set { return Set{'HardwareSafetyRequirement'}; }
+
+@cached
+operation getReqSSRStereos() : Set { return Set{'SoftwareSafetyRequirement'}; }
+
+@cached
+operation getReqGenericStereos() : Set {
+    return Set{'Requirement', 'AbstractRequirement', 'DependabilityRequirement'};
+}
+
+@cached
+operation getAllReqStereos() : Set {
+    var s = new Set;
+    for (n in getReqSafetyGoalStereos()) { s.add(n); }
+    for (n in getReqFSRStereos())        { s.add(n); }
+    for (n in getReqTSRStereos())        { s.add(n); }
+    for (n in getReqHSRStereos())        { s.add(n); }
+    for (n in getReqSSRStereos())        { s.add(n); }
+    for (n in getReqGenericStereos())    { s.add(n); }
+    return s;
+}
+
+operation UML!Class findReqAncestor() : UML!Class {
+    if (getAllReqStereos().includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var a = g.general.findReqAncestor();
+            if (a.isDefined() and a <> null) return a;
+        }
+    }
+    return null;
+}
+
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) { result.add(obj); }
+    }
+    return result;
+}
+
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            if (res.getURIFragment(e) == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
+    }
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            if (entry.getEStructuralFeature().name.startsWith('base_')) {
+                return resolveUmlElementById(entry.getValue());
+            }
+        }
+    }
+    return null;
+}
+
+operation getUserReqClassToTypeName() : Map {
+    var result = new Map;
+    for (c in UML!Class.all) {
+        var a = c.findReqAncestor();
+        if (a.isDefined() and a <> null) { result.put(c, a.name); }
+    }
+    for (stereoName in getAllReqStereos()) {
+        for (app in findAllEObjectsByTypeName(UML, stereoName)) {
+            var base = getStereotypeBaseClass(app);
+            if (base.isDefined() and base.isKindOf(UML!Class)) {
+                if (not result.containsKey(base)) { result.put(base, stereoName); }
+            }
+        }
+    }
+    return result;
+}
+
+// Walk eContainer chain to find the nearest enclosing UML Class that is itself
+// a known requirement. Returns null if this class is top-level (direct package
+// child or nested under a non-requirement container).
+operation findReqAncestorContainer(uc : Any, umlToReq : Map) : Any {
+    var p = uc.eContainer();
+    while (p.isDefined() and p <> null) {
+        if (p.isKindOf(UML!Class) and umlToReq.containsKey(p)) {
+            return p;
+        }
+        p = p.eContainer();
+    }
+    return null;
+}
+
+pre {
+    'Pair 2 user-model Requirements forward starting...'.println();
+    var users = getUserReqClassToTypeName();
+    ('  Total user requirement classes detected: ' + users.size()).println();
+    for (c in users.keySet()) {
+        ('    - ' + c.name + '  (type: ' + users.get(c) + ')').println();
+    }
+    ('').println();
+}
+
+rule UserModelToSafetyAnalysis
+    transform s : UML!Model
+    to sa : RAAML!SafetyAnalysis,
+       rm : RAAML!RequirementsModel {
+
+    guard : s.name <> 'RAAMLGeneralLibrary' and s.name <> 'CoreLibrary'
+            and s.name <> 'PrimitiveTypes'
+
+    sa.id = s.name; sa.name = s.name;
+    sa.description = 'Safety analysis for ' + s.name;
+
+    var users = getUserReqClassToTypeName();
+    var umlToReq : Map = new Map;
+
+    // Phase 1: create a typed Ecore requirement instance for each UML class.
+    for (uc in users.keySet()) {
+        var t = users.get(uc);
+        if (getReqSafetyGoalStereos().includes(t)) {
+            var x : new RAAML!SafetyGoal;
+            x.id = uc.name; x.name = uc.name; x.text = '(no text)';
+            x.description = 'User Safety Goal: ' + uc.name;
+            umlToReq.put(uc, x);
+        } else if (getReqFSRStereos().includes(t)) {
+            var x : new RAAML!FunctionalSafetyRequirement;
+            x.id = uc.name; x.name = uc.name; x.text = '(no text)';
+            x.description = 'User FSR: ' + uc.name;
+            umlToReq.put(uc, x);
+        } else if (getReqTSRStereos().includes(t)) {
+            var x : new RAAML!TechnicalSafetyRequirement;
+            x.id = uc.name; x.name = uc.name; x.text = '(no text)';
+            x.description = 'User TSR: ' + uc.name;
+            umlToReq.put(uc, x);
+        } else if (getReqHSRStereos().includes(t)) {
+            var x : new RAAML!HardwareSafetyRequirement;
+            x.id = uc.name; x.name = uc.name; x.text = '(no text)';
+            x.description = 'User HSR: ' + uc.name;
+            umlToReq.put(uc, x);
+        } else if (getReqSSRStereos().includes(t)) {
+            var x : new RAAML!SoftwareSafetyRequirement;
+            x.id = uc.name; x.name = uc.name; x.text = '(no text)';
+            x.description = 'User SSR: ' + uc.name;
+            umlToReq.put(uc, x);
+        } else if (getReqGenericStereos().includes(t)) {
+            var x : new RAAML!Requirement;
+            x.id = uc.name; x.name = uc.name; x.text = '(no text)';
+            x.description = 'User Requirement: ' + uc.name;
+            umlToReq.put(uc, x);
+        }
+    }
+
+    // Phase 2: wire composition hierarchy from UML nestedClassifier containment.
+    // Top-level requirements (no requirement ancestor) go into rm.requirements.
+    // Nested requirements become childRequirements of their UML-ancestor requirement.
+    // For every parent->child edge we also emit an explicit DeriveRequirement.
+    for (uc in umlToReq.keySet()) {
+        var child = umlToReq.get(uc);
+        var parentUml = findReqAncestorContainer(uc, umlToReq);
+        if (parentUml.isDefined() and parentUml <> null) {
+            var parentReq = umlToReq.get(parentUml);
+            parentReq.childRequirements.add(child);
+            child.parentRequirement = parentReq;
+
+            var dr : new RAAML!DeriveRequirement;
+            dr.id = 'Derive_' + parentReq.name + '_to_' + child.name;
+            dr.name = dr.id;
+            dr.description = child.name + ' derived from ' + parentReq.name;
+            dr.source = parentReq;
+            dr.target = child;
+            rm.derivations.add(dr);
+        } else {
+            rm.requirements.add(child);
+        }
+    }
+
+    sa.requirements.add(rm);
+}
+
+post {
+    'Pair 2 user-model Requirements forward complete.'.println();
+    ('  RequirementsModel count: ' + RAAML!RequirementsModel.all.size()).println();
+    ('  SafetyGoals: ' + RAAML!SafetyGoal.all.size()).println();
+    ('  Functional Safety Requirements: '
+        + RAAML!FunctionalSafetyRequirement.all.size()).println();
+    ('  Technical Safety Requirements: '
+        + RAAML!TechnicalSafetyRequirement.all.size()).println();
+    ('  Hardware Safety Requirements: '
+        + RAAML!HardwareSafetyRequirement.all.size()).println();
+    ('  Software Safety Requirements: '
+        + RAAML!SoftwareSafetyRequirement.all.size()).println();
+    ('  Generic Requirements: ' + RAAML!Requirement.all.size()).println();
+    ('  DeriveRequirement relationships: '
+        + RAAML!DeriveRequirement.all.size()).println();
+}

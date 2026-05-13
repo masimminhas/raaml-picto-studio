@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="hara" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/hara"
+    nsPrefix="hara">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="ISO 26262 Hazard Analysis and Risk Assessment"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ISO26262" eSuperTypes="core.ecore#//Analysis">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ISO 26262 HARA container"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="ISO26262"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="malfunctioningBehaviors"
+        upperBound="-1" eType="#//MalfunctioningBehaviour" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operationalSituations"
+        upperBound="-1" eType="#//OperationalSituation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="confirmedItems" upperBound="-1"
+        eType="#//Confirmed" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="verifiedItems" upperBound="-1"
+        eType="#//Verified" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="asilAssignments" upperBound="-1"
+        eType="#//ASILAssignment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ASIL">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Automotive Safety Integrity Level"/>
+    </eAnnotations>
+    <eLiterals name="noassignment" literal="noassignment"/>
+    <eLiterals name="QM" value="1" literal="QM"/>
+    <eLiterals name="A" value="2" literal="A"/>
+    <eLiterals name="B" value="3" literal="B"/>
+    <eLiterals name="C" value="4" literal="C"/>
+    <eLiterals name="D" value="5" literal="D"/>
+    <eLiterals name="AB" value="6" literal="AB"/>
+    <eLiterals name="AC" value="7" literal="AC"/>
+    <eLiterals name="AD" value="8" literal="AD"/>
+    <eLiterals name="BC" value="9" literal="BC"/>
+    <eLiterals name="CD" value="10" literal="CD"/>
+    <eLiterals name="AA" value="11" literal="AA"/>
+    <eLiterals name="BB" value="12" literal="BB"/>
+    <eLiterals name="CC" value="13" literal="CC"/>
+    <eLiterals name="DD" value="14" literal="DD"/>
+    <eLiterals name="QMA" value="15" literal="QMA"/>
+    <eLiterals name="QMB" value="16" literal="QMB"/>
+    <eLiterals name="QMC" value="17" literal="QMC"/>
+    <eLiterals name="QMD" value="18" literal="QMD"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Controllability">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ISO 26262 controllability rating"/>
+    </eAnnotations>
+    <eLiterals name="C0" literal="C0"/>
+    <eLiterals name="C1" value="1" literal="C1"/>
+    <eLiterals name="C2" value="2" literal="C2"/>
+    <eLiterals name="C3" value="3" literal="C3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Exposure">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ISO 26262 exposure rating"/>
+    </eAnnotations>
+    <eLiterals name="E0" literal="E0"/>
+    <eLiterals name="E1" value="1" literal="E1"/>
+    <eLiterals name="E2" value="2" literal="E2"/>
+    <eLiterals name="E3" value="3" literal="E3"/>
+    <eLiterals name="E4" value="4" literal="E4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Severity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ISO 26262 severity rating"/>
+    </eAnnotations>
+    <eLiterals name="S0" literal="S0"/>
+    <eLiterals name="S1" value="1" literal="S1"/>
+    <eLiterals name="S2" value="2" literal="S2"/>
+    <eLiterals name="S3" value="3" literal="S3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationalSituation" eSuperTypes="core.ecore#//Situation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Operating scenario for the item"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="OperationalSituation"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MalfunctioningBehaviour" eSuperTypes="core.ecore#//FailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Malfunctioning behavior of the item"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="MalfunctioningBehaviour"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Verified" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Verification status of an element"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Verified"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="result" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Confirmed" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Confirmation status of an element"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Confirmed"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="result" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ASILAssignment" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ASIL assignment and override"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ASILAssignment"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ASIL" lowerBound="1" eType="#//ASIL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ASILOverride" eType="#//ASIL"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationalCondition" abstract="true"
+      eSuperTypes="core.ecore#//AbstractEvent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Operating condition for hazard analysis"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractOperationalSituation" abstract="true"
+      eSuperTypes="#//OperationalCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Operational situation with exposure rating"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exposure" eType="#//Exposure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1"
+        eType="#//OperationalCondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrafficAndPeople" abstract="true"
+      eSuperTypes="#//OperationalCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: traffic actors and pedestrians dimension of operational context"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="TrafficAndPeople"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VehicleUsage" abstract="true" eSuperTypes="#//OperationalCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: vehicle driving mode, payload, speed regime"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="VehicleUsage"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoadCondition" abstract="true" eSuperTypes="#//OperationalCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: road surface and layout dimension"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="RoadCondition"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//OperationalCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: geographic location dimension (concrete per RAAML)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Location"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnvironmentalCondition" abstract="true"
+      eSuperTypes="#//OperationalCondition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: weather, lighting, visibility dimension"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="EnvironmentalCondition"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypicalAutomotiveSituation" abstract="true"
+      eSuperTypes="#//AbstractOperationalSituation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: typical automotive operational situation aggregating five contextual dimensions (traffic, usage, road, location, environment)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="TypicalAutomotiveSituation"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trafficAndPeople" upperBound="-1"
+        eType="#//TrafficAndPeople" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vehicleUsage" upperBound="-1"
+        eType="#//VehicleUsage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roadCondition" upperBound="-1"
+        eType="#//RoadCondition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" upperBound="-1"
+        eType="#//Location" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environmentalCondition" upperBound="-1"
+        eType="#//EnvironmentalCondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AccidentScenario" abstract="true" eSuperTypes="core.ecore#//DysfunctionalEvent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Scenario leading to an accident"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="controllability" eType="#//Controllability"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="situations" upperBound="-1"
+        eType="#//AbstractOperationalSituation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="malfunctioningBehaviors"
+        upperBound="-1" eType="#//AnyMalfunction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyMalfunction" abstract="true" eSuperTypes="core.ecore#//UndesiredState">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for malfunctions"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="More" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: malfunction with more-than-intended magnitude (HAZOP guide-word: MORE)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="More"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Less" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: malfunction with less-than-intended magnitude (HAZOP guide-word: LESS)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Less"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="No" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: function not delivered (HAZOP guide-word: NO/NOT)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="No"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Intermittent" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: function delivered intermittently (HAZOP guide-word equivalent)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Intermittent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Unintended" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: function delivered when not intended (HAZOP guide-word: OTHER_THAN/AS_WELL_AS)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Unintended"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Early" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: function delivered too early (HAZOP guide-word: EARLY/BEFORE)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Early"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Late" eSuperTypes="#//AnyMalfunction">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="RAAML ISO26262 Library: function delivered too late (HAZOP guide-word: LATE/AFTER)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Late"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HazardousEvent" abstract="true" eSuperTypes="core.ecore#//AbstractRisk">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Combination of hazard and operational situation"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ASIL" upperBound="-1" eType="#//ASIL"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hazards" upperBound="-1"
+        eType="ecore:EClass core.ecore#//Hazard" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="#//AccidentScenario" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vehicleLevelEffects" upperBound="-1"
+        eType="#//VehicleLevelEffect" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemLevelEffects" upperBound="-1"
+        eType="#//SystemLevelEffect" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AutomotiveEffect" abstract="true" eSuperTypes="core.ecore#//AbstractEffect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for automotive effects"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemLevelEffect" abstract="true" eSuperTypes="#//AutomotiveEffect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Effect at the system level"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="SystemLevelEffect"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VehicleLevelEffect" abstract="true"
+      eSuperTypes="#//AutomotiveEffect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Effect at the vehicle level"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="VehicleLevelEffect"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ISO26262Library" eSuperTypes="core.ecore#//AbstractLibrary">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reusable library of ISO 26262 elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="ISO26262Library"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operationalConditions"
+        upperBound="-1" eType="#//OperationalCondition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hazardousEvents" upperBound="-1"
+        eType="#//HazardousEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accidentScenarios" upperBound="-1"
+        eType="#//AccidentScenario" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

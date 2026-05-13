@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  EVL re-validation of the Refinery-bridged FMEA XMI
+  ===================================================
+  Loads the XMI produced by run-refinery2xmi.xml and runs the existing
+  raaml-semantic-constraints.evl rules against it. Two-stage pipeline:
+  Refinery (structural skeleton) → bridge (XMI) → EVL (this file).
+
+  Default I/O:
+    xmi.file : ./generated/fmea_001.xmi          (output of run-refinery2xmi.xml)
+    evl.file : ../../../raaml-picto-studio/raaml-semantic-constraints.evl
+               (override with -Devl.file=... if your raaml-picto-studio
+                project is elsewhere or you copied the EVL alongside)
+
+  Usage (Runtime Eclipse with the RAAML metamodel plugin deployed):
+    1. Run run-refinery2xmi.xml first to produce the XMI.
+    2. Right-click this file → Run As → Ant Build…
+    3. JRE tab → "Run in the same JRE as the workspace".
+    4. (Optional) Properties tab → override `xmi.file` / `evl.file`.
+    5. Click Run.
+
+  failonerrors / failonwarnings are set false so the build *succeeds*
+  even when EVL reports violations — we want the full report visible
+  in the console, not a build halt at the first failure.
+-->
+<project name="evl-on-bridged" default="validate">
+
+    <!-- Load Epsilon ANT tasks from the runtime Eclipse's classpath -->
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"
+             onerror="report"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"
+             onerror="report"/>
+
+    <!-- Paths: `location=` resolves against this buildfile's basedir
+         and produces absolute paths regardless of Eclipse's launch CWD. -->
+    <property name="model.dir" location="../../model"/>
+    <property name="xmi.file"  location="generated/fmea_001.xmi"/>
+    <property name="evl.file"
+              location="../../../raaml-picto-studio/raaml-semantic-constraints.evl"/>
+
+    <!-- ALL bifurcated metamodel namespace URIs.
+         The EVL file (raaml-semantic-constraints.evl) has contexts for
+         FTA (Gate, FTATree, FTAElement), STPA (UndesiredControlAction,
+         ControlStructure), HARA (ASILAssignment, ASILDecompose),
+         GSN (GSN, Goal), and REQ (Requirement, ISO26262SafetyRequirementTemplate)
+         in addition to FMEA. EVL resolves *all* type references at parse
+         time, so every class named in any context must be reachable from
+         the registered metamodels even if no instances of that type exist
+         in the loaded XMI. -->
+    <property name="meta.uris"
+              value="http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/iso26262,http://edu.kit.sdq/dsis/metamodels/raaml/library,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://vitruv.tools/methodologisttemplate/raaml"/>
+
+    <target name="validate"
+            description="Run EVL constraints on the Refinery-bridged FMEA XMI">
+
+        <echo>================================================================</echo>
+        <echo>EVL re-validation of Refinery-bridged XMI</echo>
+        <echo>  XMI : ${xmi.file}</echo>
+        <echo>  EVL : ${evl.file}</echo>
+        <echo>================================================================</echo>
+
+        <!-- Fail fast with clear messages if either input is missing. -->
+        <available file="${xmi.file}" property="xmi.exists"/>
+        <fail unless="xmi.exists">
+XMI not found: ${xmi.file}
+
+Run run-refinery2xmi.xml first to generate it from a Refinery .refinery
+export, or override with -Dxmi.file=full/absolute/path.xmi.
+        </fail>
+
+        <available file="${evl.file}" property="evl.exists"/>
+        <fail unless="evl.exists">
+EVL constraint file not found: ${evl.file}
+
+Default expected at raaml-picto-studio/raaml-semantic-constraints.evl
+(three levels up + sibling project from this validation/refinery/
+folder). If your raaml-picto-studio project is somewhere else, override
+with -Devl.file=full/absolute/path.evl, or copy the EVL alongside this
+ANT and override with -Devl.file=raaml-semantic-constraints.evl.
+        </fail>
+
+        <!-- Register every bifurcated ecore so all class names referenced
+             by the EVL contexts resolve. Same set used by metamodel.egx. -->
+        <epsilon.emf.register file="${model.dir}/core.ecore"/>
+        <epsilon.emf.register file="${model.dir}/fmea.ecore"/>
+        <epsilon.emf.register file="${model.dir}/fta.ecore"/>
+        <epsilon.emf.register file="${model.dir}/gsn.ecore"/>
+        <epsilon.emf.register file="${model.dir}/hara.ecore"/>
+        <epsilon.emf.register file="${model.dir}/iso26262.ecore"/>
+        <epsilon.emf.register file="${model.dir}/library.ecore"/>
+        <epsilon.emf.register file="${model.dir}/req.ecore"/>
+        <epsilon.emf.register file="${model.dir}/stpa.ecore"/>
+        <epsilon.emf.register file="${model.dir}/raaml (2).ecore"/>
+
+        <!-- Load the bridged XMI as a read-only EMF model. -->
+        <epsilon.emf.loadModel name="M"
+                               modelfile="${xmi.file}"
+                               metamodeluri="${meta.uris}"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <!-- Run EVL. failonerrors=false so the build doesn't halt on
+             a violation; we want the full report visible in the console. -->
+        <epsilon.evl src="${evl.file}"
+                     failonerrors="false"
+                     failonwarnings="false">
+            <model ref="M"/>
+        </epsilon.evl>
+
+        <epsilon.disposeModels/>
+
+        <echo> </echo>
+        <echo>EVL re-validation complete. Three result categories to record:</echo>
+        <echo>  1. Constraints reported as violated   = real findings.</echo>
+        <echo>  2. Constraints that ran and passed    = cross-tool agreement.</echo>
+        <echo>  3. Constraints that passed vacuously  = expected on bridged</echo>
+        <echo>      XMI (attributes null due to Refinery partial-model</echo>
+        <echo>      semantics; EVL `self.X == null or ...` short-circuits).</echo>
+    </target>
+</project>

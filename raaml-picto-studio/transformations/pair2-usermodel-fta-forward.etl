@@ -93,16 +93,16 @@ operation resolveUmlElementById(xmiId : String) : Any {
 }
 
 operation getStereotypeBaseClass(stereoApp : Any) : Any {
-    var feature = stereoApp.eClass().getEStructuralFeature('base_Class');
-    if (feature.isDefined() and feature <> null) {
-        var v = stereoApp.eGet(feature);
-        if (v.isDefined() and v <> null) return v;
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
     }
     var anyAttrs = stereoApp.getAnyAttribute();
     if (anyAttrs.isDefined() and anyAttrs <> null) {
         for (entry in anyAttrs) {
-            var f = entry.getEStructuralFeature();
-            if (f.name == 'base_Class') {
+            if (entry.getEStructuralFeature().name.startsWith('base_')) {
                 return resolveUmlElementById(entry.getValue());
             }
         }

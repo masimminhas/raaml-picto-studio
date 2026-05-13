@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Refinery → fmea.ecore XMI bridge runner
+  ========================================
+  Reads a Refinery .refinery partial-model export (set by `input` property)
+  and emits the equivalent fmea.ecore XMI instance (set by `output` property)
+  by running validation/refinery/refinery2xmi.eol.
+
+  Usage (Runtime Eclipse with the RAAML metamodel plugin deployed):
+
+    1. In your development Eclipse: Run As → Eclipse Application
+    2. In the Runtime Eclipse: import the edu.kit.sdq.raaml project
+    3. Right-click this file → Run As → Ant Build…
+    4. JRE tab → "Run in the same JRE as the workspace"
+    5. (Optional) Properties tab → override `input` / `output` if needed
+    6. Click Run
+
+  Default I/O:
+    input  : ./generated/fmea_001.refinery       (relative to this file)
+    output : ./generated/fmea_001.xmi            (overwritten on each run)
+-->
+<project name="refinery2xmi" default="bridge">
+
+    <!-- Load Epsilon ANT tasks from the runtime Eclipse's classpath -->
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"
+             onerror="report"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"
+             onerror="report"/>
+
+    <!-- Paths. Using `location=` (not `value=`) resolves them against the
+         buildfile's basedir and makes them absolute — necessary because
+         Java's FileReader in the EOL would otherwise resolve relative paths
+         against the JVM's working directory, which differs from basedir
+         when launched from Eclipse. -->
+    <property name="model.dir" location="../../model"/>
+    <property name="input"     location="generated/fmea_001.refinery"/>
+    <property name="output"    location="generated/fmea_001.xmi"/>
+    <property name="eol.file"  location="refinery2xmi.eol"/>
+
+    <!-- Metamodel namespace URIs we need available for createInstance().
+         Add fta / hara / req here if you widen the validation scope. -->
+    <property name="meta.uris"
+              value="http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://vitruv.tools/methodologisttemplate/raaml"/>
+
+    <target name="bridge"
+            description="Convert a .refinery partial model into fmea.ecore XMI">
+
+        <echo>================================================================</echo>
+        <echo>Refinery → fmea.ecore XMI Bridge</echo>
+        <echo>  input : ${input}</echo>
+        <echo>  output: ${output}</echo>
+        <echo>================================================================</echo>
+
+        <!-- Fail fast with a clear message if the input doesn't exist. -->
+        <available file="${input}" property="input.exists"/>
+        <fail unless="input.exists">
+Input .refinery file not found: ${input}
+
+Export your model from the Refinery web IDE, save as fmea_001.refinery
+(or override the `input` property on this ANT run), and place it under
+validation/refinery/generated/.
+        </fail>
+
+        <!-- Make sure the output directory exists. -->
+        <dirname property="output.dir" file="${output}"/>
+        <mkdir dir="${output.dir}"/>
+
+        <!-- Register the ecores so the namespace URIs above resolve. -->
+        <epsilon.emf.register file="${model.dir}/core.ecore"/>
+        <epsilon.emf.register file="${model.dir}/fmea.ecore"/>
+        <epsilon.emf.register file="${model.dir}/raaml (2).ecore"/>
+
+        <!-- Writable, fresh output model. -->
+        <epsilon.emf.loadModel name="OUT"
+                               modelfile="${output}"
+                               metamodeluri="${meta.uris}"
+                               read="false"
+                               store="true"/>
+
+        <!-- Run the bridge. -->
+        <epsilon.eol src="${eol.file}">
+            <parameter name="INPUT_FILE" value="${input}"/>
+            <model ref="OUT"/>
+        </epsilon.eol>
+
+        <epsilon.disposeModels/>
+
+        <echo> </echo>
+        <echo>Bridge complete. Inspect ${output} and run validate-all.xml on it.</echo>
+    </target>
+</project>

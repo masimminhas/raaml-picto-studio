@@ -1,0 +1,11 @@
+<?nsuri picto?>
+<picto format="egx"
+       transformation="platform:/plugin/raaml-picto-studio/fta_tree.egx"
+       standalone="true">
+    <model type="EMF">
+        <parameter name="name" value="M"/>
+        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml"/>
+        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml/fta"/>
+        <parameter name="modelFile" value="raaml-picto-studio/transformations/samples/FTALibrary.raaml.xmi"/>
+    </model>
+</picto>

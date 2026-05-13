@@ -65,6 +65,26 @@ operation RAAML!FMEAItem isPlaceholder() : Boolean {
         or self.id.indexOf('__library-template-slot') > -1;
 }
 
+// Attach RAAML provenance annotation to a generated UML Class so the
+// class carries enough metadata for a profile-aware tool to re-apply
+// the corresponding stereotype without guessing.
+operation addRaamlProvenance(umlClass : Any,
+                             ecoreType : String,
+                             stereotype : String,
+                             profile : String,
+                             baseMetaclass : String,
+                             technique : String) {
+    var ann : new UML!EAnnotation;
+    ann.source = 'http://edu.kit.sdq/raaml/roundtrip-trace';
+    ann.details.put('ecoreType',      ecoreType);
+    ann.details.put('stereotype',     stereotype);
+    ann.details.put('profile',        profile);
+    ann.details.put('baseMetaclass',  baseMetaclass);
+    ann.details.put('technique',      technique);
+    ann.details.put('roundtripDate',  'forward->Ecore->backward->UML');
+    umlClass.eAnnotations.add(ann);
+}
+
 // Find the RPNCalculation owned by an FMEAItem (if any).
 operation RAAML!FMEAItem getRPNCalc() : Any {
     if (self.rpnCalculation.isUndefined() or self.rpnCalculation.isEmpty()) {
@@ -157,6 +177,9 @@ rule FMEAItemToUMLClass
         attr.defaultValue = lit;
         t.ownedAttribute.add(attr);
     }
+
+    // RAAML provenance annotation
+    addRaamlProvenance(t, 'FMEAItem', 'FMEAItem', 'FMEAProfile', 'Class', 'FMEA');
 }
 
 // ---------------------------------------------------------------------------

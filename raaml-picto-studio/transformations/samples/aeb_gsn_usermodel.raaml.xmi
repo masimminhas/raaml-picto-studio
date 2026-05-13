@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ASCII"?>
+<raaml:SafetyAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml" xmlns:raaml.gsn="http://edu.kit.sdq/dsis/metamodels/raaml/gsn" id="aeb_gsn_usermodel" name="aeb_gsn_usermodel" description="Safety analysis for aeb_gsn_usermodel">
+  <analyses xsi:type="raaml.gsn:GSN" id="aeb_gsn_usermodel_GSN" name="aeb_gsn_usermodel GSN" description="GSN safety case for system aeb_gsn_usermodel">
+    <contextualInformation xsi:type="raaml.gsn:Justification" id="J01-ResidualRiskAcceptable" name="J01-ResidualRiskAcceptable" description="User GSN Justification: J01-ResidualRiskAcceptable" contextId="J1"/>
+    <contextualInformation xsi:type="raaml.gsn:Context" id="C04-FMEAResultsSummary" name="C04-FMEAResultsSummary" description="User GSN Context: C04-FMEAResultsSummary" contextId="C2"/>
+    <contextualInformation xsi:type="raaml.gsn:Context" id="C02-ApplicableStandardsAndReguations" name="C02-ApplicableStandardsAndReguations" description="User GSN Context: C02-ApplicableStandardsAndReguations" contextId="C3"/>
+    <contextualInformation xsi:type="raaml.gsn:Context" id="C05-FTAResultsSummary" name="C05-FTAResultsSummary" description="User GSN Context: C05-FTAResultsSummary" contextId="C5"/>
+    <contextualInformation xsi:type="raaml.gsn:Context" id="C01-AEBSystemDefinition" name="C01-AEBSystemDefinition" description="User GSN Context: C01-AEBSystemDefinition" contextId="C6"/>
+    <contextualInformation xsi:type="raaml.gsn:Context" id="C03-HARAResultsSummary" name="C03-HARAResultsSummary" description="User GSN Context: C03-HARAResultsSummary" contextId="C8"/>
+    <gsnNodes xsi:type="raaml.gsn:Goal" id="G-01-AEBIsAcceptablySafe" name="G-01-AEBIsAcceptablySafe" description="User GSN Goal: G-01-AEBIsAcceptablySafe" nodeId="G4"/>
+    <gsnNodes xsi:type="raaml.gsn:Goal" id="G-02AllHazardsIdentifiedAndAssessed" name="G-02AllHazardsIdentifiedAndAssessed" description="User GSN Goal: G-02AllHazardsIdentifiedAndAssessed" nodeId="G7"/>
+  </analyses>
+</raaml:SafetyAnalysis>

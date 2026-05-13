@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fmea" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/fmea"
+    nsPrefix="fmea">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="FMEA elements for bottom-up failure mode analysis"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="FMEA" eSuperTypes="core.ecore#//Analysis">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Container for FMEA analysis"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="FMEA"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fmeaItems" upperBound="-1"
+        eType="#//FMEAItem" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RPNCalculation" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Risk Priority Number calculation"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="RPNCalculation"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RPN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Risk Priority Number (SEV * OCC * DET)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="SEV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Severity rating (1-10)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OCC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Occurrence rating (1-10)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DET" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Detection rating (1-10)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractFMEAItem" abstract="true" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for FMEA analysis items"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RPN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Aggregated RPN"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="failureMode" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass core.ecore#//AbstractFailureMode" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finalEffect" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass core.ecore#//AbstractEffect" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cause" lowerBound="1" upperBound="-1"
+        eType="ecore:EClass core.ecore#//AbstractCause" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FMEAItem" eSuperTypes="#//AbstractFMEAItem">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Concrete FMEA item with RPN calculations"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="FMEAItem"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rpnCalculation" upperBound="-1"
+        eType="#//RPNCalculation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LossOfFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Complete loss of intended function"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="LossOfFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DegradationOfFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reduced performance of function"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="DegradationOfFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntermittentFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Function occurs intermittently"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="IntermittentFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PartialFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Only part of the function is performed"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="PartialFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExceedingFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Function exceeds intended parameters"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ExceedingFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnintendedFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Function occurs when not intended"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="UnintendedFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DelayedFunction" eSuperTypes="core.ecore#//AbstractFailureMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Function occurs later than intended"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="DelayedFunction"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FMEALibrary" eSuperTypes="core.ecore#//AbstractLibrary">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reusable library of FMEA elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="FMEALibrary"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractFMEAItems" upperBound="-1"
+        eType="#//AbstractFMEAItem" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_SomLsD5QEfGuM4bB6wLj1A" name="aeb_gsn_usermodel">
+  <packagedElement xmi:type="uml:Class" xmi:id="_SooA4D5QEfGuM4bB6wLj1A" name="G-01-AEBIsAcceptablySafe">
+    <eAnnotations xmi:id="_Soon8D5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_SopPAD5QEfGuM4bB6wLj1A" key="ecoreType" value="Goal"/>
+      <details xmi:id="_SopPAT5QEfGuM4bB6wLj1A" key="stereotype" value="Goal"/>
+      <details xmi:id="_SopPAj5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_SopPAz5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_SopPBD5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_SopPBT5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_SopPBj5QEfGuM4bB6wLj1A" name="G-02AllHazardsIdentifiedAndAssessed">
+    <eAnnotations xmi:id="_SopPBz5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_SopPCD5QEfGuM4bB6wLj1A" key="ecoreType" value="Goal"/>
+      <details xmi:id="_SopPCT5QEfGuM4bB6wLj1A" key="stereotype" value="Goal"/>
+      <details xmi:id="_SopPCj5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_SopPCz5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_SopPDD5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_Sop2ED5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Sop2ET5QEfGuM4bB6wLj1A" name="J01-ResidualRiskAcceptable">
+    <eAnnotations xmi:id="_SoqdID5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_SoqdIT5QEfGuM4bB6wLj1A" key="ecoreType" value="Justification"/>
+      <details xmi:id="_SoqdIj5QEfGuM4bB6wLj1A" key="stereotype" value="Justification"/>
+      <details xmi:id="_SoqdIz5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_SoqdJD5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_SoqdJT5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_SoqdJj5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_SoqdJz5QEfGuM4bB6wLj1A" name="C04-FMEAResultsSummary">
+    <eAnnotations xmi:id="_SoqdKD5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_SoqdKT5QEfGuM4bB6wLj1A" key="ecoreType" value="Context"/>
+      <details xmi:id="_SoqdKj5QEfGuM4bB6wLj1A" key="stereotype" value="Context"/>
+      <details xmi:id="_SoqdKz5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_SoqdLD5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_SoqdLT5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_SoqdLj5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_SorEMD5QEfGuM4bB6wLj1A" name="C02-ApplicableStandardsAndReguations">
+    <eAnnotations xmi:id="_SorrQD5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_SorrQT5QEfGuM4bB6wLj1A" key="ecoreType" value="Context"/>
+      <details xmi:id="_SorrQj5QEfGuM4bB6wLj1A" key="stereotype" value="Context"/>
+      <details xmi:id="_SorrQz5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_SosSUD5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_SosSUT5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_SosSUj5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_SosSUz5QEfGuM4bB6wLj1A" name="C05-FTAResultsSummary">
+    <eAnnotations xmi:id="_Sos5YD5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_Sos5YT5QEfGuM4bB6wLj1A" key="ecoreType" value="Context"/>
+      <details xmi:id="_Sos5Yj5QEfGuM4bB6wLj1A" key="stereotype" value="Context"/>
+      <details xmi:id="_Sos5Yz5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_Sos5ZD5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_Sos5ZT5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_Sos5Zj5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Sos5Zz5QEfGuM4bB6wLj1A" name="C01-AEBSystemDefinition">
+    <eAnnotations xmi:id="_SouHgD5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_SouHgT5QEfGuM4bB6wLj1A" key="ecoreType" value="Context"/>
+      <details xmi:id="_SouukD5QEfGuM4bB6wLj1A" key="stereotype" value="Context"/>
+      <details xmi:id="_SouukT5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_Souukj5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_Souukz5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_SouulD5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_SovVoD5QEfGuM4bB6wLj1A" name="C03-HARAResultsSummary">
+    <eAnnotations xmi:id="_Sov8sD5QEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_Sov8sT5QEfGuM4bB6wLj1A" key="ecoreType" value="Context"/>
+      <details xmi:id="_Sov8sj5QEfGuM4bB6wLj1A" key="stereotype" value="Context"/>
+      <details xmi:id="_Sov8sz5QEfGuM4bB6wLj1A" key="profile" value="GSNProfile"/>
+      <details xmi:id="_Sov8tD5QEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_Sov8tT5QEfGuM4bB6wLj1A" key="technique" value="GSN"/>
+      <details xmi:id="_Sov8tj5QEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+</uml:Model>

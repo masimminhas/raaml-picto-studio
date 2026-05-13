@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="core" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/core"
+    nsPrefix="core">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Core elements shared across all safety analysis types"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Abstract base class for all named elements in RAAML"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="NamedElement"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Unique identifier for the element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Human-readable name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Detailed description of the element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Visibility modifier (public, private, protected)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Analysis" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for all safety analysis types"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//CoreSafetyElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Safety elements contained in this analysis"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractLibrary" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for reusable libraries of safety elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//CoreSafetyElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reusable safety elements in this library"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoreSafetyElement" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for all safety-related elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Situation" eSuperTypes="#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A state or condition in a system context"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Situation"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FailureMode" eSuperTypes="#//Situation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A manner in which a system or component can fail"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="FailureMode"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Hazard" eSuperTypes="#//Situation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A potential source of harm or damage"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Hazard"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Error" eSuperTypes="#//Situation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A deviation from correct behavior"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Error"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fault" eSuperTypes="#//Situation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An abnormal condition that can cause a failure"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Fault"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControllingMeasure" abstract="true"
+      eSuperTypes="#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for measures that control or mitigate risks"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="affects" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Description of what the measure affects"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Detection" eSuperTypes="#//ControllingMeasure">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Measure to detect failures or hazards"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Detection"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Recommendation" eSuperTypes="#//ControllingMeasure">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Suggested action to address risks"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Recommendation"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mitigation" eSuperTypes="#//ControllingMeasure">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Measure to reduce the impact of a hazard"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Mitigation"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prevention" eSuperTypes="#//ControllingMeasure">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Measure to prevent a hazard from occurring"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Prevention"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" abstract="true" eSuperTypes="#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A condition or mode of a system"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="State"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FailureState" eSuperTypes="#//State">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A state representing a system failure"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="State"/>
+      <details key="stereotype" value="FailureState"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectedRelationship" abstract="true"
+      eSuperTypes="#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for directed relationships between safety elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Dependency"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" upperBound="-1"
+        eType="#//CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Source elements of the relationship"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" upperBound="-1"
+        eType="#//CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Target elements of the relationship"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelevantTo" eSuperTypes="#//DirectedRelationship">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Indicates relevance relationship between elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Dependency"/>
+      <details key="stereotype" value="RelevantTo"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PresentIn" eSuperTypes="#//RelevantTo">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Indicates presence in a context"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Dependency"/>
+      <details key="stereotype" value="PresentIn"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Violates" eSuperTypes="#//DirectedRelationship">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Indicates a violation of constraints or requirements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Dependency"/>
+      <details key="stereotype" value="Violates"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true" eSuperTypes="#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A system component or element under analysis"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Item"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Internal components of the item"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryMembers" upperBound="-1"
+        eType="#//CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Elements at the boundary of the item"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleElementItem" eSuperTypes="#//Item">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An item that references a single element"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="SingleElementItem"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedElement" lowerBound="1"
+        eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The referenced item element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementGroup" eSuperTypes="#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A logical grouping of safety elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ElementGroup"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupCriterion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Criterion used to group elements"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderedMembers" upperBound="-1"
+        eType="#//CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Ordered list of group members"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementGroupBasedItem" eSuperTypes="#//Item #//ElementGroup">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An item composed of a group of elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ElementGroupBasedItem"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnySituation" abstract="true" eSuperTypes="#//Situation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Extended situation with causal relationships"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" upperBound="-1" eType="#//AnySituation"
+        eOpposite="#//AnySituation/to">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Situations that lead to this situation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" upperBound="-1" eType="#//AnySituation"
+        eOpposite="#//AnySituation/from">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Situations that result from this situation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Factor" abstract="true" eSuperTypes="#//AnySituation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A causal factor contributing to hazards or failures"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Factor"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractEvent" abstract="true" eSuperTypes="#//AnySituation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for events with likelihood"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="likelihood" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability or frequency of occurrence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DysfunctionalEvent" abstract="true"
+      eSuperTypes="#//AbstractEvent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event representing dysfunctional behavior"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toError" upperBound="-1"
+        eType="#//DysfunctionalEvent" eOpposite="#//DysfunctionalEvent/fromError">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Error events propagated to"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromError" upperBound="-1"
+        eType="#//DysfunctionalEvent" eOpposite="#//DysfunctionalEvent/toError">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Error events propagated from"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="error" upperBound="-1"
+        eType="#//DysfunctionalEvent" eOpposite="#//DysfunctionalEvent/failure">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Errors associated with this event"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="failure" upperBound="-1"
+        eType="#//DysfunctionalEvent" eOpposite="#//DysfunctionalEvent/error">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Failures associated with this event"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fault" upperBound="-1"
+        eType="#//AbstractCause" eOpposite="#//AbstractCause/error">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Causal faults for this event"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractEffect" abstract="true" eSuperTypes="#//DysfunctionalEvent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Effect with severity assessment"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="severity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Severity level of the effect"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UndesiredState" abstract="true" eSuperTypes="#//DysfunctionalEvent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A state that is undesirable from a safety perspective"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractFailureMode" abstract="true"
+      eSuperTypes="#//UndesiredState">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for failure modes with detectability"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="detectability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="How easily the failure mode can be detected"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractCause" abstract="true" eSuperTypes="#//AbstractEvent #//Factor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A root cause with occurrence probability"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Probability of occurrence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="error" upperBound="-1"
+        eType="#//DysfunctionalEvent" eOpposite="#//DysfunctionalEvent/fault">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Errors caused by this cause"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario" abstract="true" eSuperTypes="#//AnySituation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A sequence of events leading to a particular outcome"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Scenario"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioSteps" upperBound="-1"
+        eType="#//AnySituation" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Ordered steps in the scenario"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+        eType="#//AbstractEvent" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Events that trigger the scenario"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractRisk" abstract="true" eSuperTypes="#//Scenario">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Risk scenario with quantified risk score"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="riskScore" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Quantified risk score"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="harms" upperBound="-1"
+        eType="#//AbstractEffect" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Actual harmful effects"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

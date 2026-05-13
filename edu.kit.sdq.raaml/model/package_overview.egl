@@ -1,0 +1,153 @@
+[%
+// ── Aggregated overview across the bifurcated metamodel set ─────
+// `packages` and `loadFailures` are supplied by metamodel.egx
+// (which already resolved every sibling .ecore into the resource
+// set). Falling back to a local discovery keeps the template
+// usable when invoked stand-alone.
+
+if (packages.isUndefined() or packages.isEmpty()) {
+    packages = EPackage.all
+        .select(p | p.eSuperPackage.isUndefined())
+        .sortBy(p | p.name);
+}
+if (loadFailures.isUndefined()) {
+    loadFailures = Sequence {};
+}
+%]
+digraph overview {
+    graph [
+        rankdir=TB
+        fontname="Arial"
+        fontsize=12
+        bgcolor="white"
+        label="RAAML Metamodel — Aggregated Package Architecture"
+        labelloc=t
+        pad=0.5
+    ]
+    node [
+        fontname="Arial"
+        fontsize=10
+        shape=record
+        style="filled,rounded"
+        color="#2C7BB6"
+    ]
+    edge [
+        fontname="Arial"
+        fontsize=9
+        color="#555555"
+        style=dashed
+        arrowhead=open
+    ]
+
+[% if (loadFailures.notEmpty()) { %]
+    __LoadFailures [
+        shape=note
+        style="filled"
+        fillcolor="mistyrose"
+        color="#990000"
+        fontcolor="#990000"
+        label="Could not load: [%=loadFailures.concat(", ")%]\nDetail diagrams for these packages will be missing."
+    ]
+[% } %]
+
+[%
+// ── Package nodes ───────────────────────────────────────────────
+for (pkg in packages) {
+    var pkgClasses = pkg.eClassifiers
+        .select(c | c.isKindOf(EClass));
+    var abstractCount = pkgClasses
+        .select(c | c.abstract).size();
+    var concreteCount = pkgClasses.size() - abstractCount;
+    var fillColor = getPackageColor(pkg.name);
+    var role = getPackageRole(pkg.name);
+%]
+    [%=safeId(pkg.name)%] [
+        label="{ \<\<[%=role%]\>\> | [%=pkg.name%] | [%=pkgClasses.size()%] classes\n[%=concreteCount%] concrete / [%=abstractCount%] abstract }"
+        fillcolor="[%=fillColor%]"
+    ]
+[% } %]
+
+[%
+// ── Cross-package dependency edges ──────────────────────────────
+// pkgA -> pkgB whenever any classifier in pkgA inherits from or
+// references a classifier whose owning EPackage is pkgB.
+var drawnEdges = Set {};
+for (pkg in packages) {
+    for (cls in pkg.eClassifiers
+            .select(c | c.isKindOf(EClass))) {
+
+        // Inheritance dependencies
+        for (sup in cls.eSuperTypes) {
+            if (sup.isDefined() and sup.ePackage.isDefined()) {
+                var tPkg = sup.ePackage;
+                if (tPkg <> pkg
+                    and packages.includes(tPkg)
+                    and tPkg.name.isDefined()) {
+                    var key = pkg.name + "=>" + tPkg.name;
+                    if (not drawnEdges.includes(key)) {
+                        drawnEdges.add(key);
+%]
+    [%=safeId(pkg.name)%] -> [%=safeId(tPkg.name)%] [
+        color="#336699"
+        style=solid
+        arrowhead=empty
+        label="extends"
+        fontcolor="#336699"
+    ]
+[%                  }
+                }
+            }
+        }
+
+        // Reference dependencies
+        for (ref in cls.eReferences) {
+            if (ref.eType.isDefined()
+                and ref.eType.ePackage.isDefined()) {
+                var tPkg = ref.eType.ePackage;
+                if (tPkg <> pkg
+                    and packages.includes(tPkg)
+                    and tPkg.name.isDefined()) {
+                    var key = pkg.name + "->" + tPkg.name;
+                    if (not drawnEdges.includes(key)) {
+                        drawnEdges.add(key);
+%]
+    [%=safeId(pkg.name)%] -> [%=safeId(tPkg.name)%]
+[%                  }
+                }
+            }
+        }
+    }
+} %]
+}
+
+[%
+// Distinct fill colour per analysis package
+operation getPackageColor(pkgName : String) : String {
+    if (pkgName = "fmea")     { return "#FFE8E8"; }
+    if (pkgName = "fta")      { return "#E8FFE8"; }
+    if (pkgName = "hara")     { return "#E8E8FF"; }
+    if (pkgName = "iso26262") { return "#E8F0FF"; }
+    if (pkgName = "stpa")     { return "#FFF8E8"; }
+    if (pkgName = "gsn")      { return "#F8E8FF"; }
+    if (pkgName = "core")     { return "#E8F8FF"; }
+    if (pkgName = "req")      { return "#FFFFE8"; }
+    if (pkgName = "library")  { return "#F0F0F0"; }
+    if (pkgName = "raaml")    { return "#FFEFD5"; }
+    return "#F5F5F5";
+}
+
+// Stereotype label shown on each node
+operation getPackageRole(pkgName : String) : String {
+    if (pkgName = "core")    { return "core"; }
+    if (pkgName = "raaml")   { return "root"; }
+    if (pkgName = "library") { return "library"; }
+    if (pkgName = "req")     { return "requirements"; }
+    return "analysis";
+}
+
+// Sanitise package names so they're valid Graphviz node IDs
+// (handles e.g. "raaml" vs "raaml (2)" if any spaces sneak in).
+operation safeId(name : String) : String {
+    return name.replace(" ", "_").replace("(", "_").replace(")", "_");
+}
+%]

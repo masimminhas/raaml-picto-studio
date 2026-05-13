@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ISO26262Profile.RequirementManagement="http:///ISO26262Profile/RequirementManagement.ecore" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///ISO26262Profile/RequirementManagement.ecore ISO26262Profile.profile.uml#_ZFRqc6WnEe-BAqrHrfxnNQ">
+  <uml:Model xmi:id="_5s0YsD5REfGI6P8sCgLXzg" name="aeb_requirements_usermodel">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_5wOSAD5REfGI6P8sCgLXzg">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="__XKsYD5REfGI6P8sCgLXzg" name="RequirementsPackage">
+      <packagedElement xmi:type="uml:Class" xmi:id="_FmU9UD5SEfGI6P8sCgLXzg" name="AEBISO26262Traceability">
+        <nestedClassifier xmi:type="uml:Class" xmi:id="_NcGmwD5SEfGI6P8sCgLXzg" name="SG-01PreventRearEndCollision">
+          <nestedClassifier xmi:type="uml:Class" xmi:id="_l_XhMD5SEfGI6P8sCgLXzg" name="FSR-01.01-RadarForwardDetectionRangeAndResolution">
+            <nestedClassifier xmi:type="uml:Class" xmi:id="_xYEe0D5SEfGI6P8sCgLXzg" name="TSR-02PMHFTargetSpecification">
+              <nestedClassifier xmi:type="uml:Class" xmi:id="_5usykD5SEfGI6P8sCgLXzg" name="HSR-01DualChannelSensorArchitecture"/>
+              <nestedClassifier xmi:type="uml:Class" xmi:id="_G9_eYD5TEfGI6P8sCgLXzg" name="HSR2:RadarComponentFailureRate"/>
+            </nestedClassifier>
+          </nestedClassifier>
+        </nestedClassifier>
+        <nestedClassifier xmi:type="uml:Class" xmi:id="_ZhkjwD5SEfGI6P8sCgLXzg" name="SG-02PreventUnintendedEmergencyBraking"/>
+      </packagedElement>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_EqdyAD5SEfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EqeZED5SEfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="RAAMLCoreProfile.profile.uml#_szHs0KWyEe-BAqrHrfxnNQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="RAAMLCoreProfile.profile.uml#_CFCnkHmbEe-_3MKC7IFIVQ"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_EqfAID5SEfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EqfAIT5SEfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="RAAMLGeneralProfile.profile.uml#_egPvYABPEfCn38LPCSw6MQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="RAAMLGeneralProfile.profile.uml#_rWmcEJqcEe-37_ge53UNtQ"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_EqfnMD5SEfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EqfnMT5SEfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="ISO26262Profile.profile.uml#_ZFRqMKWnEe-BAqrHrfxnNQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="ISO26262Profile.profile.uml#_MacyIJz7Ee-fxLw8sjxBPg"/>
+      </profileApplication>
+    </packagedElement>
+  </uml:Model>
+  <ISO26262Profile.RequirementManagement:SafetyGoal xmi:id="_VFUa4D5SEfGI6P8sCgLXzg" base_Class="_NcGmwD5SEfGI6P8sCgLXzg" base_NamedElement="_NcGmwD5SEfGI6P8sCgLXzg" base_Block_Block_Class="_NcGmwD5SEfGI6P8sCgLXzg" base_AbstractRequirement_NamedElement="_NcGmwD5SEfGI6P8sCgLXzg"/>
+  <ISO26262Profile.RequirementManagement:SafetyGoal xmi:id="_ffRRQD5SEfGI6P8sCgLXzg" base_Class="_ZhkjwD5SEfGI6P8sCgLXzg" base_NamedElement="_ZhkjwD5SEfGI6P8sCgLXzg" base_Block_Block_Class="_ZhkjwD5SEfGI6P8sCgLXzg" base_AbstractRequirement_NamedElement="_ZhkjwD5SEfGI6P8sCgLXzg"/>
+  <ISO26262Profile.RequirementManagement:FunctionalSafetyRequirement xmi:id="_v8ClsD5SEfGI6P8sCgLXzg" base_Class="_l_XhMD5SEfGI6P8sCgLXzg" base_NamedElement="_l_XhMD5SEfGI6P8sCgLXzg" base_Block_Block_Class="_l_XhMD5SEfGI6P8sCgLXzg" base_AbstractRequirement_NamedElement="_l_XhMD5SEfGI6P8sCgLXzg"/>
+  <ISO26262Profile.RequirementManagement:TechnicalSafetyRequirement xmi:id="_2-16ED5SEfGI6P8sCgLXzg" base_Class="_xYEe0D5SEfGI6P8sCgLXzg" base_NamedElement="_xYEe0D5SEfGI6P8sCgLXzg" base_Block_Block_Class="_xYEe0D5SEfGI6P8sCgLXzg" base_AbstractRequirement_NamedElement="_xYEe0D5SEfGI6P8sCgLXzg"/>
+  <ISO26262Profile.RequirementManagement:HardwareSafetyRequirement xmi:id="_GQYKcD5TEfGI6P8sCgLXzg" base_Class="_5usykD5SEfGI6P8sCgLXzg" base_NamedElement="_5usykD5SEfGI6P8sCgLXzg" base_Block_Block_Class="_5usykD5SEfGI6P8sCgLXzg" base_AbstractRequirement_NamedElement="_5usykD5SEfGI6P8sCgLXzg"/>
+  <ISO26262Profile.RequirementManagement:HardwareSafetyRequirement xmi:id="_M6FCUD5TEfGI6P8sCgLXzg" base_Class="_G9_eYD5TEfGI6P8sCgLXzg" base_NamedElement="_G9_eYD5TEfGI6P8sCgLXzg" base_Block_Block_Class="_G9_eYD5TEfGI6P8sCgLXzg" base_AbstractRequirement_NamedElement="_G9_eYD5TEfGI6P8sCgLXzg"/>
+</xmi:XMI>

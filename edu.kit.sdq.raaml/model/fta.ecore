@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fta" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/fta" nsPrefix="fta">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Fault Tree Analysis elements for top-down deductive failure analysis"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="FTA" eSuperTypes="core.ecore#//Analysis">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Container for Fault Tree Analysis"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="FTA"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gates" upperBound="-1"
+        eType="#//Gate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trees" upperBound="-1"
+        eType="#//FTATree" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FTAElement" abstract="true" eSuperTypes="core.ecore#//DysfunctionalEvent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for FTA elements with probability"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Failure probability"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceGate" eType="#//Gate"
+        eOpposite="#//Gate/sourceEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" abstract="true" eSuperTypes="#//FTAElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for all FTA events"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetGate" eType="#//Gate"
+        eOpposite="#//Gate/targetEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inhibitGate" upperBound="-1"
+        eType="#//INHIBIT" eOpposite="#//INHIBIT/condition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Leaf event in the fault tree"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="BasicEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntermediateEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event derived from other events through a gate"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="IntermediateEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TopEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Root undesired event in the fault tree"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="TopEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event that depends on specific conditions"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ConditionalEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DormantEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event that exists but is not active"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="DormantEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UndevelopedEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event not further analyzed"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="UndevelopedEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HouseEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event expected to occur"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="HouseEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ZeroEvent" eSuperTypes="#//Event">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Event that cannot occur"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ZeroEvent"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gate" abstract="true" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Logical gate combining input events"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEvent" upperBound="-1"
+        eType="#//FTAElement" containment="true" eOpposite="#//FTAElement/sourceGate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetEvent" lowerBound="1"
+        eType="#//Event" eOpposite="#//Event/targetGate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AND" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Outputs true if all inputs are true"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="AND"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OR" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Outputs true if any input is true"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="OR"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NOT" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Logical negation"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="NOT"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XOR" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Exclusive OR - true if exactly one input is true"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="XOR"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SEQ" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Priority AND - inputs must occur in sequence"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="SEQ"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="INHIBIT" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Gate with conditional input"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="INHIBIT"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" upperBound="-1"
+        eType="#//Event" eOpposite="#//Event/inhibitGate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAJORITY_VOTE" eSuperTypes="#//Gate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="K-out-of-N voting gate"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="MAJORITY_VOTE"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Threshold m in m-out-of-n voting"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FTATree" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Complete fault tree structure"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="FTATree"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="topEvent" lowerBound="1"
+        eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gates" upperBound="-1"
+        eType="#//Gate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FTALibrary" eSuperTypes="core.ecore#//AbstractLibrary">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reusable library of FTA elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="FTALibrary"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ftaElements" upperBound="-1"
+        eType="#//FTAElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gates" upperBound="-1"
+        eType="#//Gate" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII"?>
+<raaml:SafetyAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml" xmlns:raaml.hara="http://edu.kit.sdq/dsis/metamodels/raaml/hara" id="uermodel_hara" name="uermodel_hara" description="Safety analysis for uermodel_hara">
+  <analyses xsi:type="raaml.hara:ISO26262" id="uermodel_hara_HARA" name="uermodel_hara HARA" description="ISO 26262 HARA analysis for system uermodel_hara">
+    <malfunctioningBehaviors id="MB_003_DegradedBrakingPerformance" name="MB_003_DegradedBrakingPerformance" description="User HARA malfunctioning behaviour: MB_003_DegradedBrakingPerformance"/>
+    <malfunctioningBehaviors id="MB_001_LossOfBrakingFunction" name="MB_001_LossOfBrakingFunction" description="User HARA malfunctioning behaviour: MB_001_LossOfBrakingFunction"/>
+    <malfunctioningBehaviors id="MB_004_DelayedBrakingActivation" name="MB_004_DelayedBrakingActivation" description="User HARA malfunctioning behaviour: MB_004_DelayedBrakingActivation"/>
+    <malfunctioningBehaviors id="MB_005_ErroneousObjectClassification" name="MB_005_ErroneousObjectClassification" description="User HARA malfunctioning behaviour: MB_005_ErroneousObjectClassification"/>
+    <malfunctioningBehaviors id="MB_002_UnintendedBrakingActivation" name="MB_002_UnintendedBrakingActivation" description="User HARA malfunctioning behaviour: MB_002_UnintendedBrakingActivation"/>
+    <operationalSituations id="OS_01_HighwayDriving" name="OS_01_HighwayDriving" description="User HARA operational situation: OS_01_HighwayDriving"/>
+    <operationalSituations id="OS_05_LowSpeedParkingManoeuvre" name="OS_05_LowSpeedParkingManoeuvre" description="User HARA operational situation: OS_05_LowSpeedParkingManoeuvre"/>
+    <operationalSituations id="OS_02_UrbanDriving" name="OS_02_UrbanDriving" description="User HARA operational situation: OS_02_UrbanDriving"/>
+    <operationalSituations id="OS_06_AdverseWeatherRainorFog" name="OS_06_AdverseWeatherRainorFog" description="User HARA operational situation: OS_06_AdverseWeatherRainorFog"/>
+    <operationalSituations id="OS_04_PedestrianCrossingNight" name="OS_04_PedestrianCrossingNight" description="User HARA operational situation: OS_04_PedestrianCrossingNight"/>
+    <operationalSituations id="OS_03_PedestrianCrossingDay" name="OS_03_PedestrianCrossingDay" description="User HARA operational situation: OS_03_PedestrianCrossingDay"/>
+    <asilAssignments id="ASIL_HE_001" name="ASIL_HE_001" description="User HARA ASIL assignment: ASIL_HE_001" ASIL="QM"/>
+  </analyses>
+</raaml:SafetyAnalysis>

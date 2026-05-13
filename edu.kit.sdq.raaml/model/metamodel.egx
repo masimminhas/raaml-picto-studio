@@ -1,26 +1,111 @@
 pre {
     var emfTool : new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
-    emfTool.eCoreUtil.resolveAll(M.resource.resourceSet);
+    var rs = M.resource.resourceSet;
 
-    var rootPkg = EPackage.all
-        .selectOne(p | p.name = "raaml");
+    // The new metamodel set is split across sibling .ecore files.
+    // Picto only loads the file the driver is anchored to, so we
+    // explicitly pull in every sibling here. resolveAll() then
+    // wires up the cross-resource references.
+    var siblingEcores = Sequence {
+        "core.ecore",
+        "fmea.ecore",
+        "fta.ecore",
+        "gsn.ecore",
+        "hara.ecore",
+        "iso26262.ecore",
+        "library.ecore",
+        "req.ecore",
+        "stpa.ecore",
+        "raaml (2).ecore"
+    };
 
-    var packages : Sequence;
-    if (rootPkg.isDefined()) {
-        packages = rootPkg.eSubpackages.sortBy(p | p.name);
-    } else {
-        packages = Sequence {};
+    var baseUri = M.resource.uri.trimSegments(1);
+    var loadFailures : Sequence;
+    for (file in siblingEcores) {
+        // Encode spaces so URIs like "raaml (2).ecore" resolve.
+        var encoded = file.replace(" ", "%20");
+        var siblingUri = baseUri.appendSegment(encoded);
+        var existing = rs.getResource(siblingUri, false);
+        if (existing.isUndefined()) {
+            var loaded = rs.getResource(siblingUri, true);
+            if (loaded.isUndefined() or loaded.contents.isEmpty()) {
+                loadFailures.add(file);
+            }
+        }
     }
+    emfTool.eCoreUtil.resolveAll(rs);
 
-    var classes = EClass.all.sortBy(c | c.name);
+    // Walk the whole resource set rather than EPackage.all — the
+    // EmfModel may only report packages it was initialised with,
+    // which would silently drop the analyses we just loaded.
+    var packages : Sequence;
+    for (res in rs.resources) {
+        for (top in res.contents) {
+            if (top.isKindOf(EPackage)
+                and top.eSuperPackage.isUndefined()) {
+                packages.add(top);
+            }
+        }
+    }
+    packages = packages.sortBy(p | p.name);
+
+    // Collect every EClass reachable from those packages so the
+    // legacy "Classes" tab also covers the bifurcated metamodels.
+    var classes : Sequence;
+    for (pkg in packages) {
+        for (cls in pkg.eClassifiers
+                .select(c | c.isKindOf(EClass))) {
+            classes.add(cls);
+        }
+        // Defensive: include any nested EPackages too.
+        for (sub in pkg.eAllContents
+                .select(e | e.isKindOf(EClass))) {
+            if (not classes.includes(sub)) { classes.add(sub); }
+        }
+    }
+    classes = classes.sortBy(c | c.name);
 }
 
-// ── Rule 1: All classes overview ─────────────────────────────
+// ── Rule A: Aggregated package overview ──────────────────────
+rule AggregatedOverview {
+
+    parameters : Map {
+        "packages"     = packages,
+        "loadFailures" = loadFailures,
+        "format"       = "graphviz-dot",
+        "path"         = List {"RAAML", "Overview"},
+        "icon"         = "diagram-ff0000"
+    }
+
+    template : "package_overview.egl"
+}
+
+// ── Rule B: One detail diagram per analysis package ──────────
+rule PackageDetail
+    transform pkg : EPackage
+    in : packages {
+
+    parameters : Map {
+        "pkg"      = pkg,
+        "packages" = packages,
+        "format"   = "graphviz-dot",
+        "path"     = List {
+            "RAAML",
+            "Packages",
+            pkg.name
+        },
+        "icon"     = "diagram-fffbd7"
+    }
+
+    template : "package_detail.egl"
+}
+
+// ── Rule 1: All classes overview (legacy) ────────────────────
 rule ClassDiagram {
 
     parameters : Map {
         "mainClassName" = "",
-        "classNames"    = EClass.all.name,
+        "classNames"    = classes.name,
         "format"        = "graphviz-dot",
         "path"          = List {"RAAML", "All Classes"},
         "icon"          = "diagram-ff0000",
@@ -42,7 +127,7 @@ rule ClassDiagram {
     template : "classdiagram.egl"
 }
 
-// ── Rule 2: One diagram per subpackage ───────────────────────
+// ── Rule 2: Classdiagram per package (legacy) ────────────────
 rule PackageDiagram
     transform pkg : EPackage
     in : packages {
@@ -54,7 +139,7 @@ rule PackageDiagram
         "format"        = "graphviz-dot",
         "path"          = List {
             "RAAML",
-            "Packages",
+            "Class diagrams",
             pkg.name
         },
         "icon"  = "diagram-fffbd7",
@@ -75,7 +160,7 @@ rule PackageDiagram
     template : "classdiagram.egl"
 }
 
-// ── Rule 3: One diagram per class ────────────────────────────
+// ── Rule 3: One diagram per class (legacy) ───────────────────
 rule EClass2ClassDiagram
     transform c : EClass
     in : classes {

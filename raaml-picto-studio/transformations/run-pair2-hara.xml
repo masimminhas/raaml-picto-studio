@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="run-forward" basedir=".">
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+    <property name="raaml.ecore"
+              location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="user.uml.source"
+              location="${basedir}/samples/aeb_hara_usermodel.uml"/>
+    <property name="ecore.target"
+              location="${basedir}/samples/aeb_hara_usermodel.raaml.xmi"/>
+
+    <target name="run-forward">
+        <echo>Pair 2 user-model HARA forward transformation</echo>
+        <echo>  Source (UML): ${user.uml.source}</echo>
+        <echo>  Target (XMI): ${ecore.target}</echo>
+        <available file="${user.uml.source}" property="src.exists"/>
+        <fail unless="src.exists">User HARA UML file not found: ${user.uml.source}</fail>
+
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${user.uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true" store="false" expand="true"/>
+        <epsilon.emf.loadModel name="RAAML"
+                               modelfile="${ecore.target}"
+                               metamodeluri="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://edu.kit.sdq/dsis/metamodels/raaml/fta,http://edu.kit.sdq/dsis/metamodels/raaml/hara,http://edu.kit.sdq/dsis/metamodels/raaml/stpa,http://edu.kit.sdq/dsis/metamodels/raaml/gsn,http://edu.kit.sdq/dsis/metamodels/raaml/req,http://edu.kit.sdq/dsis/metamodels/raaml/library"
+                               read="false" store="true" expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair2-usermodel-hara-forward.etl">
+            <model ref="UML"/>
+            <model ref="RAAML"/>
+        </epsilon.etl>
+        <epsilon.disposeModels/>
+        <echo>Done. Inspect: ${ecore.target}</echo>
+    </target>
+</project>

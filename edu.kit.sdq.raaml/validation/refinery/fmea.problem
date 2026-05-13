@@ -1,0 +1,192 @@
+// =============================================================================
+// Refinery encoding — FMEA validation pilot (structural-only)
+//
+// Sources:
+//   model/core.ecore                        (NamedElement, Analysis, CoreSafetyElement,
+//                                            Situation/AnySituation/Factor,
+//                                            AbstractEvent / DysfunctionalEvent,
+//                                            AbstractCause / AbstractEffect / AbstractFailureMode,
+//                                            UndesiredState)
+//   model/fmea.ecore                        (FMEA, FMEAItem, AbstractFMEAItem,
+//                                            RPNCalculation, FMEALibrary,
+//                                            seven concrete failure-mode subclasses)
+//   raaml-semantic-constraints.evl §1       (referenced for the EVL→Refinery split)
+//
+// Methodology — tool split (v2, with synthesised numeric attributes):
+//   - Refinery (this file): structural axioms, multiplicities, containment,
+//     inheritance, AND integer attribute synthesis (SEV / OCC / DET / RPN
+//     etc. populated within reasonable bounds for AIAG-FMEA-4).
+//   - EVL (raaml-semantic-constraints.evl): attribute-value relationships
+//     that need free-form arithmetic — specifically RPN = SEV · OCC · DET
+//     (non-linear in three unknowns, undecidable in general for logical
+//     solvers) and FMEAItem.RPN ≡ rpnCalculation.first().RPN. EVL evaluates
+//     these on the populated values.
+//
+// The split point is now: Refinery handles structure + bounded numeric
+// generation; EVL handles non-linear / cross-attribute relationships.
+// Range constraints (1..10) are deliberately not encoded as Refinery
+// `error` predicates because the v0.3.x DSL surface syntax for
+// attribute-value comparison in error bodies wasn't stable in our
+// iteration (parser rejected `r.SEV < 1`). Range checking stays in EVL
+// for now, where it's a one-line `check`.
+// =============================================================================
+
+
+// =============================================================================
+// 1. Core hierarchy (FMEA-relevant subset of core.ecore)
+// =============================================================================
+
+abstract class NamedElement.
+
+abstract class CoreSafetyElement extends NamedElement.
+
+abstract class Analysis extends NamedElement.
+
+abstract class Situation extends CoreSafetyElement.
+
+abstract class AnySituation extends Situation {
+    AnySituation[] from opposite to
+    AnySituation[] to opposite from
+}
+
+abstract class Factor extends AnySituation.
+
+// AbstractEvent.likelihood, AbstractEffect.severity,
+// AbstractFailureMode.detectability, AbstractCause.occurrence are EDouble
+// in core.ecore. Refinery synthesises integers; the bridge widens them
+// to EDouble when calling eSet on the XMI side.
+//
+// VALUE-COMMITMENT EXPERIMENT (v3): plain `int X` causes Refinery to
+// emit `?X(node).` partial-model unknowns. Adding multiplicity `[1]`
+// to the declaration *should* force the solver to commit a concrete
+// value (mirrors how `contains FMEAItem[1..*]` forces non-empty
+// containment). If the parser rejects `int[1]`, fallbacks to try are
+// listed in README §3 — start with `int X[1]`, then `must int X`,
+// then add a closure constraint as a separate `error` predicate.
+abstract class AbstractEvent extends AnySituation {
+    int likelihood
+}
+
+abstract class DysfunctionalEvent extends AbstractEvent.
+abstract class UndesiredState extends DysfunctionalEvent.
+
+// NOTE: core.ecore declares
+//        AbstractCause extends AbstractEvent, Factor
+// (multiple inheritance). Refinery is single-inheritance; we keep
+// AbstractEvent as the base and document the gap in README §3.
+abstract class AbstractCause extends AbstractEvent {
+    int occurrence
+}
+
+abstract class AbstractEffect extends DysfunctionalEvent {
+    int severity
+}
+
+abstract class AbstractFailureMode extends UndesiredState {
+    int detectability
+}
+
+// Pilot-scope placeholder subclasses. In the full RAAML set, concrete
+// causes / effects live in fta.ecore and hara.ecore (e.g. BasicEvent,
+// VehicleLevelEffect). For an FMEA-only pilot we declare generic ones
+// so Refinery can populate AbstractFMEAItem.cause / .finalEffect.
+class FmeaCause  extends AbstractCause.
+class FmeaEffect extends AbstractEffect.
+
+
+// =============================================================================
+// 2. FMEA package (fmea.ecore)
+// =============================================================================
+
+class FMEA extends Analysis {
+    contains FMEAItem[1..*] fmeaItems
+}
+
+class FMEALibrary extends NamedElement {
+    contains AbstractFMEAItem[] abstractFMEAItems
+}
+
+abstract class AbstractFMEAItem extends CoreSafetyElement {
+    int RPN
+    contains AbstractFailureMode[1..*] failureMode
+    contains AbstractEffect[1..*]      finalEffect
+    contains AbstractCause[1..*]       cause
+}
+
+// rpnCalculation declared as [0..1] — the EVL rule
+// FMEAItemRPNConsistency uses .first(), implicitly assuming singleton.
+// Surfacing that assumption as a structural cardinality.
+class FMEAItem extends AbstractFMEAItem {
+    contains RPNCalculation[0..1] rpnCalculation
+}
+
+// SEV / OCC / DET are AIAG-FMEA-4 ratings in [1, 10]; RPN = SEV·OCC·DET
+// is in [1, 1000] but we let it range freely here so EVL's
+// `RPNMustBeProduct` rule is the actual oracle for the multiplicative
+// relationship. If the v0.3.x DSL accepts bounded-int syntax such as
+// `int[1..10] SEV`, swap the declarations below to that form to push
+// the range checks back into Refinery; otherwise EVL's `SEVInRange`
+// etc. catch out-of-range values.
+class RPNCalculation extends CoreSafetyElement {
+    int SEV
+    int OCC
+    int DET
+    int RPN
+}
+
+// Concrete failure-mode subclasses (fmea.ecore §LossOfFunction…DelayedFunction).
+class LossOfFunction        extends AbstractFailureMode.
+class DegradationOfFunction extends AbstractFailureMode.
+class IntermittentFunction  extends AbstractFailureMode.
+class PartialFunction       extends AbstractFailureMode.
+class ExceedingFunction     extends AbstractFailureMode.
+class UnintendedFunction    extends AbstractFailureMode.
+class DelayedFunction       extends AbstractFailureMode.
+
+
+// =============================================================================
+// 3. Range constraints — force attribute value commitment
+// =============================================================================
+// What we learned in iteration:
+//   - Multiplicity `int[1] X` is rejected: "Multiplicity declaration not
+//     allowed for attributes."
+//   - Attributes are arity-1 *functions* in predicate bodies: `SEV(r)`
+//     returns the int value. `SEV(r, v)` (binary-relation form) errors
+//     with "Expected SEV to have arity 2, got arity 1 instead."
+//   - `exists v: int | …` quantifier syntax is rejected.
+//   - `RPN` is ambiguous because it's declared on both AbstractFMEAItem
+//     and RPNCalculation. Must qualify via `ClassName::attrName(obj)`.
+//
+// The remaining route to value commitment is range constraints in
+// `error` predicate bodies, comparing `Attr(obj)` directly with int
+// literals. To satisfy a range error like `SEV(r) < 1 || SEV(r) > 10`
+// being an error, the solver should commit to a value in [1, 10].
+// (If unknowns are treated as "vacuously satisfies the absence of
+// error", this won't force commitment and we'll see `?` markers again
+// — that itself is a v0.3.x partial-logic finding worth recording.)
+
+error sevOutOfRange(RPNCalculation r) <-> SEV(r) < 1 || SEV(r) > 10.
+error occOutOfRange(RPNCalculation r) <-> OCC(r) < 1 || OCC(r) > 10.
+error detOutOfRange(RPNCalculation r) <-> DET(r) < 1 || DET(r) > 10.
+
+// RPN must be qualified: declared on both AbstractFMEAItem and
+// RPNCalculation. AIAG-FMEA-4 RPN range is [1, 1000].
+error rpnOutOfRangeOnCalc(RPNCalculation r) <->
+    RPNCalculation::RPN(r) < 1 || RPNCalculation::RPN(r) > 1000.
+error rpnOutOfRangeOnItem(AbstractFMEAItem i) <->
+    AbstractFMEAItem::RPN(i) < 1 || AbstractFMEAItem::RPN(i) > 1000.
+
+
+// =============================================================================
+// 4. Generation scope
+// =============================================================================
+// Pilot sizing: small enough that the solver completes quickly, large enough
+// that all seven failure-mode subclasses can be exercised across runs.
+
+scope FMEA = 1,
+      FMEAItem = 2..4,
+      RPNCalculation = 1..4,
+      AbstractFailureMode = 2..6,
+      AbstractCause = 2..6,
+      AbstractEffect = 2..6,
+      FMEALibrary = 0..1.

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_eu4ZUD5WEfGuM4bB6wLj1A" name="aeb_requirements_usermodel">
+  <packagedElement xmi:type="uml:Class" xmi:id="_eu5ncD5WEfGuM4bB6wLj1A" name="SG-01PreventRearEndCollision">
+    <eAnnotations xmi:id="_eu6OgD5WEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_eu6OgT5WEfGuM4bB6wLj1A" key="ecoreType" value="SafetyGoal"/>
+      <details xmi:id="_eu6Ogj5WEfGuM4bB6wLj1A" key="stereotype" value="SafetyGoal"/>
+      <details xmi:id="_eu6Ogz5WEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_eu6OhD5WEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_eu6OhT5WEfGuM4bB6wLj1A" key="technique" value="Requirements"/>
+      <details xmi:id="_eu61kD5WEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_eu7coD5WEfGuM4bB6wLj1A" name="SG-02PreventUnintendedEmergencyBraking">
+    <eAnnotations xmi:id="_eu8DsD5WEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_eu8DsT5WEfGuM4bB6wLj1A" key="ecoreType" value="SafetyGoal"/>
+      <details xmi:id="_eu8qwD5WEfGuM4bB6wLj1A" key="stereotype" value="SafetyGoal"/>
+      <details xmi:id="_eu8qwT5WEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_eu8qwj5WEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_eu8qwz5WEfGuM4bB6wLj1A" key="technique" value="Requirements"/>
+      <details xmi:id="_eu8qxD5WEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+</uml:Model>

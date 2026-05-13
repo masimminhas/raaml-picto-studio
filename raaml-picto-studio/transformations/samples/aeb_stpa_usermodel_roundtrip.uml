@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_S7nfEEMWEfG_oLYgkdyRLg" name="aeb_stpa_usermodel">
+  <packagedElement xmi:type="uml:Class" xmi:id="_S7wpAEMWEfG_oLYgkdyRLg" name="AEBControlStructure">
+    <eAnnotations xmi:id="_S72IkEMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S73WsEMWEfG_oLYgkdyRLg" key="ecoreType" value="ControlStructure"/>
+      <details xmi:id="_S73WsUMWEfG_oLYgkdyRLg" key="stereotype" value="ControlStructure"/>
+      <details xmi:id="_S73WskMWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S73Ws0MWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S73WtEMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S73WtUMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S73WtkMWEfG_oLYgkdyRLg" name="AEB ECU CONTROLLER">
+    <eAnnotations xmi:id="_S739wEMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S739wUMWEfG_oLYgkdyRLg" key="ecoreType" value="Controller"/>
+      <details xmi:id="_S739wkMWEfG_oLYgkdyRLg" key="stereotype" value="Controller"/>
+      <details xmi:id="_S739w0MWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S739xEMWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S74k0EMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S74k0UMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S74k0kMWEfG_oLYgkdyRLg" name="Apply Emergency Brake">
+    <eAnnotations xmi:id="_S75L4EMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S75y8EMWEfG_oLYgkdyRLg" key="ecoreType" value="ControlAction"/>
+      <details xmi:id="_S75y8UMWEfG_oLYgkdyRLg" key="stereotype" value="ControlAction"/>
+      <details xmi:id="_S75y8kMWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S75y80MWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S75y9EMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S75y9UMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S76aAEMWEfG_oLYgkdyRLg" name="Release Brake Command">
+    <eAnnotations xmi:id="_S77BEEMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S77BEUMWEfG_oLYgkdyRLg" key="ecoreType" value="ControlAction"/>
+      <details xmi:id="_S77BEkMWEfG_oLYgkdyRLg" key="stereotype" value="ControlAction"/>
+      <details xmi:id="_S77BE0MWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S77oIEMWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S77oIUMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S77oIkMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S77oI0MWEfG_oLYgkdyRLg" name="Issue Driver Warning">
+    <eAnnotations xmi:id="_S78PMEMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S782QEMWEfG_oLYgkdyRLg" key="ecoreType" value="ControlAction"/>
+      <details xmi:id="_S782QUMWEfG_oLYgkdyRLg" key="stereotype" value="ControlAction"/>
+      <details xmi:id="_S782QkMWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S782Q0MWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S782REMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S782RUMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S79dUEMWEfG_oLYgkdyRLg" name="BrakePressure_Feedback">
+    <eAnnotations xmi:id="_S7-EYEMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S7-EYUMWEfG_oLYgkdyRLg" key="ecoreType" value="Feedback"/>
+      <details xmi:id="_S7-EYkMWEfG_oLYgkdyRLg" key="stereotype" value="Feedback"/>
+      <details xmi:id="_S7-EY0MWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S7-EZEMWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S7-EZUMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S7-EZkMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_S7-EZ0MWEfG_oLYgkdyRLg" name="Hydraulic Brake Actuator">
+    <eAnnotations xmi:id="_S7-rcEMWEfG_oLYgkdyRLg" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_S7-rcUMWEfG_oLYgkdyRLg" key="ecoreType" value="ControlledProcess"/>
+      <details xmi:id="_S7-rckMWEfG_oLYgkdyRLg" key="stereotype" value="ControlledProcess"/>
+      <details xmi:id="_S7-rc0MWEfG_oLYgkdyRLg" key="profile" value="STPAProfile"/>
+      <details xmi:id="_S7-rdEMWEfG_oLYgkdyRLg" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_S7-rdUMWEfG_oLYgkdyRLg" key="technique" value="STPA"/>
+      <details xmi:id="_S7-rdkMWEfG_oLYgkdyRLg" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+</uml:Model>

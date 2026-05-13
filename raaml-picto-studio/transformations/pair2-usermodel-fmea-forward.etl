@@ -80,30 +80,22 @@ operation resolveUmlElementById(xmiId : String) : Any {
     return null;
 }
 
-// Extract the base_Class reference from a stereotype application EObject.
-// Handles two cases:
-//   (a) Profile resolved: base_Class is a regular EReference on the
-//       stereotype application's eClass.
-//   (b) Profile unresolved (AnyType): base_Class is stored as a string
-//       xmi:id inside the anyAttribute FeatureMap, and we must resolve it.
+// Resolve the UML element a stereotype application is attached to.
+// Checks any base_* feature name (base_Class, base_Element, base_Package,
+// base_Dependency, base_Abstraction, etc.) because different RAAML
+// stereotypes extend different UML metaclasses.
 operation getStereotypeBaseClass(stereoApp : Any) : Any {
-    // Case (a): regular feature access (profile resolved)
-    var feature = stereoApp.eClass().getEStructuralFeature('base_Class');
-    if (feature.isDefined() and feature <> null) {
-        var v = stereoApp.eGet(feature);
-        if (v.isDefined() and v <> null) return v;
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
     }
-
-    // Case (b): AnyType fallback - read from anyAttribute FeatureMap.
-    // AnyType has a getAnyAttribute() method that returns FeatureMap.
     var anyAttrs = stereoApp.getAnyAttribute();
     if (anyAttrs.isDefined() and anyAttrs <> null) {
         for (entry in anyAttrs) {
-            var f = entry.getEStructuralFeature();
-            if (f.name == 'base_Class') {
-                var val = entry.getValue();
-                // val is a String (xmi:id) in AnyType mode
-                return resolveUmlElementById(val);
+            if (entry.getEStructuralFeature().name.startsWith('base_')) {
+                return resolveUmlElementById(entry.getValue());
             }
         }
     }

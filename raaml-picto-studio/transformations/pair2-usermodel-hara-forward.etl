@@ -1,0 +1,190 @@
+// ============================================================================
+// pair2-usermodel-hara-forward.etl
+// User UML HARA model -> Ecore SafetyAnalysis with ISO26262 (HARA).
+// Detects via inheritance OR stereotype application (XMI scan).
+// ============================================================================
+
+@cached
+operation getHARAOpSitStereos() : Set {
+    return Set{'OperationalSituation', 'OperationalSitation'};  // OMG typo
+}
+
+@cached
+operation getHARAMalfStereos() : Set {
+    return Set{'MalfunctioningBehaviour', 'MalfunctioningBehavior'};
+}
+
+@cached
+operation getHARAASILAssignStereos() : Set { return Set{'ASILAssignment'}; }
+
+@cached
+operation getHARAVerifiedStereos() : Set { return Set{'Verified'}; }
+
+@cached
+operation getHARAConfirmedStereos() : Set { return Set{'Confirmed'}; }
+
+@cached
+operation getHARAHazardousEventStereos() : Set {
+    return Set{'HazardousEvent', 'HazartdousEvent'};  // OMG typo in library
+}
+
+@cached
+operation getAllHARAStereos() : Set {
+    var s = new Set;
+    for (n in getHARAOpSitStereos())          { s.add(n); }
+    for (n in getHARAMalfStereos())           { s.add(n); }
+    for (n in getHARAASILAssignStereos())     { s.add(n); }
+    for (n in getHARAVerifiedStereos())       { s.add(n); }
+    for (n in getHARAConfirmedStereos())      { s.add(n); }
+    for (n in getHARAHazardousEventStereos()) { s.add(n); }
+    return s;
+}
+
+operation UML!Class findHARAAncestor() : UML!Class {
+    if (getAllHARAStereos().includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var a = g.general.findHARAAncestor();
+            if (a.isDefined() and a <> null) return a;
+        }
+    }
+    return null;
+}
+
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) { result.add(obj); }
+    }
+    return result;
+}
+
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            if (res.getURIFragment(e) == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+// Resolve the base UML element a stereotype application is attached to.
+// Handles multiple base_* metaclass variants:
+//   base_Class, base_Element, base_Dependency, base_Package, etc.
+// Different RAAML stereotypes extend different UML metaclasses (e.g.,
+// ASILAssignment extends Element -> uses base_Element, not base_Class).
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    // Try statically-defined features first (works when profile is resolved)
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
+    }
+    // Fallback: AnyType anyAttribute map (profile-unresolved case)
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            var fname = entry.getEStructuralFeature().name;
+            if (fname.startsWith('base_')) {
+                return resolveUmlElementById(entry.getValue());
+            }
+        }
+    }
+    return null;
+}
+
+operation getUserHARAClassToTypeName() : Map {
+    var result = new Map;
+    for (c in UML!Class.all) {
+        var a = c.findHARAAncestor();
+        if (a.isDefined() and a <> null) { result.put(c, a.name); }
+    }
+    for (stereoName in getAllHARAStereos()) {
+        for (app in findAllEObjectsByTypeName(UML, stereoName)) {
+            var base = getStereotypeBaseClass(app);
+            if (base.isDefined() and base.isKindOf(UML!Class)) {
+                if (not result.containsKey(base)) { result.put(base, stereoName); }
+            }
+        }
+    }
+    return result;
+}
+
+pre {
+    'Pair 2 user-model HARA forward starting...'.println();
+    var users = getUserHARAClassToTypeName();
+    ('  Total user HARA classes detected: ' + users.size()).println();
+    for (c in users.keySet()) {
+        ('    - ' + c.name + '  (type: ' + users.get(c) + ')').println();
+    }
+    ('').println();
+}
+
+rule UserModelToSafetyAnalysis
+    transform s : UML!Model
+    to sa : RAAML!SafetyAnalysis,
+       hara : RAAML!ISO26262 {
+
+    guard : s.name <> 'ISO26262Library' and s.name <> 'RAAMLGeneralLibrary'
+            and s.name <> 'CoreLibrary' and s.name <> 'PrimitiveTypes'
+
+    sa.id = s.name; sa.name = s.name;
+    sa.description = 'Safety analysis for ' + s.name;
+    hara.id = s.name + '_HARA'; hara.name = s.name + ' HARA';
+    hara.description = 'ISO 26262 HARA analysis for system ' + s.name;
+
+    var users = getUserHARAClassToTypeName();
+    for (uc in users.keySet()) {
+        var t = users.get(uc);
+        if (getHARAOpSitStereos().includes(t)) {
+            var x : new RAAML!OperationalSituation;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User HARA operational situation: ' + uc.name;
+            hara.operationalSituations.add(x);
+        } else if (getHARAMalfStereos().includes(t)) {
+            var x : new RAAML!MalfunctioningBehaviour;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User HARA malfunctioning behaviour: ' + uc.name;
+            hara.malfunctioningBehaviors.add(x);
+        } else if (getHARAASILAssignStereos().includes(t)) {
+            var x : new RAAML!ASILAssignment;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User HARA ASIL assignment: ' + uc.name;
+            // ASIL is mandatory; default to QM if unspecified
+            x.ASIL = RAAML!ASIL#QM;
+            hara.asilAssignments.add(x);
+        } else if (getHARAVerifiedStereos().includes(t)) {
+            var x : new RAAML!Verified;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User HARA verification: ' + uc.name;
+            x.result = 'unspecified';
+            hara.verifiedItems.add(x);
+        } else if (getHARAConfirmedStereos().includes(t)) {
+            var x : new RAAML!Confirmed;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User HARA confirmation: ' + uc.name;
+            x.result = 'unspecified';
+            hara.confirmedItems.add(x);
+        }
+        // <<HazardousEvent>> is abstract in our Ecore - skip in instances
+    }
+
+    sa.analyses.add(hara);
+}
+
+post {
+    'Pair 2 user-model HARA forward complete.'.println();
+    ('  ISO26262 (HARA) analyses: ' + RAAML!ISO26262.all.size()).println();
+    ('  OperationalSituations: ' + RAAML!OperationalSituation.all.size()).println();
+    ('  MalfunctioningBehaviours: ' + RAAML!MalfunctioningBehaviour.all.size()).println();
+    ('  ASILAssignments: ' + RAAML!ASILAssignment.all.size()).println();
+    ('  Verified: ' + RAAML!Verified.all.size()).println();
+    ('  Confirmed: ' + RAAML!Confirmed.all.size()).println();
+}

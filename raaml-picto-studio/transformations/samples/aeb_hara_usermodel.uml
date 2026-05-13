@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Blocks="http://www.eclipse.org/papyrus/sysml/1.6/SysML/Blocks" xmlns:ISO26262Profile="http:///schemas/ISO26262Profile/_ZFKVcKWnEe-BAqrHrfxnNQ/44" xmlns:ISO26262Profile.RequirementManagement="http:///ISO26262Profile/RequirementManagement.ecore" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http://www.eclipse.org/papyrus/sysml/1.6/SysML/Blocks http://www.eclipse.org/papyrus/sysml/1.6/SysML#//blocks http:///schemas/ISO26262Profile/_ZFKVcKWnEe-BAqrHrfxnNQ/44 ISO26262Profile.profile.uml#_ZFRqMKWnEe-BAqrHrfxnNQ http:///ISO26262Profile/RequirementManagement.ecore ISO26262Profile.profile.uml#_ZFRqc6WnEe-BAqrHrfxnNQ">
+  <uml:Model xmi:id="_3BdVwD49EfGI6P8sCgLXzg" name="uermodel_hara">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_3EzksD49EfGI6P8sCgLXzg">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_xuUywD4-EfGI6P8sCgLXzg">
+      <importedPackage xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Blocks"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_BxcGgD4-EfGI6P8sCgLXzg" name="Hara">
+      <packagedElement xmi:type="uml:Class" xmi:id="_dD6ZMD4-EfGI6P8sCgLXzg" name="OS_01_HighwayDriving">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_35k-oD4_EfGI6P8sCgLXzg" name="description">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_N1KFID5AEfGI6P8sCgLXzg" name="OS_02_UrbanDriving">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_N1KFIT5AEfGI6P8sCgLXzg" name="description">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_TFyRQD5AEfGI6P8sCgLXzg" name="OS_03_PedestrianCrossingDay">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_TFyRQT5AEfGI6P8sCgLXzg" name="description">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_ZLZkoD5AEfGI6P8sCgLXzg" name="OS_04_PedestrianCrossingNight">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_ZLZkoT5AEfGI6P8sCgLXzg" name="description">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_gxnvID5AEfGI6P8sCgLXzg" name="OS_05_LowSpeedParkingManoeuvre">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_gxnvIT5AEfGI6P8sCgLXzg" name="description">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_mHQ-ID5AEfGI6P8sCgLXzg" name="OS_06_AdverseWeatherRainorFog">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_mHQ-IT5AEfGI6P8sCgLXzg" name="description">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_-4omAD5AEfGI6P8sCgLXzg" name="MB_001_LossOfBrakingFunction"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_HUO5UD5BEfGI6P8sCgLXzg" name="MB_002_UnintendedBrakingActivation"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_MIMXkD5BEfGI6P8sCgLXzg" name="MB_003_DegradedBrakingPerformance"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_QZgbwD5BEfGI6P8sCgLXzg" name="MB_004_DelayedBrakingActivation"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_UqlPYD5BEfGI6P8sCgLXzg" name="MB_005_ErroneousObjectClassification"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_dGWh0D5BEfGI6P8sCgLXzg" name="ASIL_HE_001">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_c72skD5CEfGI6P8sCgLXzg" name="ASIL">
+          <type xmi:type="uml:Enumeration" href="ISO26262Library.uml#_GDzQsKA-Ee-s8rdeBiP94Q"/>
+        </ownedAttribute>
+      </packagedElement>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_Z4ciwD4-EfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Z4j3gD4-EfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="ISO26262Profile.profile.uml#_ZFRqMKWnEe-BAqrHrfxnNQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="ISO26262Profile.profile.uml#_MacyIJz7Ee-fxLw8sjxBPg"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_Z4p-ID4-EfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Z4qlMD4-EfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="RAAMLCoreProfile.profile.uml#_szHs0KWyEe-BAqrHrfxnNQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="RAAMLCoreProfile.profile.uml#_CFCnkHmbEe-_3MKC7IFIVQ"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bghT0D4-EfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bgih8D4-EfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="RAAMLGeneralProfile.profile.uml#_egPvYABPEfCn38LPCSw6MQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="RAAMLGeneralProfile.profile.uml#_rWmcEJqcEe-37_ge53UNtQ"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_Gspm0D4_EfGI6P8sCgLXzg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GsqN4D4_EfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//blocks"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Blocks"/>
+      </profileApplication>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_FGs8sD4_EfGI6P8sCgLXzg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FGuK0D4_EfGI6P8sCgLXzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/sysml/1.6/SysML#//blocks"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://SysML16_PROFILES/SysML.profile.uml#SysML.package_packagedElement_Blocks"/>
+    </profileApplication>
+  </uml:Model>
+  <ISO26262Profile:OperationalSitation xmi:id="_exTIED4-EfGI6P8sCgLXzg" base_Class="_dD6ZMD4-EfGI6P8sCgLXzg"/>
+  <Blocks:Block xmi:id="_JIMcMD4_EfGI6P8sCgLXzg" base_Class="_dD6ZMD4-EfGI6P8sCgLXzg"/>
+  <ISO26262Profile:OperationalSitation xmi:id="_N1uF0D5AEfGI6P8sCgLXzg" base_Class="_N1KFID5AEfGI6P8sCgLXzg"/>
+  <Blocks:Block xmi:id="_N1xJID5AEfGI6P8sCgLXzg" base_Class="_N1KFID5AEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:OperationalSitation xmi:id="_TF4X4D5AEfGI6P8sCgLXzg" base_Class="_TFyRQD5AEfGI6P8sCgLXzg"/>
+  <Blocks:Block xmi:id="_TF6NED5AEfGI6P8sCgLXzg" base_Class="_TFyRQD5AEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:OperationalSitation xmi:id="_ZLhgcD5AEfGI6P8sCgLXzg" base_Class="_ZLZkoD5AEfGI6P8sCgLXzg"/>
+  <Blocks:Block xmi:id="_ZLnAAD5AEfGI6P8sCgLXzg" base_Class="_ZLZkoD5AEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:OperationalSitation xmi:id="_gxqycD5AEfGI6P8sCgLXzg" base_Class="_gxnvID5AEfGI6P8sCgLXzg"/>
+  <Blocks:Block xmi:id="_gxsnoD5AEfGI6P8sCgLXzg" base_Class="_gxnvID5AEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:OperationalSitation xmi:id="_mHV2oD5AEfGI6P8sCgLXzg" base_Class="_mHQ-ID5AEfGI6P8sCgLXzg"/>
+  <Blocks:Block xmi:id="_mHZhAD5AEfGI6P8sCgLXzg" base_Class="_mHQ-ID5AEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:MalfunctioningBehavior xmi:id="_DgbQgD5BEfGI6P8sCgLXzg" base_Class="_-4omAD5AEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:MalfunctioningBehavior xmi:id="_HUYDQD5BEfGI6P8sCgLXzg" base_Class="_HUO5UD5BEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:MalfunctioningBehavior xmi:id="_MIPa4D5BEfGI6P8sCgLXzg" base_Class="_MIMXkD5BEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:MalfunctioningBehavior xmi:id="_QZjfED5BEfGI6P8sCgLXzg" base_Class="_QZgbwD5BEfGI6P8sCgLXzg"/>
+  <ISO26262Profile:MalfunctioningBehavior xmi:id="_UqnroD5BEfGI6P8sCgLXzg" base_Class="_UqlPYD5BEfGI6P8sCgLXzg"/>
+  <ISO26262Profile.RequirementManagement:ASILAssignment xmi:id="_e72q4D5BEfGI6P8sCgLXzg" base_Element="_dGWh0D5BEfGI6P8sCgLXzg"/>
+</xmi:XMI>

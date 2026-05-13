@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="stpa" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
+    nsPrefix="stpa">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Systems Theoretic Process Analysis (STPA) elements"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="STPA" eSuperTypes="core.ecore#//Analysis">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Container for STPA analysis"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="STPA"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlStructures" upperBound="-1"
+        eType="#//ControlStructure" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Control structures in the system"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="losses" upperBound="-1"
+        eType="#//Loss" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="System losses to be prevented"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hazards" upperBound="-1"
+        eType="ecore:EClass core.ecore#//Hazard" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Hazards identified in STPA"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unsafeControlActions" upperBound="-1"
+        eType="#//UndesiredControlAction" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Unsafe control actions identified"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlFlaws" upperBound="-1"
+        eType="#//ProcessModelFlaw" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Control flaws identified"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Loss" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A loss representing something of value that could be lost"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Loss"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Category of loss (life, property, mission, etc.)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlStructure" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Control structure diagram showing control loops"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ControlStructure"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controllers" upperBound="-1"
+        eType="#//Controller" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Controllers in the control structure"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlledProcesses" upperBound="-1"
+        eType="#//ControlledProcess" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Controlled processes in the structure"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuators" upperBound="-1"
+        eType="#//Actuator" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Actuators in the control structure"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensors" upperBound="-1"
+        eType="#//Sensor" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Sensors in the control structure"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Controller" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A controller that issues control actions"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Controller"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlActions" upperBound="-1"
+        eType="#//ControlAction" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Control actions issued by this controller"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feedback" upperBound="-1"
+        eType="#//Feedback" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Feedback received by this controller"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlledProcess" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A process that is controlled"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ControlledProcess"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receivedActions" upperBound="-1"
+        eType="#//ControlAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Control actions received by this process"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providedFeedback" upperBound="-1"
+        eType="#//Feedback" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Feedback provided by this process"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actuator" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An actuator that executes control actions"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Actuator"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executedActions" upperBound="-1"
+        eType="#//ControlAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Control actions executed by this actuator"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A sensor that provides feedback"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Sensor"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providedFeedback" upperBound="-1"
+        eType="#//Feedback" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Feedback provided by this sensor"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlAction" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An action issued by a controller to control a process"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ControlAction"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Type of control action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceController" lowerBound="1"
+        eType="#//Controller">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Controller that issues this action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetProcess" lowerBound="1"
+        eType="#//ControlledProcess">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Process that receives this action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feedback" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Feedback provided to a controller"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="Feedback"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Type of feedback"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//ControlledProcess">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Source of the feedback"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetController" lowerBound="1"
+        eType="#//Controller">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Controller that receives this feedback"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UndesiredControlAction" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An unsafe or undesired control action"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="UndesiredControlAction"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlAction" lowerBound="1"
+        eType="#//ControlAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The control action that is unsafe"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unsafeType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Type of unsafe action (not provided, provided, wrong, etc.)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processModelFlaw" upperBound="-1"
+        eType="#//ProcessModelFlaw">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Process model flaws causing this unsafe action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="harmPotential" upperBound="-1"
+        eType="#//HarmPotential">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Harm potential associated with this unsafe action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="causalFactors" upperBound="-1"
+        eType="ecore:EClass core.ecore#//Factor" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Causal factors leading to this unsafe action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="ecore:EClass core.ecore#//Scenario" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Scenarios leading to this unsafe action"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STPALibrary" eSuperTypes="core.ecore#//AbstractLibrary">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reusable library of STPA elements"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="STPALibrary"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlStructures" upperBound="-1"
+        eType="#//ControlStructure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlActions" upperBound="-1"
+        eType="#//ControlAction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unsafeControlActions" upperBound="-1"
+        eType="#//UndesiredControlAction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessModelFlaw" eSuperTypes="core.ecore#//AnySituation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A flaw in the control process model (STPA)"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ProcessModelFlaw"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="causalFactor" upperBound="-1"
+        eType="ecore:EClass core.ecore#//Factor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Causal factors of this process model flaw"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="undesiredControlAction"
+        upperBound="-1" eType="#//UndesiredControlAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Undesired control actions resulting from this flaw"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HarmPotential" abstract="true" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Potential for harm or adverse effects"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="HarmPotential"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="undesiredControlAction"
+        upperBound="-1" eType="#//UndesiredControlAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Undesired control actions with this harm potential"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

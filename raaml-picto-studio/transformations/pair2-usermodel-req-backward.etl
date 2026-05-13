@@ -1,0 +1,112 @@
+// ============================================================================
+// pair2-usermodel-req-backward.etl
+// Ecore SafetyAnalysis with RequirementsModel -> UML user model.
+// ============================================================================
+
+operation Any isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__placeholder') > -1
+        or self.id.indexOf('__library-template-slot') > -1;
+}
+
+operation addRaamlProvenance(umlClass : Any,
+                             ecoreType : String,
+                             stereotype : String,
+                             profile : String,
+                             baseMetaclass : String,
+                             technique : String) {
+    var ann : new UML!EAnnotation;
+    ann.source = 'http://edu.kit.sdq/raaml/roundtrip-trace';
+    ann.details.put('ecoreType',      ecoreType);
+    ann.details.put('stereotype',     stereotype);
+    ann.details.put('profile',        profile);
+    ann.details.put('baseMetaclass',  baseMetaclass);
+    ann.details.put('technique',      technique);
+    ann.details.put('roundtripDate',  'forward->Ecore->backward->UML');
+    umlClass.eAnnotations.add(ann);
+}
+
+// Requirements stereotypes come from ISO26262Profile; DeriveRequirement
+// is aliased to OMG "DeriveReqt".
+operation getOmgStereotypeNameForReq(ecoreTypeName : String) : String {
+    if (ecoreTypeName == 'DeriveRequirement') return 'DeriveReqt';
+    return ecoreTypeName;
+}
+
+pre {
+    'Pair 2 user-model Requirements backward starting...'.println();
+    ('  RAAML!RequirementsModel count: '
+        + RAAML!RequirementsModel.all.size()).println();
+    ('  RAAML!Requirement count: ' + RAAML!Requirement.all.size()).println();
+}
+
+rule SafetyAnalysisToUMLModel
+    transform s : RAAML!SafetyAnalysis
+    to t : UML!Model {
+
+    t.name = s.name;
+
+    // Collect every requirement reachable under this SafetyAnalysis,
+    // whether stored flat under rm.requirements or nested under
+    // childRequirements. Using RAAML!Requirement.all covers both.
+    var emit = new Sequence;
+    var seenNames = new Set;
+    for (r in RAAML!Requirement.all) {
+        if (not r.isPlaceholder() and not seenNames.includes(r.name)) {
+            emit.add(r);
+            seenNames.add(r.name);
+        }
+    }
+
+    // Phase 1: create a UML Class for each requirement and remember the mapping.
+    var reqToClass : Map = new Map;
+    for (el in emit) {
+        var c : new UML!Class;
+        c.name = el.name;
+        reqToClass.put(el, c);
+
+        var ecoreType = el.eClass().name;
+        addRaamlProvenance(c,
+                           ecoreType,
+                           getOmgStereotypeNameForReq(ecoreType),
+                           'ISO26262Profile',
+                           'Class',
+                           'Requirements');
+    }
+
+    // Phase 2: rebuild the hierarchy from parentRequirement / childRequirements.
+    // Nested requirements become nestedClassifier of their parent Class; root
+    // requirements become packagedElement of the Model.
+    for (el in emit) {
+        var c = reqToClass.get(el);
+        var parentReq = getParentRequirement(el);
+        if (parentReq.isDefined() and parentReq <> null
+                and reqToClass.containsKey(parentReq)) {
+            var parentClass = reqToClass.get(parentReq);
+            parentClass.nestedClassifier.add(c);
+        } else {
+            t.packagedElement.add(c);
+        }
+    }
+}
+
+// Prefer the explicit parentRequirement back-reference. Fall back to walking
+// eContainer() to find an enclosing Requirement (covers models that set only
+// childRequirements containment).
+operation getParentRequirement(r : Any) : Any {
+    if (r.parentRequirement.isDefined() and r.parentRequirement <> null) {
+        return r.parentRequirement;
+    }
+    var p = r.eContainer();
+    while (p.isDefined() and p <> null) {
+        if (p.isKindOf(RAAML!Requirement)) return p;
+        p = p.eContainer();
+    }
+    return null;
+}
+
+post {
+    'Pair 2 user-model Requirements backward complete.'.println();
+    ('  UML!Class count: ' + UML!Class.all.size()).println();
+    for (c in UML!Class.all) { ('    - ' + c.name).println(); }
+}

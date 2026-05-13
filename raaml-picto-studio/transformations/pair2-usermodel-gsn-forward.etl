@@ -1,0 +1,189 @@
+// ============================================================================
+// pair2-usermodel-gsn-forward.etl
+// User UML GSN model -> Ecore SafetyAnalysis with GSN.
+// ============================================================================
+
+@cached
+operation getGSNGoalStereos() : Set { return Set{'Goal'}; }
+
+@cached
+operation getGSNStrategyStereos() : Set { return Set{'Strategy'}; }
+
+@cached
+operation getGSNSolutionStereos() : Set { return Set{'Solution'}; }
+
+@cached
+operation getGSNContextStereos() : Set { return Set{'Context'}; }
+
+@cached
+operation getGSNAssumptionStereos() : Set { return Set{'Assumption'}; }
+
+@cached
+operation getGSNJustificationStereos() : Set { return Set{'Justification'}; }
+
+@cached
+operation getAllGSNStereos() : Set {
+    var s = new Set;
+    for (n in getGSNGoalStereos())          { s.add(n); }
+    for (n in getGSNStrategyStereos())      { s.add(n); }
+    for (n in getGSNSolutionStereos())      { s.add(n); }
+    for (n in getGSNContextStereos())       { s.add(n); }
+    for (n in getGSNAssumptionStereos())    { s.add(n); }
+    for (n in getGSNJustificationStereos()) { s.add(n); }
+    return s;
+}
+
+operation UML!Class findGSNAncestor() : UML!Class {
+    if (getAllGSNStereos().includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var a = g.general.findGSNAncestor();
+            if (a.isDefined() and a <> null) return a;
+        }
+    }
+    return null;
+}
+
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) { result.add(obj); }
+    }
+    return result;
+}
+
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            if (res.getURIFragment(e) == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
+    }
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            if (entry.getEStructuralFeature().name.startsWith('base_')) {
+                return resolveUmlElementById(entry.getValue());
+            }
+        }
+    }
+    return null;
+}
+
+operation getUserGSNClassToTypeName() : Map {
+    var result = new Map;
+    for (c in UML!Class.all) {
+        var a = c.findGSNAncestor();
+        if (a.isDefined() and a <> null) { result.put(c, a.name); }
+    }
+    for (stereoName in getAllGSNStereos()) {
+        for (app in findAllEObjectsByTypeName(UML, stereoName)) {
+            var base = getStereotypeBaseClass(app);
+            if (base.isDefined() and base.isKindOf(UML!Class)) {
+                if (not result.containsKey(base)) { result.put(base, stereoName); }
+            }
+        }
+    }
+    return result;
+}
+
+pre {
+    'Pair 2 user-model GSN forward starting...'.println();
+    var users = getUserGSNClassToTypeName();
+    ('  Total user GSN classes detected: ' + users.size()).println();
+    for (c in users.keySet()) {
+        ('    - ' + c.name + '  (type: ' + users.get(c) + ')').println();
+    }
+    ('').println();
+}
+
+rule UserModelToSafetyAnalysis
+    transform s : UML!Model
+    to sa : RAAML!SafetyAnalysis,
+       gsn : RAAML!GSN {
+
+    guard : s.name <> 'RAAMLGeneralLibrary' and s.name <> 'CoreLibrary'
+            and s.name <> 'PrimitiveTypes'
+
+    sa.id = s.name; sa.name = s.name;
+    sa.description = 'Safety analysis for ' + s.name;
+    gsn.id = s.name + '_GSN'; gsn.name = s.name + ' GSN';
+    gsn.description = 'GSN safety case for system ' + s.name;
+
+    var users = getUserGSNClassToTypeName();
+    var nodeIdCounter = 1;
+    for (uc in users.keySet()) {
+        var t = users.get(uc);
+        if (getGSNGoalStereos().includes(t)) {
+            var x : new RAAML!Goal;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User GSN Goal: ' + uc.name;
+            x.nodeId = 'G' + nodeIdCounter;
+            nodeIdCounter = nodeIdCounter + 1;
+            gsn.gsnNodes.add(x);
+        } else if (getGSNStrategyStereos().includes(t)) {
+            var x : new RAAML!Strategy;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User GSN Strategy: ' + uc.name;
+            x.nodeId = 'S' + nodeIdCounter;
+            nodeIdCounter = nodeIdCounter + 1;
+            gsn.gsnNodes.add(x);
+        } else if (getGSNSolutionStereos().includes(t)) {
+            var x : new RAAML!Solution;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User GSN Solution: ' + uc.name;
+            x.nodeId = 'Sn' + nodeIdCounter;
+            nodeIdCounter = nodeIdCounter + 1;
+            gsn.gsnNodes.add(x);
+        } else if (getGSNContextStereos().includes(t)) {
+            var x : new RAAML!Context;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User GSN Context: ' + uc.name;
+            x.contextId = 'C' + nodeIdCounter;
+            nodeIdCounter = nodeIdCounter + 1;
+            gsn.contextualInformation.add(x);
+        } else if (getGSNAssumptionStereos().includes(t)) {
+            var x : new RAAML!Assumption;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User GSN Assumption: ' + uc.name;
+            x.contextId = 'A' + nodeIdCounter;
+            nodeIdCounter = nodeIdCounter + 1;
+            gsn.contextualInformation.add(x);
+        } else if (getGSNJustificationStereos().includes(t)) {
+            var x : new RAAML!Justification;
+            x.id = uc.name; x.name = uc.name;
+            x.description = 'User GSN Justification: ' + uc.name;
+            x.contextId = 'J' + nodeIdCounter;
+            nodeIdCounter = nodeIdCounter + 1;
+            gsn.contextualInformation.add(x);
+        }
+    }
+
+    sa.analyses.add(gsn);
+}
+
+post {
+    'Pair 2 user-model GSN forward complete.'.println();
+    ('  GSN safety cases: ' + RAAML!GSN.all.size()).println();
+    ('  Goals: ' + RAAML!Goal.all.size()).println();
+    ('  Strategies: ' + RAAML!Strategy.all.size()).println();
+    ('  Solutions: ' + RAAML!Solution.all.size()).println();
+    ('  Contexts: ' + RAAML!Context.all.size()).println();
+    ('  Assumptions: ' + RAAML!Assumption.all.size()).println();
+    ('  Justifications: ' + RAAML!Justification.all.size()).println();
+}

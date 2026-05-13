@@ -1,0 +1,321 @@
+// ============================================================================
+// pair2-usermodel-stpa-forward.etl
+// ----------------------------------------------------------------------------
+// Pair 2 forward: user UML STPA model -> Ecore SafetyAnalysis with STPA.
+// Detects via inheritance (Pattern 2) OR stereotype application (Pattern 3).
+//
+// Output structure:
+//   SafetyAnalysis
+//     |- analyses (STPA)
+//          |- losses
+//          |- hazards
+//          |- controlStructures (containing controllers, processes, actuators, sensors)
+//          |- unsafeControlActions
+//          |- controlFlaws
+// ============================================================================
+
+@cached
+operation getSTPALossStereos() : Set { return Set{'Loss'}; }
+
+@cached
+operation getSTPAHazardStereos() : Set { return Set{'Hazard'}; }
+
+@cached
+operation getSTPAControllerStereos() : Set { return Set{'Controller'}; }
+
+@cached
+operation getSTPAProcessStereos() : Set { return Set{'ControlledProcess'}; }
+
+@cached
+operation getSTPAActuatorStereos() : Set { return Set{'Actuator'}; }
+
+@cached
+operation getSTPASensorStereos() : Set { return Set{'Sensor'}; }
+
+@cached
+operation getSTPAControlActionStereos() : Set { return Set{'ControlAction'}; }
+
+@cached
+operation getSTPAFeedbackStereos() : Set { return Set{'Feedback'}; }
+
+@cached
+operation getSTPAControlStructureStereos() : Set { return Set{'ControlStructure'}; }
+
+@cached
+operation getSTPAUCAStereos() : Set {
+    return Set{'UndesiredControlAction', 'UnsafeControlAction'};
+}
+
+@cached
+operation getSTPAFlawStereos() : Set { return Set{'ProcessModelFlaw'}; }
+
+@cached
+operation getAllSTPAStereos() : Set {
+    var s = new Set;
+    for (n in getSTPALossStereos())             { s.add(n); }
+    for (n in getSTPAHazardStereos())           { s.add(n); }
+    for (n in getSTPAControllerStereos())       { s.add(n); }
+    for (n in getSTPAProcessStereos())          { s.add(n); }
+    for (n in getSTPAActuatorStereos())         { s.add(n); }
+    for (n in getSTPASensorStereos())           { s.add(n); }
+    for (n in getSTPAControlActionStereos())    { s.add(n); }
+    for (n in getSTPAFeedbackStereos())         { s.add(n); }
+    for (n in getSTPAControlStructureStereos()) { s.add(n); }
+    for (n in getSTPAUCAStereos())              { s.add(n); }
+    for (n in getSTPAFlawStereos())             { s.add(n); }
+    return s;
+}
+
+// --- Pattern 2 inheritance walk ---
+operation UML!Class findSTPAAncestor() : UML!Class {
+    if (getAllSTPAStereos().includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var a = g.general.findSTPAAncestor();
+            if (a.isDefined() and a <> null) return a;
+        }
+    }
+    return null;
+}
+
+// --- Pattern 3 XMI scan ---
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName) { result.add(obj); }
+    }
+    return result;
+}
+
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            if (res.getURIFragment(e) == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
+    }
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            if (entry.getEStructuralFeature().name.startsWith('base_')) {
+                return resolveUmlElementById(entry.getValue());
+            }
+        }
+    }
+    return null;
+}
+
+operation getUserSTPAClassToTypeName() : Map {
+    var result = new Map;
+    for (c in UML!Class.all) {
+        var a = c.findSTPAAncestor();
+        if (a.isDefined() and a <> null) { result.put(c, a.name); }
+    }
+    for (stereoName in getAllSTPAStereos()) {
+        for (app in findAllEObjectsByTypeName(UML, stereoName)) {
+            var base = getStereotypeBaseClass(app);
+            if (base.isDefined() and base.isKindOf(UML!Class)) {
+                if (not result.containsKey(base)) { result.put(base, stereoName); }
+            }
+        }
+    }
+    return result;
+}
+
+// --- Construction helpers ---
+operation makeLoss(name : String) : Any {
+    var x : new RAAML!Loss; x.id = name; x.name = name;
+    x.description = 'User STPA loss: ' + name; x.category = 'unspecified'; return x;
+}
+operation makeHazard(name : String) : Any {
+    var x : new RAAML!Hazard; x.id = name; x.name = name;
+    x.description = 'User STPA hazard: ' + name; return x;
+}
+operation makeController(name : String) : Any {
+    var x : new RAAML!Controller; x.id = name; x.name = name;
+    x.description = 'User STPA controller: ' + name; return x;
+}
+operation makeControlledProcess(name : String) : Any {
+    var x : new RAAML!ControlledProcess; x.id = name; x.name = name;
+    x.description = 'User STPA controlled process: ' + name; return x;
+}
+operation makeActuator(name : String) : Any {
+    var x : new RAAML!Actuator; x.id = name; x.name = name;
+    x.description = 'User STPA actuator: ' + name; return x;
+}
+operation makeSensor(name : String) : Any {
+    var x : new RAAML!Sensor; x.id = name; x.name = name;
+    x.description = 'User STPA sensor: ' + name; return x;
+}
+operation makeControlStructure(name : String) : Any {
+    var x : new RAAML!ControlStructure; x.id = name; x.name = name;
+    x.description = 'User STPA control structure: ' + name; return x;
+}
+operation makeProcessModelFlaw(name : String) : Any {
+    var x : new RAAML!ProcessModelFlaw; x.id = name; x.name = name;
+    x.description = 'User STPA process model flaw: ' + name; return x;
+}
+
+pre {
+    'Pair 2 user-model STPA forward starting...'.println();
+    var users = getUserSTPAClassToTypeName();
+    ('  Total user STPA classes detected: ' + users.size()).println();
+    for (c in users.keySet()) {
+        ('    - ' + c.name + '  (type: ' + users.get(c) + ')').println();
+    }
+    ('').println();
+}
+
+rule UserModelToSafetyAnalysis
+    transform s : UML!Model
+    to sa : RAAML!SafetyAnalysis,
+       stpa : RAAML!STPA {
+
+    guard : s.name <> 'STPALibrary' and s.name <> 'RAAMLGeneralLibrary'
+            and s.name <> 'CoreLibrary' and s.name <> 'PrimitiveTypes'
+
+    sa.id = s.name; sa.name = s.name;
+    sa.description = 'Safety analysis for ' + s.name;
+    stpa.id = s.name + '_STPA'; stpa.name = s.name + ' STPA';
+    stpa.description = 'STPA analysis for system ' + s.name;
+
+    var users = getUserSTPAClassToTypeName();
+
+    // Bucket detected user classes
+    var controlStructure = null;
+    var ctlrs = new Sequence;
+    var procs = new Sequence;
+    var actrs = new Sequence;
+    var snsrs = new Sequence;
+    var ctrlActionUCs = new Sequence;
+    var feedbackUCs = new Sequence;
+
+    for (uc in users.keySet()) {
+        var t = users.get(uc);
+        if (getSTPALossStereos().includes(t)) {
+            stpa.losses.add(makeLoss(uc.name));
+        } else if (getSTPAHazardStereos().includes(t)) {
+            stpa.hazards.add(makeHazard(uc.name));
+        } else if (getSTPAUCAStereos().includes(t)) {
+            var uca : new RAAML!UndesiredControlAction;
+            uca.id = uc.name; uca.name = uc.name;
+            uca.description = 'User STPA UCA: ' + uc.name;
+            uca.unsafeType = 'unspecified';
+            var caPlaceholder : new RAAML!ControlAction;
+            caPlaceholder.id   = uc.name + '__controlAction__placeholder';
+            caPlaceholder.name = 'unspecified';
+            uca.controlAction = caPlaceholder;
+            stpa.unsafeControlActions.add(uca);
+        } else if (getSTPAFlawStereos().includes(t)) {
+            stpa.controlFlaws.add(makeProcessModelFlaw(uc.name));
+        } else if (getSTPAControlStructureStereos().includes(t)) {
+            controlStructure = makeControlStructure(uc.name);
+        } else if (getSTPAControllerStereos().includes(t)) {
+            ctlrs.add(makeController(uc.name));
+        } else if (getSTPAProcessStereos().includes(t)) {
+            procs.add(makeControlledProcess(uc.name));
+        } else if (getSTPAActuatorStereos().includes(t)) {
+            actrs.add(makeActuator(uc.name));
+        } else if (getSTPASensorStereos().includes(t)) {
+            snsrs.add(makeSensor(uc.name));
+        } else if (getSTPAControlActionStereos().includes(t)) {
+            ctrlActionUCs.add(uc);
+        } else if (getSTPAFeedbackStereos().includes(t)) {
+            feedbackUCs.add(uc);
+        }
+    }
+
+    // Synthesize a ControlStructure container if structural elements exist
+    if (controlStructure == null
+            and (ctlrs.notEmpty() or procs.notEmpty()
+                 or actrs.notEmpty() or snsrs.notEmpty()
+                 or ctrlActionUCs.notEmpty() or feedbackUCs.notEmpty())) {
+        controlStructure = makeControlStructure('DefaultControlStructure');
+    }
+
+    // If we don't have a controller, synthesize one to host
+    // ControlActions and Feedback
+    var firstCtlr = null;
+    if (ctlrs.notEmpty()) {
+        firstCtlr = ctlrs.first();
+    } else if (controlStructure <> null
+               and (ctrlActionUCs.notEmpty() or feedbackUCs.notEmpty())) {
+        firstCtlr = makeController('DefaultController');
+        ctlrs.add(firstCtlr);
+    }
+
+    var firstProc = null;
+    if (procs.notEmpty()) {
+        firstProc = procs.first();
+    } else if (controlStructure <> null
+               and (ctrlActionUCs.notEmpty() or feedbackUCs.notEmpty())) {
+        firstProc = makeControlledProcess('DefaultControlledProcess');
+        procs.add(firstProc);
+    }
+
+    if (controlStructure <> null) {
+        for (c in ctlrs) { controlStructure.controllers.add(c); }
+        for (p in procs) { controlStructure.controlledProcesses.add(p); }
+        for (a in actrs) { controlStructure.actuators.add(a); }
+        for (sr in snsrs) { controlStructure.sensors.add(sr); }
+
+        // Attach ControlActions to the first Controller. Each requires
+        // mandatory sourceController + targetProcess.
+        for (uc in ctrlActionUCs) {
+            var ca : new RAAML!ControlAction;
+            ca.id = uc.name; ca.name = uc.name;
+            ca.description = 'User STPA control action: ' + uc.name;
+            ca.type = 'unspecified';
+            ca.sourceController = firstCtlr;
+            ca.targetProcess    = firstProc;
+            firstCtlr.controlActions.add(ca);
+        }
+
+        // Attach Feedback to the first Controller. Each requires mandatory
+        // source (ControlledProcess) + targetController.
+        for (uc in feedbackUCs) {
+            var fb : new RAAML!Feedback;
+            fb.id = uc.name; fb.name = uc.name;
+            fb.description = 'User STPA feedback: ' + uc.name;
+            fb.type = 'unspecified';
+            fb.source           = firstProc;
+            fb.targetController = firstCtlr;
+            firstCtlr.feedback.add(fb);
+        }
+
+        stpa.controlStructures.add(controlStructure);
+    }
+
+    sa.analyses.add(stpa);
+}
+
+post {
+    'Pair 2 user-model STPA forward complete.'.println();
+    ('  STPA analyses: ' + RAAML!STPA.all.size()).println();
+    ('  Losses: ' + RAAML!Loss.all.size()).println();
+    ('  Hazards: ' + RAAML!Hazard.all.size()).println();
+    ('  ControlStructures: ' + RAAML!ControlStructure.all.size()).println();
+    ('  Controllers: ' + RAAML!Controller.all.size()).println();
+    ('  ControlledProcesses: ' + RAAML!ControlledProcess.all.size()).println();
+    ('  Actuators: ' + RAAML!Actuator.all.size()).println();
+    ('  Sensors: ' + RAAML!Sensor.all.size()).println();
+    ('  ControlActions: ' + RAAML!ControlAction.all.size()).println();
+    ('  Feedback: ' + RAAML!Feedback.all.size()).println();
+    ('  UndesiredControlActions: ' + RAAML!UndesiredControlAction.all.size()).println();
+    ('  ProcessModelFlaws: ' + RAAML!ProcessModelFlaw.all.size()).println();
+}

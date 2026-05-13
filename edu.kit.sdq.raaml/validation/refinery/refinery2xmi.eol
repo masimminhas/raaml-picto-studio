@@ -1,0 +1,298 @@
+// =============================================================================
+// validation/refinery/refinery2xmi.eol
+//
+// Bridge: parse a .refinery partial-model export and emit the equivalent
+// fmea.ecore XMI for downstream EVL re-validation.
+//
+// Models declared by the launch / ANT config:
+//   OUT  : EmfModel (writable). metamodeluri spans core.ecore + fmea.ecore
+//          (and any other ecore whose concrete types you want to instantiate).
+//          modelfile = the target .xmi to be written on dispose.
+//
+// Variables declared by the launch:
+//   INPUT_FILE : absolute path to the .refinery file to read.
+//
+// Mapping policy (also documented in README §4):
+//   - Refinery emits exactly one concrete-type fact per node; we use it
+//     verbatim to choose the EClass.
+//   - Containment references are stored in the XMI tree by EMF
+//     automatically when we add a child to a parent's containment slot
+//     (EMF moves the child from the resource's top-level into the parent).
+//   - The `from` and `to` non-containment refs on AnySituation are skipped
+//     by default — they are noise from the under-specified multiplicity
+//     finding (see project memory 2026-05-06). Re-enable by removing them
+//     from `skipRefs`.
+//   - The pilot-only types FmeaCause / FmeaEffect have no concrete
+//     subclass in fmea.ecore alone, so no EClass exists to instantiate.
+//     The script will emit a warning and skip those nodes; the resulting
+//     XMI will fail EMF cardinality validation on AbstractFMEAItem.cause
+//     and .finalEffect — itself a useful, recordable finding for the
+//     pilot. To lift, either widen `OUT`'s metamodeluri to include
+//     fta.ecore + hara.ecore (where BasicEvent / VehicleLevelEffect live)
+//     or introduce a small validation-profile ecore declaring concrete
+//     subclasses.
+// =============================================================================
+
+
+// ---- Configuration -----------------------------------------------------------
+var skipTypes = Set {"FmeaCause", "FmeaEffect"};
+var skipRefs  = Set {"from", "to"};
+
+
+// ---- Parse phase -------------------------------------------------------------
+var nodeIds   = new OrderedSet;    // declared node identifiers
+var typeOf    = new Map;           // nodeId -> concrete type name
+var refFacts  = new Sequence;      // each: Map { ref=, src=, tgt= }
+var attrFacts = new Sequence;      // each: Map { attr=, node=, value= }  (value is the raw string literal)
+var attrUnknownMarkers = 0;        // count of `?attr(node).` skipped
+var linesRead = 0;
+var firstNonBlankLine = "";
+
+parseRefinery(INPUT_FILE);
+("Read " + linesRead + " lines from " + INPUT_FILE).println();
+if (firstNonBlankLine <> "") {
+    ("First non-blank line: " + firstNonBlankLine).println();
+}
+("Parsed " + nodeIds.size() + " node IDs, "
+ + typeOf.size()    + " type facts, "
+ + refFacts.size()  + " reference facts, "
+ + attrFacts.size() + " attribute value facts, "
+ + attrUnknownMarkers + " unbound `?attr(node).` markers (skipped).").println();
+
+
+// ---- Instantiate phase -------------------------------------------------------
+var nodes : Map;                  // nodeId -> EObject
+
+var skippedTypeMissing = 0;
+for (id in nodeIds) {
+    var t = typeOf.get(id);
+    if (t.isUndefined()) {
+        ("  - Skipping " + id + " (no type fact found).").println();
+        continue;
+    }
+    if (skipTypes.includes(t)) {
+        skippedTypeMissing = skippedTypeMissing + 1;
+        continue;
+    }
+    var inst = OUT.createInstance(t);
+    if (inst.isUndefined()) {
+        ("  - Skipping " + id + " (type '" + t
+         + "' not creatable in OUT — abstract or unknown).").println();
+        skippedTypeMissing = skippedTypeMissing + 1;
+        continue;
+    }
+    inst.name = id;
+    nodes.put(id, inst);
+}
+("Instantiated " + nodes.size() + " EObjects ("
+ + skippedTypeMissing + " skipped).").println();
+
+
+// ---- Wire references phase --------------------------------------------------
+var wired = 0;
+var refSkippedNoFeature = 0;
+var refSkippedFiltered  = 0;
+for (fact in refFacts) {
+    var refName = fact.get("ref");
+    if (skipRefs.includes(refName)) {
+        refSkippedFiltered = refSkippedFiltered + 1;
+        continue;
+    }
+    var src = nodes.get(fact.get("src"));
+    var tgt = nodes.get(fact.get("tgt"));
+    if (src.isUndefined() or tgt.isUndefined()) continue;
+    if (addRef(src, refName, tgt)) {
+        wired = wired + 1;
+    }
+    else {
+        refSkippedNoFeature = refSkippedNoFeature + 1;
+    }
+}
+("Wired " + wired + " references ("
+ + refSkippedFiltered  + " filtered by skipRefs, "
+ + refSkippedNoFeature + " had no matching EStructuralFeature).").println();
+
+
+// ---- Set attribute values phase ---------------------------------------------
+var attrSet = 0;
+var attrSkippedNoFeature = 0;
+var attrSkippedNoNode    = 0;
+for (fact in attrFacts) {
+    var node = nodes.get(fact.get("node"));
+    if (node.isUndefined()) {
+        attrSkippedNoNode = attrSkippedNoNode + 1;
+        continue;
+    }
+    var attrName = fact.get("attr");
+    var feat = node.eClass.eAllStructuralFeatures
+                  .selectOne(f | f.name = attrName);
+    if (feat.isUndefined() or not feat.isKindOf(EAttribute)) {
+        attrSkippedNoFeature = attrSkippedNoFeature + 1;
+        continue;
+    }
+    var coerced = coerceToAttrType(fact.get("value"), feat.eType);
+    node.eSet(feat, coerced);
+    attrSet = attrSet + 1;
+}
+("Set " + attrSet + " attribute values ("
+ + attrSkippedNoNode    + " had no matching node, "
+ + attrSkippedNoFeature + " had no matching EAttribute).").println();
+
+// EmfModel auto-saves on dispose when configured with store=true.
+
+
+// ---- Operations --------------------------------------------------------------
+
+// Read the .refinery file and dispatch each completed statement (ending `.`).
+// `declare` lines may span multiple physical lines, so we buffer until the
+// terminator is seen.
+operation parseRefinery(path : String) {
+    // Bulk-read the file via NIO. The single-arg readAllLines defaults
+    // to UTF-8 in Java 8+, which we want — Refinery's exports include
+    // non-ASCII chars (em dashes, section signs, arrows) in the
+    // comment header. Bypasses the BufferedReader path which (in this
+    // Eclipse/JDK build) truncated at line 31 on the same file.
+    var fileObj = new Native("java.io.File")(path);
+    var allLines = Native("java.nio.file.Files")
+                       .readAllLines(fileObj.toPath());
+
+    var buffer = "";
+    for (rawLine in allLines) {
+        linesRead = linesRead + 1;
+        var line = stripLineComment(rawLine).trim();
+        if (not line.isEmpty()) {
+            if (firstNonBlankLine = "") firstNonBlankLine = line;
+            buffer = (buffer + " " + line).trim();
+            if (line.endsWith(".")) {
+                handleStatement(buffer);
+                buffer = "";
+            }
+        }
+    }
+}
+
+operation stripLineComment(line : String) : String {
+    var idx = line.indexOf("//");
+    if (idx >= 0) return line.substring(0, idx);
+    return line;
+}
+
+// Classify and process one logical statement (already trimmed, ends with `.`).
+operation handleStatement(stmt : String) {
+    var s = stmt;
+    if (s.endsWith(".")) s = s.substring(0, s.length() - 1);
+    s = s.trim();
+    if (s.isEmpty()) return;
+
+    // Skip: metamodel theory and closed-world declarations.
+    // The .refinery export concatenates the source `.problem` theory
+    // (class/abstract/error/pred/enum declarations, !exists/default
+    // closures, scope blocks) with the partial-model facts. Anything
+    // that's a *theory* declaration must be skipped here so the
+    // parser only consumes facts.
+    if (s.startsWith("class ")    or s.startsWith("abstract ")
+        or s.startsWith("!")      or s.startsWith("default ")
+        or s.startsWith("error ") or s.startsWith("pred ")
+        or s.startsWith("enum ")  or s.startsWith("scope ")) return;
+
+    // Skip: Refinery's partial-model "unknown attribute" markers, of the
+    // form `?attr(node).` or `?Class::attr(node).`. The solver records that
+    // the attribute exists on the node but has not bound a concrete value;
+    // there is nothing for the bridge to set. Without this skip these lines
+    // would be misparsed as 1-arg type facts and overwrite typeOf with
+    // pseudo-types like "?likelihood".
+    if (s.startsWith("?")) {
+        attrUnknownMarkers = attrUnknownMarkers + 1;
+        return;
+    }
+
+    // declare a, b, c, …
+    if (s.startsWith("declare ")) {
+        var tail = s.substring(8);
+        for (id in tail.split(",")) {
+            var trimId = id.trim();
+            if (not trimId.isEmpty()) nodeIds.add(trimId);
+        }
+        return;
+    }
+
+    // Predicate fact:  Head(arg)  or  head(src, tgt)
+    var lparen = s.indexOf("(");
+    var rparen = s.lastIndexOf(")");
+    if (lparen < 0 or rparen <= lparen) return;
+    var head = s.substring(0, lparen).trim();
+    var argsStr = s.substring(lparen + 1, rparen);
+    var args : Sequence;
+    for (a in argsStr.split(",")) args.add(a.trim());
+
+    if (args.size() = 1) {
+        var node = args.at(0);
+        nodeIds.add(node);
+        typeOf.put(node, head);
+    }
+    else if (args.size() = 2) {
+        // Disambiguate attribute facts from reference facts by checking
+        // whether the second argument parses as a numeric literal.
+        // Attribute fact:  AttrName(node, 5).
+        // Reference fact:  refName(src, tgt).
+        if (looksLikeNumber(args.at(1))) {
+            attrFacts.add(Map {
+                "attr"  = head,
+                "node"  = args.at(0),
+                "value" = args.at(1)
+            });
+        }
+        else {
+            refFacts.add(Map {
+                "ref" = head,
+                "src" = args.at(0),
+                "tgt" = args.at(1)
+            });
+        }
+    }
+}
+
+// True if `s` is a plain numeric literal (integer or decimal,
+// optionally signed). Used to distinguish attribute facts from
+// reference facts in 2-argument predicates.
+operation looksLikeNumber(s : String) : Boolean {
+    if (s.isUndefined() or s.length() = 0) return false;
+    var pattern = Native("java.util.regex.Pattern").compile("^-?\\d+(\\.\\d+)?$");
+    return pattern.matcher(s).matches();
+}
+
+// Coerce a Refinery-emitted numeric string to the Java type expected by
+// the target EAttribute. core.ecore / fmea.ecore declare these as EDouble
+// (not EInt), so int values from Refinery need widening; we also handle
+// EInt / EFloat / EBoolean / EString defensively for future ecores.
+operation coerceToAttrType(rawValue : String, eType : Any) : Any {
+    var typeName = eType.name;
+    if (typeName = "EInt" or typeName = "EInteger") {
+        return rawValue.asInteger();
+    }
+    if (typeName = "EDouble" or typeName = "EFloat") {
+        return rawValue.asReal();
+    }
+    if (typeName = "ELong") {
+        return rawValue.asInteger();
+    }
+    if (typeName = "EBoolean") {
+        return rawValue = "true";
+    }
+    return rawValue;
+}
+
+// Set or append `tgt` on `src` for the structural feature named `refName`.
+// Returns true iff the feature exists on src.eClass.
+operation addRef(src : Any, refName : String, tgt : Any) : Boolean {
+    var feat = src.eClass.eAllStructuralFeatures
+                  .selectOne(f | f.name = refName);
+    if (feat.isUndefined()) return false;
+    if (feat.isMany()) {
+        src.eGet(feat).add(tgt);
+    }
+    else {
+        src.eSet(feat, tgt);
+    }
+    return true;
+}

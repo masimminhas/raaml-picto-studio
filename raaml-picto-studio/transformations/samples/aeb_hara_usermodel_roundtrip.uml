@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_W3ocID5JEfGuM4bB6wLj1A" name="uermodel_hara">
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3pqQD5JEfGuM4bB6wLj1A" name="OS_01_HighwayDriving">
+    <eAnnotations xmi:id="_W3qRUD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3q4YD5JEfGuM4bB6wLj1A" key="ecoreType" value="OperationalSituation"/>
+      <details xmi:id="_W3q4YT5JEfGuM4bB6wLj1A" key="stereotype" value="OperationalSitation"/>
+      <details xmi:id="_W3q4Yj5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3q4Yz5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3q4ZD5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3q4ZT5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3rfcD5JEfGuM4bB6wLj1A" name="OS_05_LowSpeedParkingManoeuvre">
+    <eAnnotations xmi:id="_W3rfcT5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3rfcj5JEfGuM4bB6wLj1A" key="ecoreType" value="OperationalSituation"/>
+      <details xmi:id="_W3rfcz5JEfGuM4bB6wLj1A" key="stereotype" value="OperationalSitation"/>
+      <details xmi:id="_W3rfdD5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3sGgD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3sGgT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3sGgj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3sGgz5JEfGuM4bB6wLj1A" name="OS_02_UrbanDriving">
+    <eAnnotations xmi:id="_W3stkD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3stkT5JEfGuM4bB6wLj1A" key="ecoreType" value="OperationalSituation"/>
+      <details xmi:id="_W3stkj5JEfGuM4bB6wLj1A" key="stereotype" value="OperationalSitation"/>
+      <details xmi:id="_W3stkz5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3stlD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3stlT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3stlj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3stlz5JEfGuM4bB6wLj1A" name="OS_06_AdverseWeatherRainorFog">
+    <eAnnotations xmi:id="_W3tUoD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3tUoT5JEfGuM4bB6wLj1A" key="ecoreType" value="OperationalSituation"/>
+      <details xmi:id="_W3tUoj5JEfGuM4bB6wLj1A" key="stereotype" value="OperationalSitation"/>
+      <details xmi:id="_W3tUoz5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3tUpD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3tUpT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3tUpj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3t7sD5JEfGuM4bB6wLj1A" name="OS_04_PedestrianCrossingNight">
+    <eAnnotations xmi:id="_W3t7sT5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3t7sj5JEfGuM4bB6wLj1A" key="ecoreType" value="OperationalSituation"/>
+      <details xmi:id="_W3t7sz5JEfGuM4bB6wLj1A" key="stereotype" value="OperationalSitation"/>
+      <details xmi:id="_W3t7tD5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3t7tT5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3t7tj5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3t7tz5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3uiwD5JEfGuM4bB6wLj1A" name="OS_03_PedestrianCrossingDay">
+    <eAnnotations xmi:id="_W3uiwT5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3uiwj5JEfGuM4bB6wLj1A" key="ecoreType" value="OperationalSituation"/>
+      <details xmi:id="_W3uiwz5JEfGuM4bB6wLj1A" key="stereotype" value="OperationalSitation"/>
+      <details xmi:id="_W3uixD5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3vJ0D5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3vJ0T5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3vJ0j5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3vJ0z5JEfGuM4bB6wLj1A" name="MB_003_DegradedBrakingPerformance">
+    <eAnnotations xmi:id="_W3vJ1D5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3vJ1T5JEfGuM4bB6wLj1A" key="ecoreType" value="MalfunctioningBehaviour"/>
+      <details xmi:id="_W3vJ1j5JEfGuM4bB6wLj1A" key="stereotype" value="MalfunctioningBehavior"/>
+      <details xmi:id="_W3vJ1z5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3vw4D5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3vw4T5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3vw4j5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3wX8D5JEfGuM4bB6wLj1A" name="MB_001_LossOfBrakingFunction">
+    <eAnnotations xmi:id="_W3w_AD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3w_AT5JEfGuM4bB6wLj1A" key="ecoreType" value="MalfunctioningBehaviour"/>
+      <details xmi:id="_W3w_Aj5JEfGuM4bB6wLj1A" key="stereotype" value="MalfunctioningBehavior"/>
+      <details xmi:id="_W3w_Az5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3w_BD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3w_BT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3w_Bj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3w_Bz5JEfGuM4bB6wLj1A" name="MB_004_DelayedBrakingActivation">
+    <eAnnotations xmi:id="_W3xmED5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3xmET5JEfGuM4bB6wLj1A" key="ecoreType" value="MalfunctioningBehaviour"/>
+      <details xmi:id="_W3xmEj5JEfGuM4bB6wLj1A" key="stereotype" value="MalfunctioningBehavior"/>
+      <details xmi:id="_W3xmEz5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3xmFD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3xmFT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3xmFj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3xmFz5JEfGuM4bB6wLj1A" name="MB_005_ErroneousObjectClassification">
+    <eAnnotations xmi:id="_W3xmGD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3xmGT5JEfGuM4bB6wLj1A" key="ecoreType" value="MalfunctioningBehaviour"/>
+      <details xmi:id="_W3xmGj5JEfGuM4bB6wLj1A" key="stereotype" value="MalfunctioningBehavior"/>
+      <details xmi:id="_W3xmGz5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3xmHD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3xmHT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3xmHj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3xmHz5JEfGuM4bB6wLj1A" name="MB_002_UnintendedBrakingActivation">
+    <eAnnotations xmi:id="_W3y0MD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3y0MT5JEfGuM4bB6wLj1A" key="ecoreType" value="MalfunctioningBehaviour"/>
+      <details xmi:id="_W3y0Mj5JEfGuM4bB6wLj1A" key="stereotype" value="MalfunctioningBehavior"/>
+      <details xmi:id="_W3y0Mz5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3y0ND5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_W3y0NT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3y0Nj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_W3y0Nz5JEfGuM4bB6wLj1A" name="ASIL_HE_001">
+    <eAnnotations xmi:id="_W3zbQD5JEfGuM4bB6wLj1A" source="http://edu.kit.sdq/raaml/roundtrip-trace">
+      <details xmi:id="_W3zbQT5JEfGuM4bB6wLj1A" key="ecoreType" value="ASILAssignment"/>
+      <details xmi:id="_W3zbQj5JEfGuM4bB6wLj1A" key="stereotype" value="ASILAssignment"/>
+      <details xmi:id="_W3zbQz5JEfGuM4bB6wLj1A" key="profile" value="ISO26262Profile"/>
+      <details xmi:id="_W3zbRD5JEfGuM4bB6wLj1A" key="baseMetaclass" value="Element"/>
+      <details xmi:id="_W3zbRT5JEfGuM4bB6wLj1A" key="technique" value="HARA"/>
+      <details xmi:id="_W3zbRj5JEfGuM4bB6wLj1A" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+</uml:Model>

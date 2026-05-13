@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:STPAProfile="http:///schemas/STPAProfile/_QFnxQDviEfGAXqMMrUCFzQ/26" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/STPAProfile/_QFnxQDviEfGAXqMMrUCFzQ/26 STPAProfile.profile.uml#_QF0lkDviEfGAXqMMrUCFzQ">
+  <uml:Model xmi:id="_WqBSYDviEfGAXqMMrUCFzQ" name="aeb_stpa_usermodel">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Wq4OADviEfGAXqMMrUCFzQ">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_vWKcADviEfGAXqMMrUCFzQ" name="STPA">
+      <packagedElement xmi:type="uml:Class" xmi:id="_bl4vcDviEfGAXqMMrUCFzQ" name="AEBControlStructure">
+        <nestedClassifier xmi:type="uml:Class" xmi:id="_DiqxkDvjEfGAXqMMrUCFzQ" name="AEB ECU CONTROLLER">
+          <nestedClassifier xmi:type="uml:Class" xmi:id="_VESOMDvjEfGAXqMMrUCFzQ" name="Apply Emergency Brake"/>
+          <nestedClassifier xmi:type="uml:Class" xmi:id="_e4_pgDvjEfGAXqMMrUCFzQ" name="Release Brake Command"/>
+          <nestedClassifier xmi:type="uml:Class" xmi:id="_lGMLkDvjEfGAXqMMrUCFzQ" name="Issue Driver Warning"/>
+        </nestedClassifier>
+        <nestedClassifier xmi:type="uml:Class" xmi:id="_sdJLADvjEfGAXqMMrUCFzQ" name="Hydraulic Brake Actuator">
+          <nestedClassifier xmi:type="uml:Class" xmi:id="_yTt80DvjEfGAXqMMrUCFzQ" name="BrakePressure_Feedback"/>
+        </nestedClassifier>
+      </packagedElement>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_z8-2IDviEfGAXqMMrUCFzQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z8-2ITviEfGAXqMMrUCFzQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="RAAMLCoreProfile.profile.uml#_szHs0KWyEe-BAqrHrfxnNQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="RAAMLCoreProfile.profile.uml#_CFCnkHmbEe-_3MKC7IFIVQ"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_z8-2IjviEfGAXqMMrUCFzQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z8-2IzviEfGAXqMMrUCFzQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="RAAMLGeneralProfile.profile.uml#_egPvYABPEfCn38LPCSw6MQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="RAAMLGeneralProfile.profile.uml#_rWmcEJqcEe-37_ge53UNtQ"/>
+      </profileApplication>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_z8_dMDviEfGAXqMMrUCFzQ">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z8_dMTviEfGAXqMMrUCFzQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="STPAProfile.profile.uml#_QF0lkDviEfGAXqMMrUCFzQ"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="STPAProfile.profile.uml#_qQ-C0JzjEe-GZ_sV80B9tw"/>
+      </profileApplication>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bSAKIDviEfGAXqMMrUCFzQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bSBYQDviEfGAXqMMrUCFzQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="RAAMLCoreProfile.profile.uml#_szHs0KWyEe-BAqrHrfxnNQ"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="RAAMLCoreProfile.profile.uml#_CFCnkHmbEe-_3MKC7IFIVQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bSB_UDviEfGAXqMMrUCFzQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bSB_UTviEfGAXqMMrUCFzQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="RAAMLGeneralProfile.profile.uml#_egPvYABPEfCn38LPCSw6MQ"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="RAAMLGeneralProfile.profile.uml#_rWmcEJqcEe-37_ge53UNtQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bSB_UjviEfGAXqMMrUCFzQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bSB_UzviEfGAXqMMrUCFzQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="STPAProfile.profile.uml#_QF0lkDviEfGAXqMMrUCFzQ"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="STPAProfile.profile.uml#_qQ-C0JzjEe-GZ_sV80B9tw"/>
+    </profileApplication>
+  </uml:Model>
+  <STPAProfile:Situation xmi:id="_kgFDQDviEfGAXqMMrUCFzQ" base_Class="_bl4vcDviEfGAXqMMrUCFzQ"/>
+  <STPAProfile:ControlStructure xmi:id="_83LxADviEfGAXqMMrUCFzQ" base_Class="_bl4vcDviEfGAXqMMrUCFzQ"/>
+  <STPAProfile:Controller xmi:id="_HIoLoDvjEfGAXqMMrUCFzQ" base_Class="_DiqxkDvjEfGAXqMMrUCFzQ"/>
+  <STPAProfile:ControlAction xmi:id="_Z0FlMDvjEfGAXqMMrUCFzQ" base_Class="_VESOMDvjEfGAXqMMrUCFzQ"/>
+  <STPAProfile:ControlAction xmi:id="_hT6z0DvjEfGAXqMMrUCFzQ" base_Class="_e4_pgDvjEfGAXqMMrUCFzQ"/>
+  <STPAProfile:ControlAction xmi:id="_oPVGwDvjEfGAXqMMrUCFzQ" base_Class="_lGMLkDvjEfGAXqMMrUCFzQ"/>
+  <STPAProfile:ControlledProcess xmi:id="_ugydwDvjEfGAXqMMrUCFzQ" base_Class="_sdJLADvjEfGAXqMMrUCFzQ"/>
+  <STPAProfile:Feedback xmi:id="_1fpGQDvjEfGAXqMMrUCFzQ" base_Class="_yTt80DvjEfGAXqMMrUCFzQ"/>
+</xmi:XMI>

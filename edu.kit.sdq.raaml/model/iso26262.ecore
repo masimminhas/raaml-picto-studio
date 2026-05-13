@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="iso26262" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/iso26262"
+    nsPrefix="iso26262">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="ISO 26262 compliance tracking - anchored to the OMG RAAML ISO 26262 sub-profile. Explicit ApplicabilityContext supports future context-related consistency reactions (lifecycle phase, ASIL applicability, project context)."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ISO26262" eSuperTypes="core.ecore#//Analysis">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Container for ISO 26262 compliance tracking analysis"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Package"/>
+      <details key="stereotype" value="ISO26262"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="complianceItems" upperBound="-1"
+        eType="#//ComplianceItem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contexts" upperBound="-1"
+        eType="#//ApplicabilityContext" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplianceItem" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One compliance entry tracking adherence to a specific ISO 26262 clause"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ComplianceItem"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clauseRef" lowerBound="1"
+        eType="#//ClauseReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//ComplianceStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rationale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evidence" upperBound="-1"
+        eType="#//WorkProductReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applicableContext" eType="#//ApplicabilityContext"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClauseReference" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A reference to one ISO 26262 clause: Part X Clause Y[.Z]"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ClauseReference"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="part" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clause" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductReference" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A reference to a work product (FMEA item, FTA tree, GSN solution, requirement, etc.) serving as evidence for a compliance item"/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="WorkProductReference"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workProductType" eType="#//WorkProductType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicabilityContext" eSuperTypes="core.ecore#//CoreSafetyElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Context that determines when/where a compliance item applies. Anchor for future context-related consistency reactions: lifecycle phase, ASIL applicability, project-specific scope."/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/metaclass">
+      <details key="base" value="Class"/>
+      <details key="stereotype" value="ApplicabilityContext"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lifecyclePhase" eType="#//LifecyclePhase"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minASIL" eType="ecore:EEnum hara.ecore#//ASIL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectScope" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rationale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComplianceStatus">
+    <eLiterals name="NotApplicable"/>
+    <eLiterals name="Pending" value="1"/>
+    <eLiterals name="PartiallyCompliant" value="2"/>
+    <eLiterals name="Compliant" value="3"/>
+    <eLiterals name="NonCompliant" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LifecyclePhase">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ISO 26262 lifecycle phases per Part 2"/>
+    </eAnnotations>
+    <eLiterals name="Concept"/>
+    <eLiterals name="Development" value="1"/>
+    <eLiterals name="Production" value="2"/>
+    <eLiterals name="Operation" value="3"/>
+    <eLiterals name="Decommissioning" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="WorkProductType">
+    <eLiterals name="ItemDefinition"/>
+    <eLiterals name="HazardAnalysis" value="1"/>
+    <eLiterals name="SafetyGoal" value="2"/>
+    <eLiterals name="FunctionalSafetyConcept" value="3"/>
+    <eLiterals name="TechnicalSafetyConcept" value="4"/>
+    <eLiterals name="FMEA" value="5"/>
+    <eLiterals name="FTA" value="6"/>
+    <eLiterals name="STPA" value="7"/>
+    <eLiterals name="HAZOP" value="8"/>
+    <eLiterals name="SafetyCase" value="9"/>
+    <eLiterals name="VerificationReport" value="10"/>
+  </eClassifiers>
+</ecore:EPackage>

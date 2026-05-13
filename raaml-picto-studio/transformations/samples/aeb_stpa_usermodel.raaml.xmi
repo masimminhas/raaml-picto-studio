@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<raaml:SafetyAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml" xmlns:raaml.stpa="http://edu.kit.sdq/dsis/metamodels/raaml/stpa" id="aeb_stpa_usermodel" name="aeb_stpa_usermodel" description="Safety analysis for aeb_stpa_usermodel">
+  <analyses xsi:type="raaml.stpa:STPA" id="aeb_stpa_usermodel_STPA" name="aeb_stpa_usermodel STPA" description="STPA analysis for system aeb_stpa_usermodel">
+    <controlStructures id="AEBControlStructure" name="AEBControlStructure" description="User STPA control structure: AEBControlStructure">
+      <controllers id="AEB ECU CONTROLLER" name="AEB ECU CONTROLLER" description="User STPA controller: AEB ECU CONTROLLER">
+        <controlActions id="Issue Driver Warning" name="Issue Driver Warning" description="User STPA control action: Issue Driver Warning" type="unspecified" sourceController="//@analyses.0/@controlStructures.0/@controllers.0" targetProcess="//@analyses.0/@controlStructures.0/@controlledProcesses.0"/>
+        <controlActions id="Apply Emergency Brake" name="Apply Emergency Brake" description="User STPA control action: Apply Emergency Brake" type="unspecified" sourceController="//@analyses.0/@controlStructures.0/@controllers.0" targetProcess="//@analyses.0/@controlStructures.0/@controlledProcesses.0"/>
+        <controlActions id="Release Brake Command" name="Release Brake Command" description="User STPA control action: Release Brake Command" type="unspecified" sourceController="//@analyses.0/@controlStructures.0/@controllers.0" targetProcess="//@analyses.0/@controlStructures.0/@controlledProcesses.0"/>
+        <feedback id="BrakePressure_Feedback" name="BrakePressure_Feedback" description="User STPA feedback: BrakePressure_Feedback" type="unspecified" source="//@analyses.0/@controlStructures.0/@controlledProcesses.0" targetController="//@analyses.0/@controlStructures.0/@controllers.0"/>
+      </controllers>
+      <controlledProcesses id="Hydraulic Brake Actuator" name="Hydraulic Brake Actuator" description="User STPA controlled process: Hydraulic Brake Actuator"/>
+    </controlStructures>
+  </analyses>
+</raaml:SafetyAnalysis>

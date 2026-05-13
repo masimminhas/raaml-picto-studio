@@ -1,0 +1,118 @@
+// ============================================================================
+// pair2-usermodel-hara-backward.etl
+// Ecore SafetyAnalysis with HARA -> UML user model.
+// ============================================================================
+
+operation Any isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__placeholder') > -1
+        or self.id.indexOf('__library-template-slot') > -1;
+}
+
+// Add provenance annotation to a UML Class so its RAAML origin is
+// preserved even without re-applying the profile stereotype.
+// A profile-aware tool can later read these annotations and re-apply
+// the stereotypes. Source URI is a project-specific namespace.
+operation addRaamlProvenance(umlClass : Any,
+                             ecoreType : String,
+                             stereotype : String,
+                             profile : String,
+                             baseMetaclass : String,
+                             technique : String) {
+    var ann : new UML!EAnnotation;
+    ann.source = 'http://edu.kit.sdq/raaml/roundtrip-trace';
+
+    // Build detail entries (EAnnotation.details is an EMap of String->String).
+    // In Epsilon EOL, EMap supports put() for this purpose.
+    ann.details.put('ecoreType',      ecoreType);
+    ann.details.put('stereotype',     stereotype);
+    ann.details.put('profile',        profile);
+    ann.details.put('baseMetaclass',  baseMetaclass);
+    ann.details.put('technique',      technique);
+    ann.details.put('roundtripDate',  'forward->Ecore->backward->UML');
+
+    umlClass.eAnnotations.add(ann);
+}
+
+// Map a RAAML Ecore EClass name to its OMG stereotype name
+// (handles OMG typos/renames)
+operation getOmgStereotypeNameForHARA(ecoreTypeName : String) : String {
+    if (ecoreTypeName == 'OperationalSituation')     return 'OperationalSitation';
+    if (ecoreTypeName == 'MalfunctioningBehaviour')  return 'MalfunctioningBehavior';
+    // Others use identical names:
+    return ecoreTypeName;
+}
+
+// Map a RAAML Ecore EClass to the UML base metaclass the stereotype extends
+operation getBaseMetaclassForHARA(ecoreTypeName : String) : String {
+    if (ecoreTypeName == 'ASILAssignment') return 'Element';
+    // Most HARA stereotypes extend Class:
+    return 'Class';
+}
+
+pre {
+    'Pair 2 user-model HARA backward starting...'.println();
+    ('  RAAML!ISO26262 count: ' + RAAML!ISO26262.all.size()).println();
+}
+
+rule SafetyAnalysisToUMLModel
+    transform s : RAAML!SafetyAnalysis
+    to t : UML!Model {
+
+    t.name = s.name;
+    var seenNames = new Set;
+    var emit = new Sequence;
+
+    for (a in s.analyses) {
+        if (a.isKindOf(RAAML!ISO26262)) {
+            for (os in a.operationalSituations) {
+                if (not os.isPlaceholder() and not seenNames.includes(os.name)) {
+                    emit.add(os); seenNames.add(os.name);
+                }
+            }
+            for (mb in a.malfunctioningBehaviors) {
+                if (not mb.isPlaceholder() and not seenNames.includes(mb.name)) {
+                    emit.add(mb); seenNames.add(mb.name);
+                }
+            }
+            for (asg in a.asilAssignments) {
+                if (not asg.isPlaceholder() and not seenNames.includes(asg.name)) {
+                    emit.add(asg); seenNames.add(asg.name);
+                }
+            }
+            for (vi in a.verifiedItems) {
+                if (not vi.isPlaceholder() and not seenNames.includes(vi.name)) {
+                    emit.add(vi); seenNames.add(vi.name);
+                }
+            }
+            for (ci in a.confirmedItems) {
+                if (not ci.isPlaceholder() and not seenNames.includes(ci.name)) {
+                    emit.add(ci); seenNames.add(ci.name);
+                }
+            }
+        }
+    }
+
+    for (el in emit) {
+        var c : new UML!Class;
+        c.name = el.name;
+        t.packagedElement.add(c);
+
+        // Attach RAAML provenance annotation recording the original
+        // stereotype, profile, and UML base metaclass. Enables a later
+        // profile-aware step to reconstruct full stereotype applications.
+        var ecoreType = el.eClass().name;
+        addRaamlProvenance(c,
+                           ecoreType,
+                           getOmgStereotypeNameForHARA(ecoreType),
+                           'ISO26262Profile',
+                           getBaseMetaclassForHARA(ecoreType),
+                           'HARA');
+    }
+}
+
+post {
+    'Pair 2 user-model HARA backward complete.'.println();
+    ('  UML!Class count: ' + UML!Class.all.size()).println();
+    for (c in UML!Class.all) { ('    - ' + c.name).println(); }
+}
