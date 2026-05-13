@@ -5,19 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RAAML Picto Studio – Eclipse Update Site</title>
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #333; }
+    body { font-family: sans-serif; max-width: 820px; margin: 40px auto; padding: 0 20px; color: #333; line-height: 1.55; }
     h1   { color: #1a73e8; }
+    h2   { color: #1a73e8; margin-top: 32px; }
     code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.95em; }
     pre  { background: #f4f4f4; padding: 12px; border-radius: 6px; overflow-x: auto; }
     a    { color: #1a73e8; }
     .note { background: #fff8e1; border-left: 4px solid #f9a825; padding: 10px 14px; margin: 20px 0; border-radius: 4px; }
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; margin: 12px 0; }
+    .feature-grid div { background: #f4faff; border-left: 3px solid #1a73e8; padding: 10px 14px; border-radius: 4px; }
+    .feature-grid strong { color: #1a73e8; }
+    table { border-collapse: collapse; margin: 12px 0; }
+    th, td { border: 1px solid #ddd; padding: 6px 12px; text-align: left; }
+    th { background: #f4f4f4; }
   </style>
 </head>
 <body>
   <h1>RAAML Picto Studio</h1>
-  <p>Eclipse p2 Update Site for <strong>RAAML Picto Studio</strong> –
-     visualizations for safety analysis (FTA, FMEA, HARA, STPA, GSN)
-     using Eclipse Epsilon Picto.</p>
+  <p>An open-source Eclipse workbench for <strong>multi-technique safety analysis</strong>
+     aligned with the OMG <em>Risk Analysis and Assessment Modeling Language</em>
+     (RAAML, OMG formal/2023-06-01). Provides a standalone Ecore metamodel,
+     live Epsilon Picto visualizations, EVL well-formedness validation, a
+     dedicated FMEA form editor, and bidirectional ETL transformations to and
+     from the OMG RAAML UML profile.</p>
+
+  <h2>What's Included</h2>
+  <div class="feature-grid">
+    <div><strong>Standalone Ecore metamodel</strong><br/>
+      138 EClasses, 9 sub-packages covering FMEA, FTA, STPA, HARA, GSN, HAZOP,
+      and the ISO 26262 requirements hierarchy. Carries Ecore annotations
+      mapping each EClass to its OMG RAAML profile stereotype.</div>
+    <div><strong>Live Picto visualizations</strong><br/>
+      Per-technique HTML and Graphviz views (FMEA risk tables, FTA fault trees,
+      STPA control structures, GSN argument hierarchies, HARA tables,
+      Requirements hierarchy, HAZOP).</div>
+    <div><strong>Bidirectional ETL round-trips</strong><br/>
+      Pair-1 (library ↔ Ecore) and Pair-2 (user UML ↔ SafetyAnalysis)
+      transformations for all seven techniques. Profile-resolution-independent
+      stereotype detection via AnyType plus <code>base_*</code> generalisation;
+      backward output carries provenance EAnnotations.</div>
+    <div><strong>EVL validation catalog</strong><br/>
+      15 well-formedness rules derived from AIAG FMEA-4, IEC 61025,
+      STPA Handbook, ISO 26262 Part 3, and GSN Community Standard v3.
+      Batch-runnable via Ant for CI workflows.</div>
+    <div><strong>FMEA form editor</strong><br/>
+      Eclipse SWT editor with automatic Risk Priority Number computation and
+      live Picto refresh on save.</div>
+    <div><strong>Autonomous Emergency Braking case study</strong><br/>
+      Reference user models for all seven techniques. Quantitative data
+      grounded in Euro&nbsp;NCAP and ISO 26262 PMHF targets.</div>
+  </div>
+
+  <h2>Technique Coverage</h2>
+  <table>
+    <thead>
+      <tr><th>Technique</th><th>Picto view</th><th>Pair-2 ETL</th><th>EVL rules</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>FMEA</td><td>Risk-coloured table</td><td>fwd / bwd</td><td>5</td></tr>
+      <tr><td>FTA</td><td>Graphviz fault tree</td><td>fwd / bwd</td><td>3</td></tr>
+      <tr><td>STPA</td><td>Control structure</td><td>fwd / bwd</td><td>4</td></tr>
+      <tr><td>HARA</td><td>ASIL assignment table</td><td>fwd / bwd</td><td>1</td></tr>
+      <tr><td>GSN</td><td>Goal-strategy tree</td><td>fwd / bwd</td><td>2</td></tr>
+      <tr><td>HAZOP</td><td>Deviation table</td><td>–</td><td>–</td></tr>
+      <tr><td>Requirements</td><td>Requirement hierarchy</td><td>fwd / bwd</td><td>1</td></tr>
+    </tbody>
+  </table>
 
   <h2>Installing via Eclipse</h2>
   <ol>
@@ -31,16 +84,22 @@
     <li>Restart Eclipse when prompted.</li>
   </ol>
 
-  <div class="note">
-    ⚠️ <strong>Note:</strong> The update site bundles will be published here after the Eclipse export.
-    Check the <a href="https://github.com/masimminhas/raaml-picto-studio">GitHub repository</a> for progress.
-  </div>
+  <h2>Using the Transformations</h2>
+  <p>The transformations are bundled inside the plugin JAR and can be referenced
+     from your own Ant workflows or Epsilon scripts:</p>
+  <pre>platform:/plugin/raaml-picto-studio/transformations/pair2-usermodel-fmea-forward.etl</pre>
+  <p>Reference Ant runners are provided for each technique (e.g.
+     <code>run-pair2-stpa.xml</code>, <code>run-pair2-hara-backward.xml</code>);
+     adapt the source/target paths to your model files. See
+     <a href="https://github.com/masimminhas/raaml-picto-studio/tree/main/raaml-picto-studio/transformations">
+     the transformations folder</a> on GitHub for the full set.</p>
 
   <h2>Requirements</h2>
   <ul>
     <li>Eclipse IDE 2024-03 or later (tested on 2025-06 / 4.36.0)</li>
-    <li><a href="https://eclipse.org/epsilon/download/">Eclipse Epsilon Picto</a> ≥ 2.0.0</li>
+    <li><a href="https://eclipse.org/epsilon/download/">Eclipse Epsilon Picto, ETL, EVL, EGL/EGX</a> ≥ 2.0.0</li>
     <li>Java 17+</li>
+    <li>Graphviz on PATH (for FTA, STPA, and GSN renderings)</li>
   </ul>
 
   <h2>Source Code</h2>
@@ -54,6 +113,6 @@
   <p>Eclipse Public License 2.0</p>
 
   <hr/>
-  <p><small>KIT DSIS – 2025</small></p>
+  <p><small>KIT DSIS – 2026</small></p>
 </body>
 </html>
