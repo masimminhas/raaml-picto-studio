@@ -1,0 +1,199 @@
+[%
+// SysML Blocks (typed Ecore) class diagram, Papyrus-style, using
+// Graphviz HTML labels.
+//
+// One node per Block / ConstraintBlock / ValueType. Each rendered as a
+// UML-class table:
+//   row 1: «stereotype» (italic) + ClassName (bold)
+//   row 2: attributes / properties (one per line)
+//   row 3: constraint expression (ConstraintBlock only)
+// Type references rendered as solid arrows Block -> ValueType.
+// Constraint applicability rendered as a dotted line ConstraintBlock -> Block
+// (textual heuristic: ConstraintBlock expression mentions a Block property).
+
+out.print("digraph BlockModel {\n");
+out.print("  graph [rankdir=LR, fontname=\"Helvetica\", fontsize=10, splines=spline, nodesep=0.6, ranksep=0.9, bgcolor=\"white\"];\n");
+out.print("  node  [shape=plain, fontname=\"Helvetica\", fontsize=10];\n");
+out.print("  edge  [fontname=\"Helvetica\", fontsize=9, color=\"#555555\"];\n\n");
+
+// ---------------- Blocks ----------------
+for (b in blockModel.blocks.select(b | not b.isKindOf(M!ConstraintBlock))) {
+  out.print("  " + nodeId(b) + " [label=<");
+  out.print(classTable('block', b.name, '#E3F2FD', '#1565C0',
+                       renderProperties(b.ownedProperties), '', ''));
+  out.print(">];\n");
+}
+
+// ---------------- ConstraintBlocks ----------------
+for (cb in blockModel.constraintBlocks) {
+  var expr = '';
+  if (cb.constraintExpression.isDefined() and cb.constraintExpression <> null
+      and cb.constraintExpression.length() > 0) {
+    expr = '<I>{ ' + esc(cb.constraintExpression) + ' }</I>';
+  } else {
+    expr = '<FONT COLOR="#999999"><I>(no expression)</I></FONT>';
+  }
+  out.print("  " + nodeId(cb) + " [label=<");
+  out.print(classTable('constraintBlock', cb.name, '#F3E5F5', '#6A1B9A',
+                       '', expr, ''));
+  out.print(">];\n");
+}
+
+// ---------------- ValueTypes ----------------
+for (vt in blockModel.valueTypes) {
+  var attrs = '';
+  var lines = new Sequence;
+  if (vt.unit.isDefined() and vt.unit <> null and vt.unit.length() > 0) {
+    lines.add('unit: ' + esc(vt.unit));
+  }
+  if (vt.dimension.isDefined() and vt.dimension <> null
+      and vt.dimension.length() > 0) {
+    lines.add('dimension: ' + esc(vt.dimension));
+  }
+  if (lines.size() > 0) {
+    attrs = lines.concat('<BR ALIGN="LEFT"/>');
+  } else {
+    attrs = '<FONT COLOR="#999999"><I>(no metadata)</I></FONT>';
+  }
+  out.print("  " + nodeId(vt) + " [label=<");
+  out.print(classTable('valueType', vt.name, '#FFE0B2', '#BF360C',
+                       attrs, '', ''));
+  out.print(">];\n");
+}
+
+// ---------------- Type-reference edges (Block.attr : ValueType) ---------
+out.print("\n  // type references\n");
+var vtByName = new Map;
+for (vt in blockModel.valueTypes) { vtByName.put(vt.name, vt); }
+for (b in blockModel.blocks.select(b | not b.isKindOf(M!ConstraintBlock))) {
+  for (p in b.ownedProperties) {
+    if (p.typeName.isDefined() and p.typeName <> null
+        and vtByName.containsKey(p.typeName)) {
+      var vt = vtByName.get(p.typeName);
+      out.print("  " + nodeId(b) + " -> " + nodeId(vt)
+                + " [label=\"" + escAttr(p.name) + " : " + escAttr(p.typeName)
+                + "\", arrowhead=open, color=\"#BF360C\"];\n");
+    }
+  }
+}
+
+// ---------------- Constraint applicability (textual heuristic) --------
+out.print("\n  // constraint applicability\n");
+for (cb in blockModel.constraintBlocks) {
+  if (cb.constraintExpression.isDefined()
+      and cb.constraintExpression <> null) {
+    var expr = cb.constraintExpression;
+    for (b in blockModel.blocks.select(b | not b.isKindOf(M!ConstraintBlock))) {
+      for (p in b.ownedProperties) {
+        if (expr.indexOf(p.name) >= 0) {
+          out.print("  " + nodeId(cb) + " -> " + nodeId(b)
+                    + " [label=\"constrains " + escAttr(p.name)
+                    + "\", style=dotted, color=\"#6A1B9A\", arrowhead=odot];\n");
+        }
+      }
+    }
+  }
+}
+
+out.print("}\n");
+
+// ============================================================
+// helpers
+// ============================================================
+
+operation classTable(stereotype : String, name : String,
+                     headerBg : String, borderColor : String,
+                     attrsHtml : String, constraintsHtml : String,
+                     footerHtml : String) : String {
+  var t = '<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">';
+  // Header row: stereotype + name
+  t = t + '<TR><TD BGCOLOR="' + headerBg + '" ALIGN="CENTER">';
+  t = t + '<FONT POINT-SIZE="9"><I>&#171;' + esc(stereotype) + '&#187;</I></FONT><BR/>';
+  t = t + '<B>' + esc(name) + '</B>';
+  t = t + '</TD></TR>';
+  // Attributes/properties compartment (always present, may be empty)
+  t = t + '<TR><TD ALIGN="LEFT" BALIGN="LEFT">';
+  if (attrsHtml.length() == 0) {
+    t = t + '<FONT COLOR="#999999"><I>(no properties)</I></FONT>';
+  } else {
+    t = t + attrsHtml;
+  }
+  t = t + '</TD></TR>';
+  // Constraints compartment (optional)
+  if (constraintsHtml.length() > 0) {
+    t = t + '<TR><TD ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="#FAFAFA">';
+    t = t + '<FONT POINT-SIZE="9" COLOR="#444444">constraint</FONT><BR ALIGN="LEFT"/>';
+    t = t + constraintsHtml;
+    t = t + '</TD></TR>';
+  }
+  // Footer (optional)
+  if (footerHtml.length() > 0) {
+    t = t + '<TR><TD ALIGN="LEFT" BALIGN="LEFT" BGCOLOR="#F5F5F5">';
+    t = t + footerHtml;
+    t = t + '</TD></TR>';
+  }
+  t = t + '</TABLE>';
+  return t;
+}
+
+operation renderProperties(props : Collection) : String {
+  if (props.isUndefined() or props == null or props.size() == 0) return '';
+  var lines = new Sequence;
+  for (p in props) {
+    lines.add(renderOneProperty(p));
+  }
+  return lines.concat('<BR ALIGN="LEFT"/>');
+}
+
+operation renderOneProperty(p : Any) : String {
+  var line = '+ <B>' + esc(p.name) + '</B>';
+  if (p.typeName.isDefined() and p.typeName <> null
+      and p.typeName.length() > 0) {
+    line = line + ' : ' + esc(p.typeName);
+  }
+  var lower = 1; var upper = 1;
+  if (p.lowerBound.isDefined()) { lower = p.lowerBound; }
+  if (p.upperBound.isDefined()) { upper = p.upperBound; }
+  if (lower <> 1 or upper <> 1) {
+    var multStr = ' [' + lower + '..';
+    if (upper < 0) { multStr = multStr + '*'; } else { multStr = multStr + upper; }
+    multStr = multStr + ']';
+    line = line + multStr;
+  }
+  if (p.isKindOf(M!FlowProperty)) {
+    var dir = 'inout';
+    if (p.direction.isDefined() and p.direction <> null) {
+      dir = p.direction.literal;
+    }
+    line = line + ' <FONT POINT-SIZE="8"><I>&#171;flow ' + esc(dir) + '&#187;</I></FONT>';
+  }
+  if (p.defaultValue.isDefined() and p.defaultValue <> null
+      and p.defaultValue.length() > 0) {
+    line = line + ' <FONT POINT-SIZE="8">= ' + esc(p.defaultValue) + '</FONT>';
+  }
+  return line;
+}
+
+operation nodeId(o : Any) : String {
+  var raw = '';
+  if (o.id.isDefined() and o.id <> null) { raw = o.id; }
+  else if (o.name.isDefined() and o.name <> null) { raw = o.name; }
+  else { raw = 'n_' + o.hashCode(); }
+  return 'n_' + raw.replaceAll('[^A-Za-z0-9_]', '_');
+}
+
+// HTML-label content: '<' '>' '&' must be encoded.
+operation esc(s : Any) : String {
+  if (s.isUndefined() or s == null) return '';
+  return s.toString()
+      .replace('&', '&amp;')
+      .replace('<', '&lt;')
+      .replace('>', '&gt;');
+}
+
+// Regular double-quoted dot attribute (edge labels, etc.).
+operation escAttr(s : Any) : String {
+  if (s.isUndefined() or s == null) return '';
+  return s.toString().replace('\\\\', '\\\\\\\\').replace('\"', '\\\\"');
+}
+%]

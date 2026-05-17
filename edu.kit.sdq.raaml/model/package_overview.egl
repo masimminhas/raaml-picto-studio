@@ -145,9 +145,10 @@ operation getPackageRole(pkgName : String) : String {
     return "analysis";
 }
 
-// Sanitise package names so they're valid Graphviz node IDs
-// (handles e.g. "raaml" vs "raaml (2)" if any spaces sneak in).
+// Sanitise package names so they're valid Graphviz node IDs.
+// EOL String.replace treats its first argument as a regex, so we use a
+// character class to handle '(' and ')' literally without needing escapes.
 operation safeId(name : String) : String {
-    return name.replace(" ", "_").replace("(", "_").replace(")", "_");
+    return name.replace(" ", "_").replace("[()]", "_");
 }
 %]

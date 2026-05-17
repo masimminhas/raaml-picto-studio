@@ -1,0 +1,115 @@
+// ============================================================================
+// pair2-sysml-blocks-backward.etl
+// ----------------------------------------------------------------------------
+// SysML Blocks (subset) Pair-2 backward transformation:
+// standalone SysML Blocks Ecore instance  ->  plain UML model decorated
+// with profile-bridge provenance EAnnotations.
+//
+// Same provenance pattern as the RAAML backwards: structural identity is
+// preserved (names, containment, typing), stereotype re-application is
+// not performed here (would require a resolvable SysML profile at
+// runtime) but is reduced to a mechanical post-pass thanks to the
+// EAnnotation metadata.
+// ============================================================================
+
+import "../../profile-bridge/profile-bridge.eol";
+
+@cached
+operation getProvenanceSource() : String {
+    return 'http://edu.kit.sdq/sysml-blocks/roundtrip-trace';
+}
+
+@cached
+operation getProfileName() : String { return 'SysML'; }
+
+@cached
+operation getTechniqueName() : String { return 'SysML Blocks'; }
+
+pre {
+    'SysML Blocks Pair-2 backward starting...'.println();
+    ('  BlockModel count:      ' + SysML!BlockModel.all.size()).println();
+    ('  Block count:           ' + SysML!Block.all.size()).println();
+    ('  ConstraintBlock count: ' + SysML!ConstraintBlock.all.size()).println();
+    ('  ValueType count:       ' + SysML!ValueType.all.size()).println();
+    ('  Property count:        ' + SysML!Property.all.size()).println();
+    ('  FlowProperty count:    ' + SysML!FlowProperty.all.size()).println();
+}
+
+// --- Root ------------------------------------------------------------------
+rule BlockModelToUmlModel
+    transform s : SysML!BlockModel
+    to t : UML!Model {
+
+    t.name = s.name;
+
+    // Phase 1: create a UML Class for each Block (skip ConstraintBlocks --
+    // they go through their own rule but are also SysML!Block instances
+    // since ConstraintBlock extends Block in the metamodel).
+    for (b in s.blocks) {
+        if (not b.isKindOf(SysML!ConstraintBlock)) {
+            var c : new UML!Class;
+            c.name = b.name;
+            addProvenance(getProvenanceSource(), c,
+                          'Block', 'Block', getProfileName(),
+                          'Class', getTechniqueName());
+            // ownedAttribute for each owned Property / FlowProperty
+            for (p in b.ownedProperties) {
+                var up : new UML!Property;
+                up.name  = p.name;
+                up.lower = p.lowerBound;
+                up.upper = p.upperBound;
+                var stereo = 'Property';
+                if (p.isKindOf(SysML!FlowProperty)) stereo = 'FlowProperty';
+                addProvenance(getProvenanceSource(), up,
+                              stereo, stereo, getProfileName(),
+                              'Property', getTechniqueName());
+                c.ownedAttribute.add(up);
+            }
+            t.packagedElement.add(c);
+        }
+    }
+
+    // Phase 2: ConstraintBlocks
+    for (cb in s.constraintBlocks) {
+        var c : new UML!Class;
+        c.name = cb.name;
+        addProvenance(getProvenanceSource(), c,
+                      'ConstraintBlock', 'ConstraintBlock', getProfileName(),
+                      'Class', getTechniqueName());
+        // Body of the constraint expression -> UML OpaqueExpression
+        if (cb.constraintExpression.isDefined()
+            and cb.constraintExpression <> null) {
+            var rule0 : new UML!Constraint;
+            rule0.name = cb.name + '_constraint';
+            var spec  : new UML!OpaqueExpression;
+            spec.body.add(cb.constraintExpression);
+            rule0.specification = spec;
+            c.ownedRule.add(rule0);
+        }
+        t.packagedElement.add(c);
+    }
+
+    // Phase 3: ValueTypes -> UML DataType
+    for (vt in s.valueTypes) {
+        var dt : new UML!DataType;
+        dt.name = vt.name;
+        addProvenance(getProvenanceSource(), dt,
+                      'ValueType', 'ValueType', getProfileName(),
+                      'DataType', getTechniqueName());
+        t.packagedElement.add(dt);
+    }
+}
+
+post {
+    'SysML Blocks Pair-2 backward complete.'.println();
+    ('  UML!Model count:    ' + UML!Model.all.size()).println();
+    ('  UML!Class count:    ' + UML!Class.all.size()).println();
+    ('  UML!DataType count: ' + UML!DataType.all.size()).println();
+    ('  UML!Property count: ' + UML!Property.all.size()).println();
+    for (c in UML!Class.all) {
+        ('    Class ' + c.name).println();
+    }
+    for (d in UML!DataType.all) {
+        ('    DataType ' + d.name).println();
+    }
+}

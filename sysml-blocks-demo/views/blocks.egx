@@ -1,0 +1,39 @@
+// ============================================================================
+// blocks.egx
+// ----------------------------------------------------------------------------
+// Picto orchestrator for SysML Blocks subset instances. Produces two views
+// per BlockModel:
+//   (a) HTML overview table  -- blocks_table.egl
+//   (b) Graphviz diagram     -- blocks_diagram.egl
+//
+// Multi-view per model demonstrates Picto's tree navigation capability,
+// reused across both the RAAML and SysML-Blocks demonstrations in the
+// SoSYM paper.
+// ============================================================================
+
+rule BlockModelOverview
+    transform bm : M!BlockModel {
+
+    template : "blocks_table.egl"
+
+    parameters : Map {
+        "blockModel" = bm,
+        "title"      = "SysML Blocks - " + bm.name + " (overview)",
+        "icon"       = "table",
+        "path"       = Sequence{bm.name, "Overview"}
+    }
+}
+
+rule BlockModelDiagram
+    transform bm : M!BlockModel {
+
+    template : "blocks_diagram.egl"
+
+    parameters : Map {
+        "blockModel" = bm,
+        "title"      = "SysML Blocks - " + bm.name + " (diagram)",
+        "format"     = "graphviz-dot",
+        "icon"       = "diagram",
+        "path"       = Sequence{bm.name, "Diagram"}
+    }
+}

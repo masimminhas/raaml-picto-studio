@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair2-sysml-blocks-backward.xml
+  ============================================================================
+  SysML Blocks (subset) Pair-2 backward transformation runner.
+
+  Input:  samples/camera-system.sysml-blocks.xmi
+  Output: samples/camera-system_roundtrip.uml
+  ============================================================================
+-->
+<project default="run-backward" basedir=".">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="sysml.ecore"
+              location="${project.dir}/model/sysml-blocks.ecore"/>
+
+    <property name="ecore.source"
+              location="${basedir}/../samples/camera-system.sysml-blocks.xmi"/>
+    <property name="uml.target"
+              location="${basedir}/../samples/camera-system_roundtrip.uml"/>
+
+    <target name="run-backward"
+            description="standalone SysML Blocks Ecore -> UML with provenance">
+
+        <echo>=============================================================</echo>
+        <echo>SysML Blocks Pair-2 backward transformation</echo>
+        <echo>  Source (XMI):   ${ecore.source}</echo>
+        <echo>  Target (UML):   ${uml.target}</echo>
+        <echo>=============================================================</echo>
+
+        <available file="${ecore.source}" property="src.exists"/>
+        <fail unless="src.exists">
+            Source XMI not found: ${ecore.source}.
+            Run the forward transformation first.
+        </fail>
+
+        <epsilon.emf.loadModel name="SysML"
+                               modelfile="${ecore.source}"
+                               metamodelfile="${sysml.ecore}"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${uml.target}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair2-sysml-blocks-backward.etl">
+            <model ref="SysML"/>
+            <model ref="UML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>=============================================================</echo>
+        <echo>Done. Inspect: ${uml.target}</echo>
+        <echo>=============================================================</echo>
+    </target>
+
+</project>

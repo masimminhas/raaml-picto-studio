@@ -1,0 +1,262 @@
+// ============================================================================
+// pair2-sysml-blocks-forward.etl
+// ----------------------------------------------------------------------------
+// SysML Blocks (subset) Pair-2 forward transformation:
+// UML user model with <<Block>> / <<ConstraintBlock>> / <<Property>> /
+// <<FlowProperty>> / <<ValueType>> applications  ->  standalone SysML
+// Blocks Ecore instance.
+//
+// METHODOLOGICAL DEMONSTRATION (SoSYM evidence):
+// This ETL imports the SAME profile-bridge.eol file used by all RAAML
+// Pair-2 ETLs. Reviewers can verify by reading both files that the
+// shared helpers contain zero domain-specific code. The only SysML-
+// specific code in this file is the per-stereotype dispatch and the
+// rule bodies.
+//
+// Stereotype subset deliberately spans three different UML base
+// metaclasses (Class, Property, DataType) to demonstrate that the
+// base_* generalisation in getStereotypeBaseClass() works across the
+// UML metaclass hierarchy, not just for Class-bound stereotypes.
+// ============================================================================
+
+import "../../profile-bridge/profile-bridge.eol";
+
+// ===========================================================================
+// SYSML-SPECIFIC DISPATCH (the only SysML-bound code in this file)
+// ===========================================================================
+
+// UML Classes with <<Block>> applied -- but EXCLUDING those also stereotyped
+// <<ConstraintBlock>>, since ConstraintBlock extends Block in the profile and
+// we want each user element to map to exactly one Ecore EClass.
+operation getBlockClasses() : Sequence {
+    var blocks = findUmlElementsWithStereotype(UML, 'Block');
+    var cbSet  = findUmlElementsWithStereotype(UML, 'ConstraintBlock').asSet();
+    var result = new Sequence;
+    for (b in blocks) {
+        if (b.isKindOf(UML!Class) and not cbSet.includes(b)
+            and not result.includes(b)) {
+            result.add(b);
+        }
+    }
+    return result;
+}
+
+operation getConstraintBlockClasses() : Sequence {
+    var result = new Sequence;
+    for (c in findUmlElementsWithStereotype(UML, 'ConstraintBlock')) {
+        if (c.isKindOf(UML!Class) and not result.includes(c)) {
+            result.add(c);
+        }
+    }
+    return result;
+}
+
+operation getValueTypeElements() : Sequence {
+    var result = new Sequence;
+    // ValueType has base=DataType; element may be UML!DataType or
+    // (depending on profile authoring) UML!Class. Accept both.
+    for (e in findUmlElementsWithStereotype(UML, 'ValueType')) {
+        if (not result.includes(e)) result.add(e);
+    }
+    return result;
+}
+
+// <<Property>> applications EXCLUDING those also stereotyped <<FlowProperty>>.
+operation getPropertyElements() : Sequence {
+    var props = findUmlElementsWithStereotype(UML, 'Property');
+    var fpSet = findUmlElementsWithStereotype(UML, 'FlowProperty').asSet();
+    var result = new Sequence;
+    for (p in props) {
+        if (p.isKindOf(UML!Property) and not fpSet.includes(p)
+            and not result.includes(p)) {
+            result.add(p);
+        }
+    }
+    return result;
+}
+
+operation getFlowPropertyElements() : Sequence {
+    var result = new Sequence;
+    for (fp in findUmlElementsWithStereotype(UML, 'FlowProperty')) {
+        if (fp.isKindOf(UML!Property) and not result.includes(fp)) {
+            result.add(fp);
+        }
+    }
+    return result;
+}
+
+// Find the stereotype application EObject (AnyType or typed) whose
+// getStereotypeBaseClass(app) == the given UML element. Used to read
+// tagged values such as FlowProperty.direction.
+operation findStereotypeAppFor(stereotypeName : String, umlElement : Any) : Any {
+    for (app in findAllEObjectsByTypeName(UML, stereotypeName)) {
+        if (getStereotypeBaseClass(app) == umlElement) return app;
+    }
+    return null;
+}
+
+// ===========================================================================
+// PRE: diagnostic
+// ===========================================================================
+
+pre {
+    'SysML Blocks Pair-2 forward starting...'.println();
+    ('  UML!Element.all count: '  + UML!Element.all.size()).println();
+    ('  UML!Class.all count:   '  + UML!Class.all.size()).println();
+    ('  Blocks detected:           ' + getBlockClasses().size()).println();
+    ('  ConstraintBlocks detected: '
+        + getConstraintBlockClasses().size()).println();
+    ('  ValueTypes detected:       ' + getValueTypeElements().size()).println();
+    ('  Properties detected:       ' + getPropertyElements().size()).println();
+    ('  FlowProperties detected:   '
+        + getFlowPropertyElements().size()).println();
+    ('').println();
+}
+
+// ===========================================================================
+// TRANSFORMATION RULES
+// ===========================================================================
+
+// --- Root ------------------------------------------------------------------
+rule UmlModelToBlockModel
+    transform s : UML!Model
+    to bm : SysML!BlockModel {
+
+    guard : s.name <> 'PrimitiveTypes'
+            and s.name <> 'UMLPrimitiveTypes'
+
+    bm.id   = s.name;
+    bm.name = s.name;
+
+    bm.blocks           ::= getBlockClasses();
+    bm.constraintBlocks ::= getConstraintBlockClasses();
+    bm.valueTypes       ::= getValueTypeElements();
+}
+
+// --- Block (base = UML Class) ---------------------------------------------
+rule UmlClassToBlock
+    transform s : UML!Class
+    to t : SysML!Block {
+
+    guard : getBlockClasses().includes(s)
+
+    t.id   = s.name;
+    t.name = s.name;
+    t.isEncapsulated = false;
+
+    // Collect owned UML Properties that carry <<Property>> or <<FlowProperty>>.
+    var owned = new Sequence;
+    for (op in s.ownedAttribute) {
+        if (getPropertyElements().includes(op)
+            or getFlowPropertyElements().includes(op)) {
+            owned.add(op);
+        }
+    }
+    t.ownedProperties ::= owned;
+}
+
+// --- ConstraintBlock (base = UML Class, extends Block) --------------------
+rule UmlClassToConstraintBlock
+    transform s : UML!Class
+    to t : SysML!ConstraintBlock {
+
+    guard : getConstraintBlockClasses().includes(s)
+
+    t.id   = s.name;
+    t.name = s.name;
+    t.isEncapsulated = false;
+
+    // Take the body of the first owned UML Constraint as the expression text.
+    if (s.ownedRule.isDefined() and s.ownedRule.size() > 0) {
+        var rule0 = s.ownedRule.first();
+        if (rule0.specification.isDefined()
+            and rule0.specification.body.isDefined()
+            and rule0.specification.body.size() > 0) {
+            t.constraintExpression = rule0.specification.body.first();
+        }
+    }
+}
+
+// --- Property (base = UML Property) ---------------------------------------
+rule UmlPropertyToProperty
+    transform s : UML!Property
+    to t : SysML!Property {
+
+    guard : getPropertyElements().includes(s)
+
+    t.id   = s.name;
+    t.name = s.name;
+    if (s.type.isDefined() and s.type <> null) {
+        t.typeName = s.type.name;
+    }
+    t.lowerBound = s.lower;
+    t.upperBound = s.upper;
+    if (s.defaultValue.isDefined() and s.defaultValue <> null
+        and s.defaultValue.value.isDefined()) {
+        t.defaultValue = s.defaultValue.value.toString();
+    }
+}
+
+// --- FlowProperty (base = UML Property, extends Property) -----------------
+rule UmlPropertyToFlowProperty
+    transform s : UML!Property
+    to t : SysML!FlowProperty {
+
+    guard : getFlowPropertyElements().includes(s)
+
+    t.id   = s.name;
+    t.name = s.name;
+    if (s.type.isDefined() and s.type <> null) {
+        t.typeName = s.type.name;
+    }
+    t.lowerBound = s.lower;
+    t.upperBound = s.upper;
+
+    // Read tagged value `direction` (string "in"/"out"/"inout") from the
+    // stereotype application and resolve it to the FlowDirection EEnum
+    // literal via the shared setEnumValue helper.
+    var app = findStereotypeAppFor('FlowProperty', s);
+    if (app.isDefined() and app <> null) {
+        var dirVal = getStereotypeTaggedValue(app, 'direction');
+        if (dirVal.isDefined() and dirVal <> null) {
+            setEnumValue(t, 'direction', dirVal.toString());
+        }
+    }
+}
+
+// --- ValueType (base = UML DataType) --------------------------------------
+rule UmlDataTypeToValueType
+    transform s : UML!DataType
+    to t : SysML!ValueType {
+
+    guard : getValueTypeElements().includes(s)
+
+    t.id   = s.name;
+    t.name = s.name;
+
+    var app = findStereotypeAppFor('ValueType', s);
+    if (app.isDefined() and app <> null) {
+        var u = getStereotypeTaggedValue(app, 'unit');
+        if (u.isDefined() and u <> null) t.unit = u.toString();
+        var d = getStereotypeTaggedValue(app, 'dimension');
+        if (d.isDefined() and d <> null) t.dimension = d.toString();
+    }
+}
+
+// ===========================================================================
+// POST: summary
+// ===========================================================================
+
+post {
+    'SysML Blocks Pair-2 forward complete.'.println();
+    ('  BlockModel containers:  ' + SysML!BlockModel.all.size()).println();
+    ('  Blocks:                 ' + SysML!Block.all.size()).println();
+    ('  ConstraintBlocks:       ' + SysML!ConstraintBlock.all.size()).println();
+    ('  ValueTypes:             ' + SysML!ValueType.all.size()).println();
+    ('  Properties:             ' + SysML!Property.all.size()).println();
+    ('  FlowProperties:         ' + SysML!FlowProperty.all.size()).println();
+    for (b in SysML!Block.all) {
+        ('    Block ' + b.name + '  (#props='
+            + b.ownedProperties.size() + ')').println();
+    }
+}

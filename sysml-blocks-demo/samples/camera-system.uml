@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  camera-system.uml
+  ============================================================================
+  Minimal SysML Blocks sample for the Pair-2 round-trip demonstration.
+
+  Hand-crafted (not Papyrus-generated) so the demo can run today without
+  requiring a SysML profile installation. Exactly the same XMI shape as
+  Papyrus emits: a UML model with classes/properties/datatypes plus
+  separate stereotype-application elements at file root.
+
+  The SysML namespace URI is intentionally a non-resolvable placeholder.
+  EMF loads <SysML:Block ...> etc. as dynamic AnyType instances whose
+  eClass.name equals the local element name ("Block", "Property", etc.)
+  which is exactly the form our profile-bridge.eol helpers detect.
+
+  Contents (deliberately spans 3 UML base metaclasses):
+    - 1 Block             (Camera; base_Class)
+    - 1 Property          (resolution: int; base_Property)
+    - 1 FlowProperty      (imageOut, direction=out; base_Property)
+    - 1 ConstraintBlock   (ResolutionConstraint; base_Class)
+    - 1 ValueType         (MegaPixel; base_DataType)
+  ============================================================================
+-->
+<xmi:XMI xmi:version="20131001"
+  xmlns:xmi="http://www.omg.org/spec/XMI/20131001"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:SysML="http://example.org/sysml/blocks"
+  xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+
+  <uml:Model xmi:id="_model_1" name="CameraSystem">
+
+    <!-- Block: Camera -->
+    <packagedElement xmi:type="uml:Class" xmi:id="_camera_1" name="Camera">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_resolution_1"
+                      name="resolution"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_imageOut_1"
+                      name="imageOut"/>
+    </packagedElement>
+
+    <!-- ConstraintBlock: ResolutionConstraint -->
+    <packagedElement xmi:type="uml:Class" xmi:id="_constraint_1"
+                     name="ResolutionConstraint">
+      <ownedRule xmi:type="uml:Constraint" xmi:id="_rule_1"
+                 name="ResolutionRule">
+        <specification xmi:type="uml:OpaqueExpression" xmi:id="_spec_1">
+          <body>resolution &gt;= 1000</body>
+        </specification>
+      </ownedRule>
+    </packagedElement>
+
+    <!-- ValueType: MegaPixel -->
+    <packagedElement xmi:type="uml:DataType" xmi:id="_megapixel_1"
+                     name="MegaPixel"/>
+
+  </uml:Model>
+
+  <!-- Stereotype applications (loaded as AnyType; detected via
+       profile-bridge.eol's getStereotypeBaseClass + base_* generalisation) -->
+
+  <SysML:Block          xmi:id="_block_app_1"
+                        base_Class="_camera_1"/>
+  <SysML:ConstraintBlock xmi:id="_cb_app_1"
+                        base_Class="_constraint_1"/>
+  <SysML:Property       xmi:id="_prop_app_1"
+                        base_Property="_resolution_1"/>
+  <SysML:FlowProperty   xmi:id="_fp_app_1"
+                        base_Property="_imageOut_1"
+                        direction="out"/>
+  <SysML:ValueType      xmi:id="_vt_app_1"
+                        base_DataType="_megapixel_1"
+                        unit="MP" dimension="resolution"/>
+
+</xmi:XMI>

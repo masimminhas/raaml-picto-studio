@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sysmlblocks:BlockModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sysmlblocks="http://edu.kit.sdq/dsis/metamodels/sysml/blocks" xsi:schemaLocation="http://edu.kit.sdq/dsis/metamodels/sysml/blocks ../model/sysml-blocks.ecore" id="CameraSystem" name="CameraSystem">
+  <blocks id="Camera" name="Camera">
+    <ownedProperties id="resolution" name="resolution"/>
+    <ownedProperties xsi:type="sysmlblocks:FlowProperty" id="imageOut" name="imageOut" direction="out"/>
+  </blocks>
+  <constraintBlocks id="ResolutionConstraint" name="ResolutionConstraint" constraintExpression="resolution >= 1000"/>
+  <valueTypes id="MegaPixel" name="MegaPixel" unit="MP" dimension="resolution"/>
+</sysmlblocks:BlockModel>

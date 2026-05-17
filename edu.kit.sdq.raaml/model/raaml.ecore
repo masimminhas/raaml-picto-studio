@@ -1893,4 +1893,94 @@
       </eAnnotations>
     </eClassifiers>
   </eSubpackages>
+  <eSubpackages name="hazop" nsURI="http://edu.kit.sdq/dsis/metamodels/raaml/hazop"
+      nsPrefix="raaml.hazop">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Hazard and Operability Study (IEC 61882:2016). Guide-word-based deviation analysis on a system's nodes, parameters, and design intent."/>
+    </eAnnotations>
+    <eAnnotations source="http://edu.kit.sdq/raaml/native-ecore">
+      <details key="rationale" value="IEC 61882 is a worksheet-only methodology with no normative OMG UML profile. This package is native to the standalone Ecore (no Pair-1/Pair-2 ETL is provided or possible). Demonstrates that the standalone-Ecore approach delivers value even where no source UML profile exists."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="HAZOPStudy" eSuperTypes="#//core/Analysis">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A complete HAZOP study covering one or more system nodes per IEC 61882:2016"/>
+      </eAnnotations>
+      <eAnnotations source="http://edu.kit.sdq/raaml/native-ecore">
+        <details key="origin" value="IEC 61882:2016 -- no UML profile equivalent"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="studyDate"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="standardReference"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="IEC 61882:2016"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+          eType="#//hazop/HAZOPNode" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HAZOPNode"
+        eSuperTypes="#//core/CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A part of the system under analysis (e.g., 'Radar Sensor', 'ECU', 'Brake Actuator'). Holds the design intent and the deviations identified on it."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="subsystem"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="designIntent"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deviations" upperBound="-1"
+          eType="#//hazop/Deviation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Deviation"
+        eSuperTypes="#//core/CoreSafetyElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A single (guide-word, parameter) cell in a HAZOP worksheet, with its causes, consequences, safeguards, and recommendations."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="guideWord"
+          eType="#//hazop/GuideWord" defaultValueLiteral="NO"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameter"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deviationText"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="riskLevel"
+          eType="#//hazop/RiskLevel" defaultValueLiteral="MEDIUM"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="asil"
+          eType="#//hara/ASIL"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="causes" upperBound="-1"
+          eType="#//hazop/Cause" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="consequences" upperBound="-1"
+          eType="#//hazop/Consequence" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="safeguards" upperBound="-1"
+          eType="#//hazop/Safeguard" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="recommendations" upperBound="-1"
+          eType="#//hazop/Recommendation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Cause"
+        eSuperTypes="#//core/CoreSafetyElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Consequence"
+        eSuperTypes="#//core/CoreSafetyElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Safeguard"
+        eSuperTypes="#//core/CoreSafetyElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Recommendation"
+        eSuperTypes="#//core/CoreSafetyElement"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="GuideWord">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Standard HAZOP guide words per IEC 61882:2016 Annex B"/>
+      </eAnnotations>
+      <eLiterals name="NO" literal="NO"/>
+      <eLiterals name="MORE" value="1" literal="MORE"/>
+      <eLiterals name="LESS" value="2" literal="LESS"/>
+      <eLiterals name="AS_WELL_AS" value="3" literal="AS WELL AS"/>
+      <eLiterals name="PART_OF" value="4" literal="PART OF"/>
+      <eLiterals name="REVERSE" value="5" literal="REVERSE"/>
+      <eLiterals name="OTHER_THAN" value="6" literal="OTHER THAN"/>
+      <eLiterals name="EARLY" value="7" literal="EARLY"/>
+      <eLiterals name="LATE" value="8" literal="LATE"/>
+      <eLiterals name="BEFORE" value="9" literal="BEFORE"/>
+      <eLiterals name="AFTER" value="10" literal="AFTER"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RiskLevel">
+      <eLiterals name="LOW" literal="LOW"/>
+      <eLiterals name="MEDIUM" value="1" literal="MEDIUM"/>
+      <eLiterals name="HIGH" value="2" literal="HIGH"/>
+      <eLiterals name="CRITICAL" value="3" literal="CRITICAL"/>
+    </eClassifiers>
+  </eSubpackages>
 </ecore:EPackage>

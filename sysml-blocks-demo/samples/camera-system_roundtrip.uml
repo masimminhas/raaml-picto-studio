@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_a8lQAFFoEfGMvMt-w6rTnQ" name="CameraSystem">
+  <packagedElement xmi:type="uml:Class" xmi:id="_a8meIFFoEfGMvMt-w6rTnQ" name="Camera">
+    <eAnnotations xmi:id="_a8o6YFFoEfGMvMt-w6rTnQ" source="http://edu.kit.sdq/sysml-blocks/roundtrip-trace">
+      <details xmi:id="_a8phcFFoEfGMvMt-w6rTnQ" key="ecoreType" value="Block"/>
+      <details xmi:id="_a8qIgFFoEfGMvMt-w6rTnQ" key="stereotype" value="Block"/>
+      <details xmi:id="_a8qIgVFoEfGMvMt-w6rTnQ" key="profile" value="SysML"/>
+      <details xmi:id="_a8qvkFFoEfGMvMt-w6rTnQ" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_a8qvkVFoEfGMvMt-w6rTnQ" key="technique" value="SysML Blocks"/>
+      <details xmi:id="_a8qvklFoEfGMvMt-w6rTnQ" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+    <ownedAttribute xmi:id="_a8rWoFFoEfGMvMt-w6rTnQ" name="resolution">
+      <eAnnotations xmi:id="_a8ty4FFoEfGMvMt-w6rTnQ" source="http://edu.kit.sdq/sysml-blocks/roundtrip-trace">
+        <details xmi:id="_a8ty4VFoEfGMvMt-w6rTnQ" key="ecoreType" value="Property"/>
+        <details xmi:id="_a8uZ8FFoEfGMvMt-w6rTnQ" key="stereotype" value="Property"/>
+        <details xmi:id="_a8uZ8VFoEfGMvMt-w6rTnQ" key="profile" value="SysML"/>
+        <details xmi:id="_a8uZ8lFoEfGMvMt-w6rTnQ" key="baseMetaclass" value="Property"/>
+        <details xmi:id="_a8uZ81FoEfGMvMt-w6rTnQ" key="technique" value="SysML Blocks"/>
+        <details xmi:id="_a8uZ9FFoEfGMvMt-w6rTnQ" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_a8skwFFoEfGMvMt-w6rTnQ" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_a8tL0FFoEfGMvMt-w6rTnQ" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_a8voEFFoEfGMvMt-w6rTnQ" name="imageOut">
+      <eAnnotations xmi:id="_a8w2MFFoEfGMvMt-w6rTnQ" source="http://edu.kit.sdq/sysml-blocks/roundtrip-trace">
+        <details xmi:id="_a8w2MVFoEfGMvMt-w6rTnQ" key="ecoreType" value="FlowProperty"/>
+        <details xmi:id="_a8w2MlFoEfGMvMt-w6rTnQ" key="stereotype" value="FlowProperty"/>
+        <details xmi:id="_a8w2M1FoEfGMvMt-w6rTnQ" key="profile" value="SysML"/>
+        <details xmi:id="_a8w2NFFoEfGMvMt-w6rTnQ" key="baseMetaclass" value="Property"/>
+        <details xmi:id="_a8xdQFFoEfGMvMt-w6rTnQ" key="technique" value="SysML Blocks"/>
+        <details xmi:id="_a8xdQVFoEfGMvMt-w6rTnQ" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+      </eAnnotations>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_a8wPIFFoEfGMvMt-w6rTnQ" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_a8wPIVFoEfGMvMt-w6rTnQ" value="1"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_a8zScFFoEfGMvMt-w6rTnQ" name="ResolutionConstraint">
+    <eAnnotations xmi:id="_a8z5gFFoEfGMvMt-w6rTnQ" source="http://edu.kit.sdq/sysml-blocks/roundtrip-trace">
+      <details xmi:id="_a8z5gVFoEfGMvMt-w6rTnQ" key="ecoreType" value="ConstraintBlock"/>
+      <details xmi:id="_a80gkFFoEfGMvMt-w6rTnQ" key="stereotype" value="ConstraintBlock"/>
+      <details xmi:id="_a80gkVFoEfGMvMt-w6rTnQ" key="profile" value="SysML"/>
+      <details xmi:id="_a80gklFoEfGMvMt-w6rTnQ" key="baseMetaclass" value="Class"/>
+      <details xmi:id="_a80gk1FoEfGMvMt-w6rTnQ" key="technique" value="SysML Blocks"/>
+      <details xmi:id="_a80glFFoEfGMvMt-w6rTnQ" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+    <ownedRule xmi:id="_a81usFFoEfGMvMt-w6rTnQ" name="ResolutionConstraint_constraint">
+      <specification xmi:type="uml:OpaqueExpression" xmi:id="_a81usVFoEfGMvMt-w6rTnQ">
+        <body>resolution >= 1000</body>
+      </specification>
+    </ownedRule>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_a82VwFFoEfGMvMt-w6rTnQ" name="MegaPixel">
+    <eAnnotations xmi:id="_a8280FFoEfGMvMt-w6rTnQ" source="http://edu.kit.sdq/sysml-blocks/roundtrip-trace">
+      <details xmi:id="_a8280VFoEfGMvMt-w6rTnQ" key="ecoreType" value="ValueType"/>
+      <details xmi:id="_a83j4FFoEfGMvMt-w6rTnQ" key="stereotype" value="ValueType"/>
+      <details xmi:id="_a83j4VFoEfGMvMt-w6rTnQ" key="profile" value="SysML"/>
+      <details xmi:id="_a83j4lFoEfGMvMt-w6rTnQ" key="baseMetaclass" value="DataType"/>
+      <details xmi:id="_a83j41FoEfGMvMt-w6rTnQ" key="technique" value="SysML Blocks"/>
+      <details xmi:id="_a83j5FFoEfGMvMt-w6rTnQ" key="roundtripDate" value="forward->Ecore->backward->UML"/>
+    </eAnnotations>
+  </packagedElement>
+</uml:Model>

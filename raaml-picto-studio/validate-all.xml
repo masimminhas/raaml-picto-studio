@@ -24,7 +24,11 @@
 
     <!-- Paths -->
     <property name="evl.file" value="raaml-semantic-constraints.evl"/>
-    <property name="metamodel.uri" value="http://edu.kit.sdq/dsis/metamodels/raaml"/>
+    <!-- Load the metamodel from the .ecore file directly (dynamic EPackage).
+         This bypasses Eclipse's EPackage.Registry entirely, so it works
+         regardless of plugin-activation timing or registry caching. -->
+    <property name="metamodel.file"
+              location="${basedir}/../edu.kit.sdq.raaml/model/raaml.ecore"/>
 
     <macrodef name="validate-model">
         <attribute name="model.file"/>
@@ -37,7 +41,7 @@
 
             <epsilon.emf.loadModel name="M"
                                    modelfile="@{model.file}"
-                                   metamodeluri="${metamodel.uri}"
+                                   metamodelfile="${metamodel.file}"
                                    read="true"
                                    store="false"
                                    expand="true"/>
@@ -65,7 +69,7 @@
         <validate-model model.file="aeb_stpa.xmi"       model.label="AEB STPA Analysis"/>
         <validate-model model.file="aeb_hara.xmi"       model.label="AEB HARA (ISO 26262)"/>
         <validate-model model.file="aeb_gsn.xmi"        model.label="AEB GSN Safety Case"/>
-        <validate-model model.file="aeb_hazop.xmi"      model.label="AEB HAZOP Analysis"/>
+        <validate-model model.file="aeb_hazop.raaml.xmi" model.label="AEB HAZOP Analysis (typed, hazop sub-package)"/>
         <validate-model model.file="aeb_iso26262.xmi"   model.label="AEB ISO 26262 Compliance"/>
         <validate-model model.file="aeb_requirements.xmi" model.label="AEB Safety Requirements"/>
         <validate-model model.file="SafetyAnalysis.xmi"  model.label="Full Safety Analysis"/>

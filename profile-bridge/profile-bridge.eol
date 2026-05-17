@@ -1,0 +1,307 @@
+// ============================================================================
+// profile-bridge.eol
+// ----------------------------------------------------------------------------
+// Profile-agnostic helpers for bidirectional transformations between an
+// OMG UML2 profile and a standalone Ecore metamodel.
+//
+// This file is intentionally placed at the repository root, OUTSIDE both
+// `raaml-picto-studio/` and `sysml-blocks-demo/`, to make its profile-
+// neutrality explicit: any RAAML- or SysML- specific code in here is a bug.
+//
+// Imported by:
+//   - raaml-picto-studio/transformations/pair2-usermodel-*-{forward,backward}.etl
+//   - sysml-blocks-demo/transformations/pair2-sysml-blocks-*.etl
+//
+// Methodological role (cite in SoSYM paper):
+//   * Profile-resolution-independent stereotype detection via direct XMI
+//     inspection of dynamic AnyType elements.
+//   * Generalisation over every `base_*` UML metaclass slot (base_Class,
+//     base_Element, base_Property, base_DataType, base_Dependency, ...).
+//   * Provenance EAnnotation emission on the backward path so stereotype
+//     re-application becomes a mechanical post-pass.
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// 1. UML generalisation chain walking (Pattern 2 detection)
+// ---------------------------------------------------------------------------
+
+// Walk a UML Class's generalisation chain looking for any class whose name
+// is in the given set. Returns the matching ancestor (including self) or
+// null. Profile-agnostic.
+operation UML!Class findAncestorInSet(names : Collection) : UML!Class {
+    if (names.includes(self.name)) return self;
+    for (g in self.generalization) {
+        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+            var ancestor = g.general.findAncestorInSet(names);
+            if (ancestor.isDefined() and ancestor <> null) return ancestor;
+        }
+    }
+    return null;
+}
+
+operation UML!Class hasAncestorInSet(names : Collection) : Boolean {
+    return self.findAncestorInSet(names) <> null;
+}
+
+// ---------------------------------------------------------------------------
+// 2. AnyType-based stereotype detection (Pattern 3, profile-resolution-
+//    independent)
+// ---------------------------------------------------------------------------
+
+// True iff `obj` is a dynamically-loaded XMI AnyType instance (the form
+// EMF uses for stereotype applications when their profile is unresolved).
+operation isAnyTypeInstance(obj : Any) : Boolean {
+    if (obj.isUndefined() or obj == null) return false;
+    return obj.getClass().getName()
+           == 'org.eclipse.emf.ecore.xml.type.impl.AnyTypeImpl';
+}
+
+// True iff `eClass` declares at least one `base_*` structural feature
+// (i.e. it is a typed stereotype class from a resolved UML profile).
+operation eClassHasBaseFeature(eClass : Any) : Boolean {
+    for (f in eClass.eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) return true;
+    }
+    return false;
+}
+
+// Scan all EObjects in a loaded EMF model via the Resource API and return
+// those whose eClass simple-name matches the given name AND that look like
+// stereotype applications (either dynamic AnyType, or a typed stereotype
+// class declaring `base_*` features). This guards against name collisions
+// with real UML metaclasses -- e.g. SysML's <<Property>> stereotype shares
+// its eClass simple-name with UML's own Property metaclass, which would
+// otherwise be wrongly picked up.
+//
+// NOTE: parameter named `mdl` because `model` is a reserved EOL keyword.
+operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
+    var result = new Sequence;
+    var res = mdl.getResource();
+    if (res.isUndefined() or res == null) return result;
+    var iter = res.getAllContents();
+    while (iter.hasNext()) {
+        var obj = iter.next();
+        if (obj.eClass().name == typeName
+            and (isAnyTypeInstance(obj)
+                 or eClassHasBaseFeature(obj.eClass()))) {
+            result.add(obj);
+        }
+    }
+    return result;
+}
+
+// Resolve a UML element by its xmi:id string. Iterates UML!Element.all and
+// returns the one whose Resource URI fragment matches the given id.
+operation resolveUmlElementById(xmiId : String) : Any {
+    if (xmiId.isUndefined() or xmiId == null) return null;
+    for (e in UML!Element.all) {
+        var res = e.eResource();
+        if (res.isDefined() and res <> null) {
+            var frag = res.getURIFragment(e);
+            if (frag == xmiId) return e;
+        }
+    }
+    return null;
+}
+
+// Resolve the UML element a stereotype application is attached to.
+//
+// CENTRAL METHODOLOGICAL CONTRIBUTION: this helper generalises over every
+// `base_*` UML metaclass slot (base_Class, base_Element, base_Property,
+// base_DataType, base_Dependency, base_Abstraction, base_Connector, ...).
+// Stereotype applications from any UML profile resolve correctly without
+// the helper needing to know which profile they came from.
+//
+// Falls back to AnyType.getAnyAttribute() when the profile is unresolved
+// and the stereotype application has been loaded as a dynamic AnyType.
+operation getStereotypeBaseClass(stereoApp : Any) : Any {
+    // Typed stereotype class: read the base_* eReference directly.
+    for (f in stereoApp.eClass().eAllStructuralFeatures) {
+        if (f.name.startsWith('base_')) {
+            var v = stereoApp.eGet(f);
+            if (v.isDefined() and v <> null) return v;
+        }
+    }
+    // AnyType (unresolved profile): read base_* from anyAttribute.
+    // Guard with isAnyTypeInstance so this branch never fires on real UML
+    // elements that happen to share an eClass name with a stereotype.
+    if (isAnyTypeInstance(stereoApp)) {
+        var anyAttrs = stereoApp.getAnyAttribute();
+        if (anyAttrs.isDefined() and anyAttrs <> null) {
+            for (entry in anyAttrs) {
+                if (entry.getEStructuralFeature().name.startsWith('base_')) {
+                    return resolveUmlElementById(entry.getValue());
+                }
+            }
+        }
+    }
+    return null;
+}
+
+// Return all UML elements (typically Classes, but also Properties / DataTypes
+// / etc.) in the given model that have a stereotype of the given name
+// applied to them, detected via XMI-level scanning.
+//
+// Profile-agnostic: works for any UML2 profile whose stereotypes have a
+// `base_*` reference to the underlying UML metaclass.
+operation findUmlElementsWithStereotype(mdl : Any,
+                                        stereotypeName : String) : Sequence {
+    var result = new Sequence;
+    var apps = findAllEObjectsByTypeName(mdl, stereotypeName);
+    for (app in apps) {
+        var base = getStereotypeBaseClass(app);
+        if (base.isDefined() and base <> null) {
+            result.add(base);
+        }
+    }
+    return result;
+}
+
+// Legacy alias kept for compatibility with existing RAAML ETLs.
+operation findUmlClassesWithStereotype(mdl : Any,
+                                       stereotypeName : String) : Sequence {
+    return findUmlElementsWithStereotype(mdl, stereotypeName);
+}
+
+// ---------------------------------------------------------------------------
+// 3. UML attribute helpers (read defaults from owned properties)
+// ---------------------------------------------------------------------------
+
+// Return the numeric default value of a UML owned attribute, or null.
+operation UML!Class getDoubleProperty(propName : String) : Real {
+    var a = self.ownedAttribute.selectOne(p | p.name == propName);
+    if (a.isDefined() and a.defaultValue.isDefined()) {
+        var v = a.defaultValue.value;
+        if (v.isDefined() and v <> null) return v.asDouble();
+    }
+    return null;
+}
+
+// Return the string default value of a UML owned attribute, or null.
+operation UML!Class getStringProperty(propName : String) : String {
+    var a = self.ownedAttribute.selectOne(p | p.name == propName);
+    if (a.isDefined() and a.defaultValue.isDefined()) {
+        var v = a.defaultValue.value;
+        if (v.isDefined() and v <> null) return v.toString();
+    }
+    return null;
+}
+
+// Return the integer default value of a UML owned attribute, or null.
+operation UML!Class getIntegerProperty(propName : String) : Integer {
+    var a = self.ownedAttribute.selectOne(p | p.name == propName);
+    if (a.isDefined() and a.defaultValue.isDefined()) {
+        var v = a.defaultValue.value;
+        if (v.isDefined() and v <> null) return v.asInteger();
+    }
+    return null;
+}
+
+// Return the boolean default value of a UML owned attribute, or null.
+operation UML!Class getBooleanProperty(propName : String) : Boolean {
+    var a = self.ownedAttribute.selectOne(p | p.name == propName);
+    if (a.isDefined() and a.defaultValue.isDefined()) {
+        var v = a.defaultValue.value;
+        if (v.isDefined() and v <> null) {
+            if (v.isKindOf(Boolean)) return v;
+            return v.toString().asLowercase() == 'true';
+        }
+    }
+    return null;
+}
+
+// ---------------------------------------------------------------------------
+// 4. Tagged-value access from AnyType stereotype applications
+// ---------------------------------------------------------------------------
+
+// Read a tagged-value property from a stereotype application loaded as
+// AnyType. Returns null if the property is missing. Profile-agnostic.
+operation getStereotypeTaggedValue(stereoApp : Any,
+                                   propertyName : String) : Any {
+    if (stereoApp.isUndefined() or stereoApp == null) return null;
+    var feature = stereoApp.eClass().getEStructuralFeature(propertyName);
+    if (feature.isDefined() and feature <> null) {
+        return stereoApp.eGet(feature);
+    }
+    var anyAttrs = stereoApp.getAnyAttribute();
+    if (anyAttrs.isDefined() and anyAttrs <> null) {
+        for (entry in anyAttrs) {
+            if (entry.getEStructuralFeature().name == propertyName) {
+                return entry.getValue();
+            }
+        }
+    }
+    return null;
+}
+
+// Resolve an EEnum literal by name (case-sensitive) for an attribute
+// whose type is an EEnum, and assign it to the given target's attribute.
+// Profile-agnostic; usable from any Ecore-targeting backward/forward rule
+// that needs to map a textual stereotype tagged-value to a typed enum.
+operation setEnumValue(target : Any,
+                       featureName : String,
+                       literalName : String) {
+    if (target.isUndefined() or target == null) return;
+    if (literalName.isUndefined() or literalName == null) return;
+    var feature = target.eClass().getEStructuralFeature(featureName);
+    if (feature.isUndefined() or feature == null) return;
+    var eType = feature.getEType();
+    if (eType.isUndefined() or eType == null) return;
+    var literal = eType.getEEnumLiteral(literalName);
+    if (literal.isDefined() and literal <> null) {
+        target.eSet(feature, literal.getInstance());
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 5. Backward-path provenance EAnnotation emission
+// ---------------------------------------------------------------------------
+
+// Attach a profile-bridge provenance EAnnotation to a regenerated UML
+// element. The annotation carries enough information for a downstream
+// profile-aware post-pass to re-apply the original stereotype without
+// having to re-derive its identity.
+//
+// Parameters:
+//   annotationSource - opaque URI identifying the bridge instance, e.g.
+//                      'http://edu.kit.sdq/raaml/roundtrip-trace' or
+//                      'http://edu.kit.sdq/sysml-blocks/roundtrip-trace'
+//   umlElement       - the regenerated UML element to annotate
+//   ecoreType        - the source Ecore EClass name (e.g. 'SafetyGoal')
+//   stereotype       - the OMG stereotype name (often == ecoreType)
+//   profile          - the originating UML profile name
+//   baseMetaclass    - the UML metaclass the stereotype extends
+//   technique        - free-text technique/domain tag
+//
+// Profile-agnostic; the previously RAAML-specific addRaamlProvenance is a
+// thin wrapper around this operation.
+operation addProvenance(annotationSource : String,
+                        umlElement       : Any,
+                        ecoreType        : String,
+                        stereotype       : String,
+                        profile          : String,
+                        baseMetaclass    : String,
+                        technique        : String) {
+    var ann : new UML!EAnnotation;
+    ann.source = annotationSource;
+    ann.details.put('ecoreType',     ecoreType);
+    ann.details.put('stereotype',    stereotype);
+    ann.details.put('profile',       profile);
+    ann.details.put('baseMetaclass', baseMetaclass);
+    ann.details.put('technique',     technique);
+    ann.details.put('roundtripDate', 'forward->Ecore->backward->UML');
+    umlElement.eAnnotations.add(ann);
+}
+
+// ---------------------------------------------------------------------------
+// 6. Placeholder marker helpers (round-trip skip-list pattern)
+// ---------------------------------------------------------------------------
+
+// True if the given element carries a stable placeholder identifier marker
+// (`__placeholder` or `__library-template-slot`). Used by backward
+// transformations to skip synthesised mandatory children.
+operation Any isPlaceholder() : Boolean {
+    if (self.id.isUndefined() or self.id == null) return false;
+    return self.id.indexOf('__placeholder')           > -1
+        or self.id.indexOf('__library-template-slot') > -1;
+}

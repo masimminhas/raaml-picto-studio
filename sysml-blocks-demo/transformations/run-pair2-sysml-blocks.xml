@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  run-pair2-sysml-blocks.xml
+  ============================================================================
+  SysML Blocks (subset) Pair-2 forward transformation runner.
+
+  Input:  a UML user model created in Papyrus with the OMG SysML profile
+          applied. Save it as samples/camera-system.uml (or change the
+          user.uml.source property below).
+
+  Output: samples/camera-system.sysml-blocks.xmi  - a standalone
+          SysML Blocks Ecore instance.
+
+  This runner is the SysML Blocks demonstration twin of
+  raaml-picto-studio/transformations/run-pair2-usermodel.xml. It uses the
+  SAME shared helper module (../../profile-bridge/profile-bridge.eol) as
+  the RAAML transformations, evidencing methodology generality.
+  ============================================================================
+-->
+<project default="run-forward" basedir=".">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"/>
+
+    <taskdef name="epsilon.etl"
+             classname="org.eclipse.epsilon.workflow.tasks.EtlTask"
+             onerror="ignore"/>
+
+    <property name="project.dir"   location="${basedir}/.."/>
+    <property name="workspace.dir" location="${basedir}/../.."/>
+
+    <property name="sysml.ecore"
+              location="${project.dir}/model/sysml-blocks.ecore"/>
+
+    <property name="user.uml.source"
+              location="${basedir}/../samples/camera-system.uml"/>
+    <property name="ecore.target"
+              location="${basedir}/../samples/camera-system.sysml-blocks.xmi"/>
+
+    <target name="run-forward"
+            description="UML+SysML-profile -> standalone SysML Blocks Ecore">
+
+        <echo>=============================================================</echo>
+        <echo>SysML Blocks Pair-2 forward transformation</echo>
+        <echo>  basedir:        ${basedir}</echo>
+        <echo>  Source (UML):   ${user.uml.source}</echo>
+        <echo>  Target (XMI):   ${ecore.target}</echo>
+        <echo>  Metamodel:      ${sysml.ecore}</echo>
+        <echo>=============================================================</echo>
+
+        <available file="${user.uml.source}" property="src.exists"/>
+        <fail unless="src.exists">
+            UML source not found: ${user.uml.source}
+
+            Create a small SysML model in Papyrus with at least one
+            &lt;&lt;Block&gt;&gt; and one &lt;&lt;Property&gt;&gt;,
+            save it as samples/camera-system.uml, then re-run.
+        </fail>
+
+        <epsilon.emf.loadModel name="UML"
+                               modelfile="${user.uml.source}"
+                               metamodeluri="http://www.eclipse.org/uml2/5.0.0/UML"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+
+        <epsilon.emf.loadModel name="SysML"
+                               modelfile="${ecore.target}"
+                               metamodelfile="${sysml.ecore}"
+                               read="false"
+                               store="true"
+                               expand="true"/>
+
+        <epsilon.etl src="${basedir}/pair2-sysml-blocks-forward.etl">
+            <model ref="UML"/>
+            <model ref="SysML"/>
+        </epsilon.etl>
+
+        <epsilon.disposeModels/>
+
+        <echo>=============================================================</echo>
+        <echo>Done. Inspect: ${ecore.target}</echo>
+        <echo>=============================================================</echo>
+    </target>
+
+</project>

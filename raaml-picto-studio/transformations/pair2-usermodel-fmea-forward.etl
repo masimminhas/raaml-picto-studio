@@ -6,115 +6,20 @@
 // DUAL-STRATEGY detection:
 //   1. Inheritance-based (Pattern 2)  - user class generalizes from FMEAItem
 //   2. Stereotype-application-based (Pattern 3) - user class has <<FMEAItem>>
-//      applied, detected via direct XMI inspection (works even when UML2
-//      profile resolution fails in ANT contexts).
-//
-// Helper operations are INLINED (not imported) to avoid Epsilon import
-// resolution issues in some ANT environments.
+//      applied, detected via the profile-resolution-independent helpers in
+//      ../../profile-bridge/profile-bridge.eol (shared with the SysML Blocks
+//      demonstration ETLs, evidencing methodology generality for SoSYM).
 // ============================================================================
 
+import "../../profile-bridge/profile-bridge.eol";
+
 // ===========================================================================
-// INLINED HELPERS (copied from helpers/uml-helpers.eol and omg-aliases.eol)
+// FMEA-SPECIFIC DISPATCH (the only RAAML/FMEA-bound code in this file)
 // ===========================================================================
 
 @cached
 operation getFMEAItemAncestors() : Set {
     return Set{'FMEAItem', 'AbstractFMEAItem'};
-}
-
-// Walk the UML generalization chain looking for a class whose name is in the
-// given set. Returns the matching ancestor (including self) or null.
-operation UML!Class findAncestorInSet(names : Collection) : UML!Class {
-    if (names.includes(self.name)) return self;
-    for (g in self.generalization) {
-        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
-            var ancestor = g.general.findAncestorInSet(names);
-            if (ancestor.isDefined() and ancestor <> null) return ancestor;
-        }
-    }
-    return null;
-}
-
-operation UML!Class hasAncestorInSet(names : Collection) : Boolean {
-    return self.findAncestorInSet(names) <> null;
-}
-
-// Return a numeric default value of a UML owned attribute, or null.
-operation UML!Class getDoubleProperty(propName : String) : Real {
-    var a = self.ownedAttribute.selectOne(p | p.name == propName);
-    if (a.isDefined() and a.defaultValue.isDefined()) {
-        var v = a.defaultValue.value;
-        if (v.isDefined() and v <> null) return v.asDouble();
-    }
-    return null;
-}
-
-// Scan all EObjects in a loaded EMF model via the Resource API and return
-// those whose eClass simple-name matches the given name. This locates
-// stereotype application elements without requiring UML2 profile resolution.
-operation findAllEObjectsByTypeName(mdl : Any, typeName : String) : Sequence {
-    var result = new Sequence;
-    var res = mdl.getResource();
-    if (res.isUndefined() or res == null) return result;
-    var iter = res.getAllContents();
-    while (iter.hasNext()) {
-        var obj = iter.next();
-        if (obj.eClass().name == typeName) {
-            result.add(obj);
-        }
-    }
-    return result;
-}
-
-// Resolve a UML element by its xmi:id string. Iterates UML!Element.all
-// and returns the one whose Resource URI fragment matches the given id.
-operation resolveUmlElementById(xmiId : String) : Any {
-    if (xmiId.isUndefined() or xmiId == null) return null;
-    for (e in UML!Element.all) {
-        var res = e.eResource();
-        if (res.isDefined() and res <> null) {
-            var frag = res.getURIFragment(e);
-            if (frag == xmiId) return e;
-        }
-    }
-    return null;
-}
-
-// Resolve the UML element a stereotype application is attached to.
-// Checks any base_* feature name (base_Class, base_Element, base_Package,
-// base_Dependency, base_Abstraction, etc.) because different RAAML
-// stereotypes extend different UML metaclasses.
-operation getStereotypeBaseClass(stereoApp : Any) : Any {
-    for (f in stereoApp.eClass().eAllStructuralFeatures) {
-        if (f.name.startsWith('base_')) {
-            var v = stereoApp.eGet(f);
-            if (v.isDefined() and v <> null) return v;
-        }
-    }
-    var anyAttrs = stereoApp.getAnyAttribute();
-    if (anyAttrs.isDefined() and anyAttrs <> null) {
-        for (entry in anyAttrs) {
-            if (entry.getEStructuralFeature().name.startsWith('base_')) {
-                return resolveUmlElementById(entry.getValue());
-            }
-        }
-    }
-    return null;
-}
-
-// Return all UML Classes (from the given model) to which a stereotype of
-// the given name has been applied, via XMI-level scanning.
-operation findUmlClassesWithStereotype(mdl : Any,
-                                       stereotypeName : String) : Sequence {
-    var result = new Sequence;
-    var apps = findAllEObjectsByTypeName(mdl, stereotypeName);
-    for (app in apps) {
-        var baseClass = getStereotypeBaseClass(app);
-        if (baseClass.isDefined() and baseClass <> null) {
-            result.add(baseClass);
-        }
-    }
-    return result;
 }
 
 // Unified detection: returns user classes identified as FMEAItems by

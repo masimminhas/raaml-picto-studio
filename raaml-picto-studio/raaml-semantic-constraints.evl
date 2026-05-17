@@ -343,3 +343,61 @@ context SafetyAnalysis {
                   + "correspond to HARA hazardous events."
     }
 }
+
+// =============================================================================
+// HAZOP (IEC 61882:2016)
+// =============================================================================
+// HAZOP is a native-Ecore technique with no corresponding OMG UML profile.
+// These rules enforce the worksheet structural requirements of IEC 61882.
+
+context HAZOPNode {
+
+    critique HAZOPNodeMustHaveAtLeastOneDeviation {
+        check : self.deviations.notEmpty()
+        message : "HAZOP node '" + self.name + "' has no deviations. "
+                  + "Each node analysed in a HAZOP study must contribute "
+                  + "at least one (guide-word, parameter) deviation cell."
+    }
+}
+
+context Deviation {
+
+    critique HAZOPDeviationMustHaveCause {
+        check : self.causes.notEmpty()
+        message : "Deviation '" + self.name + "' has no causes recorded. "
+                  + "IEC 61882 Clause 5.5.4: every identified deviation must "
+                  + "list at least one credible cause."
+    }
+
+    critique HAZOPDeviationMustHaveConsequence {
+        check : self.consequences.notEmpty()
+        message : "Deviation '" + self.name + "' has no consequences recorded. "
+                  + "IEC 61882 Clause 5.5.5: every deviation must document "
+                  + "its consequences."
+    }
+
+    critique HAZOPHighRiskMustHaveSafeguard {
+        check {
+            var risk = self.riskLevel.literal;
+            if (risk == 'HIGH' or risk == 'CRITICAL') {
+                return self.safeguards.notEmpty();
+            }
+            return true;
+        }
+        message : "Deviation '" + self.name + "' is risk " + self.riskLevel.literal
+                  + " but has no safeguards declared. HIGH and CRITICAL risk "
+                  + "deviations must record existing or proposed safeguards."
+    }
+
+    critique HAZOPCriticalMustHaveRecommendation {
+        check {
+            if (self.riskLevel.literal == 'CRITICAL') {
+                return self.recommendations.notEmpty();
+            }
+            return true;
+        }
+        message : "Deviation '" + self.name + "' is risk CRITICAL but has no "
+                  + "recommendation. Every CRITICAL deviation requires an "
+                  + "actionable recommendation per IEC 61882 worksheet practice."
+    }
+}

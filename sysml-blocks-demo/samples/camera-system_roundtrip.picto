@@ -1,0 +1,11 @@
+<?nsuri picto?>
+<picto format="egx"
+       transformation="platform:/resource/sysml-blocks-demo/views/roundtrip_classdiagram.egx"
+       standalone="true">
+    <model type="EMF">
+        <parameter name="name" value="M"/>
+        <parameter name="metamodelUri" value="http://www.eclipse.org/uml2/5.0.0/UML"/>
+        <parameter name="modelFile"
+                   value="sysml-blocks-demo/samples/camera-system_roundtrip.uml"/>
+    </model>
+</picto>

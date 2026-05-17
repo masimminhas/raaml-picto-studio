@@ -1,0 +1,31 @@
+// ============================================================================
+// roundtrip_classdiagram.egx
+// ----------------------------------------------------------------------------
+// Picto orchestrator for the Pair-2 BACKWARD output:
+// a plain UML model (.uml) regenerated from the standalone SysML Blocks
+// Ecore instance, decorated with profile-bridge provenance EAnnotations.
+//
+// Produces a UML class diagram view (Graphviz) showing:
+//   - Each regenerated UML!Class as a UML class box (name + properties)
+//   - Each UML!DataType as a tagged box
+//   - Provenance EAnnotation details (ecoreType, stereotype, baseMetaclass,
+//     profile, technique) visible as small chips under each element name
+//
+// Demonstrates structural identity preservation across the round-trip
+// AND the provenance trace that lets a downstream profile-aware step
+// re-apply stereotypes mechanically.
+// ============================================================================
+
+rule UmlModelClassDiagram
+    transform m : M!Model {
+
+    template : "roundtrip_classdiagram.egl"
+
+    parameters : Map {
+        "umlModel" = m,
+        "title"    = "Round-trip class diagram - " + m.name,
+        "format"   = "graphviz-dot",
+        "icon"     = "diagram",
+        "path"     = Sequence{m.name, "Round-trip class diagram"}
+    }
+}

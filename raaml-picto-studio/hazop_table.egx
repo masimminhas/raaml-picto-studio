@@ -1,11 +1,11 @@
 rule HAZOPOverview
-    transform obj : M!ISO26262 {
+    transform obj : M!HAZOPStudy {
 
     template : "hazop_table.egl"
 
     parameters : Map {
-        "hazopAnalysis" = obj,
-        "title"         = "AEB HAZOP - " + obj.name,
-        "icon"          = "table"
+        "hazopStudy" = obj,
+        "title"      = "AEB HAZOP - " + obj.name,
+        "icon"       = "table"
     }
 }

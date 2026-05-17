@@ -1,0 +1,203 @@
+[%
+// Round-trip UML class diagram (Papyrus-style) using Graphviz HTML labels.
+// Each UML!Class renders as a 3- or 4-compartment "Papyrus look":
+//   row 1: stereotype in «guillemets» (italic, small)
+//   row 2: ClassName (bold)
+//   row 3: attributes (one per line, "+ name : Type [mult] «stereo»")
+//   row 4: constraints (if any, italic)
+//   row 5: provenance EAnnotation (small italic gray footer)
+// UML!DataType uses the same table form, colour-coded orange.
+
+out.print("digraph RoundTripUML {\n");
+out.print("  graph [rankdir=LR, fontname=\"Helvetica\", fontsize=10, splines=spline, nodesep=0.6, ranksep=0.9, bgcolor=\"white\"];\n");
+out.print("  node  [shape=plain, fontname=\"Helvetica\", fontsize=10];\n");
+out.print("  edge  [fontname=\"Helvetica\", fontsize=9, color=\"#555555\"];\n\n");
+
+// --- UML Classes ---
+for (c in umlModel.packagedElement.select(e | e.isKindOf(M!Class))) {
+  var prov = provenanceFields(c);
+  var headerColor = "#E3F2FD";
+  if (prov.containsKey('ecoreType') and prov.get('ecoreType') == 'ConstraintBlock') {
+    headerColor = "#F3E5F5";
+  }
+  var stereotype = prov.get('stereotype');
+  if (stereotype.isUndefined() or stereotype == null) { stereotype = 'class'; }
+
+  out.print("  " + nodeId(c) + " [label=<");
+  out.print("<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">");
+
+  // Header: stereotype + class name
+  out.print("<TR><TD BGCOLOR=\"" + headerColor + "\" ALIGN=\"CENTER\">");
+  out.print("<FONT POINT-SIZE=\"9\"><I>&#171;" + esc(stereotype) + "&#187;</I></FONT><BR/>");
+  out.print("<B>" + esc(c.name) + "</B>");
+  out.print("</TD></TR>");
+
+  // Attributes compartment
+  out.print("<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\">");
+  if (c.ownedAttribute.isUndefined() or c.ownedAttribute.size() == 0) {
+    out.print("<FONT COLOR=\"#999999\"><I>(no attributes)</I></FONT>");
+  } else {
+    var first = true;
+    for (a in c.ownedAttribute) {
+      if (not first) { out.print("<BR ALIGN=\"LEFT\"/>"); }
+      first = false;
+      out.print(renderAttr(a));
+    }
+  }
+  out.print("</TD></TR>");
+
+  // Constraints compartment (if any)
+  if (c.ownedRule.isDefined() and c.ownedRule.size() > 0) {
+    out.print("<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\" BGCOLOR=\"#FAFAFA\">");
+    out.print("<FONT POINT-SIZE=\"9\" COLOR=\"#444444\">constraints</FONT><BR ALIGN=\"LEFT\"/>");
+    var firstRule = true;
+    for (r in c.ownedRule) {
+      if (not firstRule) { out.print("<BR ALIGN=\"LEFT\"/>"); }
+      firstRule = false;
+      var body = '';
+      if (r.specification.isDefined() and r.specification <> null
+          and r.specification.body.isDefined()
+          and r.specification.body.size() > 0) {
+        body = r.specification.body.first();
+      } else {
+        body = r.name;
+      }
+      out.print("<I>{ " + esc(body) + " }</I>");
+    }
+    out.print("</TD></TR>");
+  }
+
+  // Provenance footer (small italic gray)
+  if (prov.size() > 0) {
+    out.print("<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\" BGCOLOR=\"#F5F5F5\">");
+    out.print(renderProvenanceFooter(prov));
+    out.print("</TD></TR>");
+  }
+
+  out.print("</TABLE>>];\n");
+}
+
+// --- UML DataTypes ---
+for (d in umlModel.packagedElement.select(e | e.isKindOf(M!DataType)
+                                                and not e.isKindOf(M!Class))) {
+  var prov = provenanceFields(d);
+  var stereotype = prov.get('stereotype');
+  if (stereotype.isUndefined() or stereotype == null) { stereotype = 'dataType'; }
+
+  out.print("  " + nodeId(d) + " [label=<");
+  out.print("<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">");
+
+  out.print("<TR><TD BGCOLOR=\"#FFE0B2\" ALIGN=\"CENTER\">");
+  out.print("<FONT POINT-SIZE=\"9\"><I>&#171;" + esc(stereotype) + "&#187;</I></FONT><BR/>");
+  out.print("<B>" + esc(d.name) + "</B>");
+  out.print("</TD></TR>");
+
+  if (prov.size() > 0) {
+    out.print("<TR><TD ALIGN=\"LEFT\" BALIGN=\"LEFT\" BGCOLOR=\"#F5F5F5\">");
+    out.print(renderProvenanceFooter(prov));
+    out.print("</TD></TR>");
+  }
+
+  out.print("</TABLE>>];\n");
+}
+
+// --- Type-reference edges (Class.attr : DataType) ---
+out.print("\n  // type references\n");
+for (c in umlModel.packagedElement.select(e | e.isKindOf(M!Class))) {
+  for (a in c.ownedAttribute) {
+    if (a.type.isDefined() and a.type <> null) {
+      out.print("  " + nodeId(c) + " -> " + nodeId(a.type)
+                + " [label=\"" + escAttr(a.name) + "\", arrowhead=open, style=solid];\n");
+    }
+  }
+}
+
+out.print("}\n");
+
+// --- helpers ---
+
+operation renderAttr(a : Any) : String {
+  var aProv = provenanceFields(a);
+  var aStereo = '';
+  if (aProv.containsKey('stereotype')) {
+    aStereo = ' <FONT POINT-SIZE=\"8\"><I>&#171;' + esc(aProv.get('stereotype')) + '&#187;</I></FONT>';
+  }
+  var line = '+ <B>' + esc(a.name) + '</B>';
+  if (a.type.isDefined() and a.type <> null and a.type.name.isDefined()) {
+    line = line + ' : ' + esc(a.type.name);
+  }
+  var lower = 1; var upper = 1;
+  if (a.lowerValue.isDefined() and a.lowerValue <> null
+      and a.lowerValue.value.isDefined()) { lower = a.lowerValue.value; }
+  if (a.upperValue.isDefined() and a.upperValue <> null
+      and a.upperValue.value.isDefined()) { upper = a.upperValue.value; }
+  var multStr = '';
+  if (lower <> 1 or upper <> 1) {
+    multStr = ' [' + lower + '..';
+    if (upper < 0) { multStr = multStr + '*'; } else { multStr = multStr + upper; }
+    multStr = multStr + ']';
+  }
+  return line + multStr + aStereo;
+}
+
+operation provenanceFields(elem : Any) : Map {
+  var result = new Map;
+  if (elem.eAnnotations.isUndefined() or elem.eAnnotations == null) {
+    return result;
+  }
+  for (ann in elem.eAnnotations) {
+    if (ann.source.isDefined()
+        and ann.source.indexOf('roundtrip-trace') >= 0) {
+      for (d in ann.details) {
+        result.put(d.key, d.value);
+      }
+    }
+  }
+  return result;
+}
+
+operation renderProvenanceFooter(prov : Map) : String {
+  var s = '<FONT POINT-SIZE=\"8\" COLOR=\"#666666\">';
+  s = s + '<I>provenance:</I><BR ALIGN=\"LEFT\"/>';
+  if (prov.containsKey('ecoreType')) {
+    s = s + 'ecore = ' + esc(prov.get('ecoreType')) + '<BR ALIGN=\"LEFT\"/>';
+  }
+  if (prov.containsKey('profile')) {
+    s = s + 'profile = ' + esc(prov.get('profile'));
+    if (prov.containsKey('baseMetaclass')) {
+      s = s + ' (base ' + esc(prov.get('baseMetaclass')) + ')';
+    }
+    s = s + '<BR ALIGN=\"LEFT\"/>';
+  }
+  if (prov.containsKey('technique')) {
+    s = s + 'technique = ' + esc(prov.get('technique'));
+  }
+  s = s + '</FONT>';
+  return s;
+}
+
+operation nodeId(o : Any) : String {
+  var raw = '';
+  if (o.name.isDefined() and o.name <> null) { raw = o.name; }
+  else { raw = 'n_' + o.hashCode(); }
+  return 'n_' + raw.replaceAll('[^A-Za-z0-9_]', '_');
+}
+
+// Escape user text for inclusion inside an HTML-like label (TD content,
+// FONT, B, I, etc.). HTML labels use angle brackets as syntax, so any
+// '<' '>' '&' in user text must be HTML-encoded.
+operation esc(s : Any) : String {
+  if (s.isUndefined() or s == null) return '';
+  return s.toString()
+      .replace('&', '&amp;')
+      .replace('<', '&lt;')
+      .replace('>', '&gt;');
+}
+
+// Escape user text for inclusion in a regular double-quoted attribute
+// value (edge labels, etc.) -- different rules than HTML labels.
+operation escAttr(s : Any) : String {
+  if (s.isUndefined() or s == null) return '';
+  return s.toString().replace('\\\\', '\\\\\\\\').replace('\"', '\\\\"');
+}
+%]

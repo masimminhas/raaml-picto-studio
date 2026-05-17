@@ -57,5 +57,11 @@
             class="raaml.library.LibraryPackage"
             genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://edu.kit.sdq/dsis/metamodels/raaml/hazop"
+            class="raaml.hazop.HazopPackage"
+            genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
+   </extension>
 
 </plugin>
