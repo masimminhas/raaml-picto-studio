@@ -64,4 +64,9 @@
             genModel="platform:/plugin/edu.kit.sdq.raaml/model/raaml.genmodel"/>
    </extension>
 
+   <!-- Shows a one-time welcome popup after installing/updating the feature -->
+   <extension point="org.eclipse.ui.startup">
+      <startup class="raaml.picto.studio.startup.WelcomeStartup"/>
+   </extension>
+
 </plugin>
