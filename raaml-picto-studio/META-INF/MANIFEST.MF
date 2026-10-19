@@ -39,6 +39,7 @@ Export-Package: raaml,
  raaml.stpa.impl,
  raaml.stpa.util,
  raaml.util,
+ raaml.picto.studio.startup,
  aeb.fmea.editor
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
