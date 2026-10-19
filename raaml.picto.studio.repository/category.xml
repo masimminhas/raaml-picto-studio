@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/raaml.picto.studio.feature_1.1.0.qualifier.jar" id="raaml.picto.studio.feature" version="1.1.0.qualifier">
+      <category name="raaml.picto.studio"/>
+   </feature>
+   <category-def name="raaml.picto.studio" label="RAAML Picto Studio">
+      <description>
+         RAAML Picto Studio is a model-driven safety analysis workbench built on Eclipse
+         Epsilon and Picto. It provides live, interactive HTML visualizations for ISO 26262
+         safety analyses - including FMEA, FTA, HARA, STPA, GSN, HAZOP and Requirements -
+         using the RAAML (Risk Analysis and Assessment Modelling Language) metamodel.
+      </description>
+   </category-def>
+</site>

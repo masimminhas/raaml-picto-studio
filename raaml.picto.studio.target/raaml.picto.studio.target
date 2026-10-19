@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.8"?>
+<target name="RAAML Picto Studio Target Platform" sequenceNumber="1">
+	<locations>
+		<!-- Eclipse 2024-03 (4.31) release train: the earliest common release train that
+		     actually ships org.eclipse.emf.ecore.xmi >= 2.20.0 (2024-03 ships 2.37.0;
+		     2022-12 only ships 2.17.0), together with org.eclipse.ui >= 3.200.0 and
+		     org.eclipse.core.runtime >= 3.24.0 as required by raaml.picto.studio.feature/feature.xml -->
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+			<repository location="https://download.eclipse.org/releases/2024-03/"/>
+		</location>
+
+		<!-- Epsilon 2.4: provides org.eclipse.epsilon.picto, org.eclipse.epsilon.egl.engine
+		     (which also contains the EGX executor), and org.eclipse.epsilon.flexmi (all >= 2.0.0).
+		     Epsilon 2.8's picto feature pulls in org.eclipse.epsilon.eol.dap -> lsp4j.debug 0.23.1
+		     and commonmark bundles under non-Orbit-compatible symbolic names, so the older,
+		     dependency-lighter 2.4 line is used instead; it is fully compatible with the
+		     Eclipse 2024-03 platform selected below. -->
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.epsilon.core.feature.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.epsilon.picto.feature.feature.group" version="0.0.0"/>
+			<unit id="org.eclipse.epsilon.flexmi.feature.feature.group" version="0.0.0"/>
+			<repository location="https://download.eclipse.org/epsilon/updates/2.4/"/>
+		</location>
+
+		<!-- Eclipse Orbit: third-party OSGi bundles (e.g. org.apache.commons.math3)
+		     transitively required by the Epsilon engines above -->
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.apache.commons.math3" version="0.0.0"/>
+			<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20220830213456/repository/"/>
+		</location>
+	</locations>
+</target>

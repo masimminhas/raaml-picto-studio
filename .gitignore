@@ -9,3 +9,6 @@ bin/
 .classpath
 .project
 .settings/
+
+# Tycho/Maven build output
+target/

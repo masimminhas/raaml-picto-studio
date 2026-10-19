@@ -2,7 +2,7 @@
 <feature
       id="raaml.picto.studio.feature"
       label="RAAML Picto Studio"
-      version="1.0.1.qualifier"
+      version="1.1.0.qualifier"
       provider-name="KIT DSIS – Karlsruhe Institute of Technology"
       plugin="edu.kit.sdq.raaml"
       os="win32,linux,macosx"
@@ -52,7 +52,6 @@
    <requires>
       <import plugin="org.eclipse.epsilon.picto" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.epsilon.egl.engine" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.epsilon.egx.engine" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.epsilon.flexmi" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.ecore" version="2.20.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.emf.ecore.xmi" version="2.20.0" match="greaterOrEqual"/>
