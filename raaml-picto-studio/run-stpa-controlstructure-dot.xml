@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  STPA control structure -> Graphviz DOT
+  ======================================
+  Writes the control-structure DOT for both case studies to figures/, so the
+  diagrams can be compiled to vector PDF for the paper:
+
+      dot -Tpdf figures/aeb_stpa_cs.dot -o figures/aeb_stpa_cs.pdf
+      dot -Tpdf figures/gip_stpa_cs.dot -o figures/gip_stpa_cs.pdf
+
+  Vector output keeps the labels crisp at the 58 mm panel width used in
+  Figure 2; a screenshot of the Picto view would not.
+
+  Usage (Runtime Eclipse with the RAAML metamodel plugin deployed):
+    1. In your development Eclipse: Run As -> Eclipse Application
+    2. In the Runtime Eclipse: import raaml-picto-studio
+    3. Right-click this file -> Run As -> Ant Build...
+    4. JRE tab -> "Run in the same JRE as the workspace"
+    5. Click Run
+
+  The Picto views render the same template live:
+    aeb_stpa_controlstructure.picto
+    samples-infusion-pump/gip_stpa_controlstructure.picto
+-->
+<project name="stpa-controlstructure-dot" default="all">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"
+             onerror="report"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"
+             onerror="report"/>
+
+    <!-- File-based metamodel loading: independent of plugin activation
+         timing, which keeps the replication package portable. -->
+    <property name="metamodel.file"
+              location="${basedir}/../edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="egl.file"  location="${basedir}/stpa_controlstructure.egl"/>
+    <property name="out.dir"   location="${basedir}/figures"/>
+
+    <!-- Epsilon's EglTask resolves `target` against basedir itself, so the
+         target must stay RELATIVE. Using ${out.dir} (declared with
+         location=, hence absolute) yields basedir + absolute path and a
+         FileNotFoundException. value=, not location=, on purpose. -->
+    <property name="out.rel"   value="figures"/>
+
+    <!-- Namespace URIs the STPA models use. The instance root is
+         raaml:SafetyAnalysis, its contents are core + stpa types. -->
+    <property name="meta.uris"
+              value="http://edu.kit.sdq/dsis/metamodels/raaml,http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/stpa"/>
+
+    <target name="init">
+        <mkdir dir="${out.dir}"/>
+    </target>
+
+    <target name="aeb" depends="init"
+            description="AEB control structure -> figures/aeb_stpa_cs.dot">
+        <echo>Generating AEB STPA control structure DOT...</echo>
+        <!-- Register first, then reference by URI. Passing metamodelfile= to
+             loadModel on its own does not put the EPackage in the registry,
+             so the instance's nsURI fails to resolve. -->
+        <epsilon.emf.register file="${metamodel.file}"/>
+        <epsilon.emf.loadModel name="M"
+                               modelfile="aeb_stpa.xmi"
+                               metamodeluri="${meta.uris}"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+        <epsilon.egl src="${egl.file}" target="${out.rel}/aeb_stpa_cs.dot">
+            <model ref="M"/>
+        </epsilon.egl>
+        <epsilon.disposeModels/>
+        <echo>  -> ${out.dir}/aeb_stpa_cs.dot</echo>
+    </target>
+
+    <target name="gip" depends="init"
+            description="GIP control structure -> figures/gip_stpa_cs.dot">
+        <echo>Generating GIP STPA control structure DOT...</echo>
+        <epsilon.emf.register file="${metamodel.file}"/>
+        <epsilon.emf.loadModel name="M"
+                               modelfile="samples-infusion-pump/gip_stpa.raaml.xmi"
+                               metamodeluri="${meta.uris}"
+                               read="true"
+                               store="false"
+                               expand="true"/>
+        <epsilon.egl src="${egl.file}" target="${out.rel}/gip_stpa_cs.dot">
+            <model ref="M"/>
+        </epsilon.egl>
+        <epsilon.disposeModels/>
+        <echo>  -> ${out.dir}/gip_stpa_cs.dot</echo>
+    </target>
+
+    <target name="all" depends="aeb,gip">
+        <echo> </echo>
+        <echo>Done. Convert to vector PDF with:</echo>
+        <echo>  dot -Tpdf figures/aeb_stpa_cs.dot -o figures/aeb_stpa_cs.pdf</echo>
+        <echo>  dot -Tpdf figures/gip_stpa_cs.dot -o figures/gip_stpa_cs.pdf</echo>
+    </target>
+
+</project>

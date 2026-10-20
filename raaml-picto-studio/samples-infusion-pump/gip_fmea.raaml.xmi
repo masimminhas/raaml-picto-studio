@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  gip_fmea.raaml.xmi
+  ============================================================================
+  Generic Infusion Pump (GIP) FMEA: 10 failure modes spanning the
+  principal GIP hazard categories: occlusion, free-flow, air-in-line,
+  dose error, electrical, mechanical, software, communication.
+
+  Grounded in the FDA GIP Research Project hazard catalogue and ISO 14971
+  Annex C medical device risk-analysis examples. Severity / occurrence /
+  detection values are illustrative (10-point scale) and aligned with
+  the AEB case study so the same EVL rules apply uniformly.
+  ============================================================================
+-->
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.fmea="http://edu.kit.sdq/dsis/metamodels/raaml/fmea"
+    xmi:id="SA_GIP_FMEA_001"
+    id="SA_GIP_FMEA_001"
+    name="GIP FMEA Safety Analysis"
+    description="FMEA for Generic Infusion Pump per FDA GIP Research Project and ISO 14971.">
+
+  <analyses xsi:type="raaml.fmea:FMEA"
+      xmi:id="FMEA_GIP_001" id="FMEA_GIP_001"
+      name="GIP System FMEA"
+      description="Failure Modes and Effects Analysis covering pump mechanics, software, dose calculation, occlusion detection, air-in-line, free-flow protection, and clinician interface.">
+
+    <fmeaItems id="GIP_FM_001" name="GIP-FM-01: Occlusion not detected"
+        description="Downstream occlusion (kinked line, clamped catheter) not detected within FDA-recommended response time (8 s for low flow rates, IEC 60601-2-24). Patient: missed dose. Source: FDA GIP Hazard category H-1.">
+      <RPN>180</RPN>
+      <rpnCalculation id="GIP_FM_001_RPN" name="GIP-FM-01 RPN" SEV="9" OCC="4" DET="5" RPN="180"/>
+      <failureMode xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_001_mode"
+          name="Occlusion sensor signal not raised"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_001_cause"
+          name="Sensor drift, calibration error, slow pressure rise"/>
+      <finalEffect xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_001_effect"
+          name="Drug delivery stops without alarm; patient receives no medication"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_002" name="GIP-FM-02: Free-flow on cassette removal"
+        description="Free-flow of drug to patient when cassette is removed from pump without manual clamp engaged. Patient: massive overdose. Source: FDA GIP Hazard category H-2. Mitigation: anti-free-flow mechanism per IEC 60601-2-24 cl. 51.5.">
+      <RPN>270</RPN>
+      <rpnCalculation id="GIP_FM_002_RPN" name="GIP-FM-02 RPN" SEV="10" OCC="3" DET="9" RPN="270"/>
+      <failureMode xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_002_mode"
+          name="Free-flow without operator command"/>
+      <cause xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_002_cause"
+          name="Anti-free-flow valve fails open; operator removes set without manual clamp"/>
+      <finalEffect xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_002_effect"
+          name="Bolus delivery up to entire IV bag volume; potentially fatal overdose"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_003" name="GIP-FM-03: Air-in-line not detected"
+        description="Air bubble in tubing passes downstream of air detector and is delivered to patient. Risk: air embolism. Source: FDA GIP Hazard category H-3.">
+      <RPN>140</RPN>
+      <rpnCalculation id="GIP_FM_003_RPN" name="GIP-FM-03 RPN" SEV="7" OCC="4" DET="5" RPN="140"/>
+      <failureMode xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_003_mode"
+          name="Ultrasonic air detector fails to trigger"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_003_cause"
+          name="Transducer aging, coupling fluid loss, micro-bubble below detection threshold"/>
+      <finalEffect xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_003_effect"
+          name="Air bolus reaches patient venous system; risk of pulmonary embolism"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_004" name="GIP-FM-04: Dose calculation overflow"
+        description="Integer overflow in dose-rate calculation produces incorrect (much smaller or much larger) infusion rate. Source: software defect class; analogous to Therac-25 overflow incident.">
+      <RPN>200</RPN>
+      <rpnCalculation id="GIP_FM_004_RPN" name="GIP-FM-04 RPN" SEV="10" OCC="2" DET="10" RPN="200"/>
+      <failureMode xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_004_mode"
+          name="Computed infusion rate differs from clinician-entered rate"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_004_cause"
+          name="Unchecked integer arithmetic in rate-to-pulse conversion"/>
+      <finalEffect xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_004_effect"
+          name="Patient receives wrong dose -- under-dose (no effect) or massive overdose"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_005" name="GIP-FM-05: Battery depletion without alarm"
+        description="Battery fully depletes during infusion; pump stops; alarm fails to sound. Source: FDA GIP Hazard category H-4. ISO 14971 risk class.">
+      <RPN>96</RPN>
+      <rpnCalculation id="GIP_FM_005_RPN" name="GIP-FM-05 RPN" SEV="8" OCC="3" DET="4" RPN="96"/>
+      <failureMode xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_005_mode"
+          name="Power loss without audible/visual alarm"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_005_cause"
+          name="Battery age, alarm circuit failure, software watchdog disabled"/>
+      <finalEffect xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_005_effect"
+          name="Infusion stops silently; missed dose may delay critical therapy"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_006" name="GIP-FM-06: Stuck or unresponsive keypad"
+        description="Keypad button fails or controller misses button press. Clinician cannot stop infusion or adjust rate. Source: FDA GIP Hazard category H-5 (user interface).">
+      <RPN>105</RPN>
+      <rpnCalculation id="GIP_FM_006_RPN" name="GIP-FM-06 RPN" SEV="7" OCC="3" DET="5" RPN="105"/>
+      <failureMode xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_006_mode"
+          name="Keypad input not registered or stuck at one value"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_006_cause"
+          name="Mechanical wear, debris ingress, capacitive sensor drift"/>
+      <finalEffect xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_006_effect"
+          name="Clinician cannot abort or modify infusion; manual disconnection required"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_007" name="GIP-FM-07: Wrong drug library entry"
+        description="Drug library entry corrupted or out of date; pump applies incorrect dose limit for selected drug. Source: FDA GIP Hazard category H-6 (data integrity).">
+      <RPN>160</RPN>
+      <rpnCalculation id="GIP_FM_007_RPN" name="GIP-FM-07 RPN" SEV="8" OCC="4" DET="5" RPN="160"/>
+      <failureMode xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_007_mode"
+          name="Drug-specific dose limit applied incorrectly"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_007_cause"
+          name="Library version mismatch, transmission corruption, no integrity check on load"/>
+      <finalEffect xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_007_effect"
+          name="Hard / soft dose limit silently wrong; clinician override warnings absent"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_008" name="GIP-FM-08: Communication loss with EHR"
+        description="Network/USB communication with electronic health record system lost mid-infusion; pump cannot log progress; clinician unaware. Source: interoperability hazard, ASTM F2761.">
+      <RPN>60</RPN>
+      <rpnCalculation id="GIP_FM_008_RPN" name="GIP-FM-08 RPN" SEV="5" OCC="4" DET="3" RPN="60"/>
+      <failureMode xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_008_mode"
+          name="EHR sync stops; no error displayed on pump"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_008_cause"
+          name="WiFi loss, hospital network outage, USB cable disconnection"/>
+      <finalEffect xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_008_effect"
+          name="Incomplete dose record; medication reconciliation error post-shift"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_009" name="GIP-FM-09: Motor reversal"
+        description="Stepper motor commanded reverse, pulling fluid back from patient line. Risk: blood reflux, contamination of pump set. Source: software/hardware interaction defect.">
+      <RPN>180</RPN>
+      <rpnCalculation id="GIP_FM_009_RPN" name="GIP-FM-09 RPN" SEV="9" OCC="2" DET="10" RPN="180"/>
+      <failureMode xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_009_mode"
+          name="Motor rotates in opposite direction"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_009_cause"
+          name="Direction signal inversion, H-bridge fault, software polarity bug"/>
+      <finalEffect xsi:type="raaml.fmea:UnintendedFunction" id="GIP_FM_009_effect"
+          name="Reflux of patient blood into IV set; contamination of subsequent infusions"/>
+    </fmeaItems>
+
+    <fmeaItems id="GIP_FM_010" name="GIP-FM-10: KVO mode not engaged after dose complete"
+        description="Pump fails to switch to Keep-Vein-Open (KVO) rate after primary infusion completes. Line clots. Source: FDA GIP Hazard category H-7.">
+      <RPN>72</RPN>
+      <rpnCalculation id="GIP_FM_010_RPN" name="GIP-FM-10 RPN" SEV="6" OCC="3" DET="4" RPN="72"/>
+      <failureMode xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_010_mode"
+          name="KVO rate not started at end of programmed volume"/>
+      <cause xsi:type="raaml.fmea:DegradationOfFunction" id="GIP_FM_010_cause"
+          name="Software state-machine bug; KVO setting disabled in clinician profile"/>
+      <finalEffect xsi:type="raaml.fmea:LossOfFunction" id="GIP_FM_010_effect"
+          name="IV catheter clots and must be replaced; secondary infusion delayed"/>
+    </fmeaItems>
+
+  </analyses>
+</raaml:SafetyAnalysis>

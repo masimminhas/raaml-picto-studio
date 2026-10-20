@@ -4,7 +4,8 @@
 //
 // One node per Block / ConstraintBlock / ValueType. Each rendered as a
 // UML-class table:
-//   row 1: «stereotype» (italic) + ClassName (bold)
+//   row 1: «stereotype» (italic) + ClassName (bol
+d)
 //   row 2: attributes / properties (one per line)
 //   row 3: constraint expression (ConstraintBlock only)
 // Type references rendered as solid arrows Block -> ValueType.

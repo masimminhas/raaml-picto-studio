@@ -1,11 +1,11 @@
 <?nsuri picto?>
 <picto format="egx"
-       transformation="platform:/plugin/raaml-picto-studio/gsn_tree.egx"
+       transformation="platform:/resource/raaml-picto-studio/gsn_tree.egx"
        standalone="true">
     <model type="EMF">
         <parameter name="name" value="M"/>
-        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml"/>
-        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml/gsn"/>
+        <parameter name="metamodelFile"
+                   value="platform:/resource/edu.kit.sdq.raaml/model/raaml.ecore"/>
         <parameter name="modelFile" value="raaml-picto-studio/aeb_gsn.xmi"/>
     </model>
 </picto>

@@ -5,7 +5,7 @@ rule HARAOverview
 
     parameters : Map {
         "haraModel" = obj,
-        "title"     = "AEB HARA - " + obj.name,
+        "title"     = obj.name,
         "icon"      = "table"
     }
 }

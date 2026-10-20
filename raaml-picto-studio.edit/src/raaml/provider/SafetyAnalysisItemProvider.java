@@ -29,6 +29,7 @@ import raaml.gsn.GsnFactory;
 
 import raaml.hara.HaraFactory;
 
+import raaml.hazop.HazopFactory;
 import raaml.library.LibraryFactory;
 
 import raaml.req.ReqFactory;
@@ -181,6 +182,11 @@ public class SafetyAnalysisItemProvider extends NamedElementItemProvider {
 			(createChildParameter
 				(RaamlPackage.Literals.SAFETY_ANALYSIS__ANALYSES,
 				 GsnFactory.eINSTANCE.createGSN()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(RaamlPackage.Literals.SAFETY_ANALYSIS__ANALYSES,
+				 HazopFactory.eINSTANCE.createHAZOPStudy()));
 
 		newChildDescriptors.add
 			(createChildParameter

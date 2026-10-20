@@ -1,0 +1,256 @@
+[%
+// =============================================================================
+// stpa_controlstructure.egl
+//
+// Renders the STPA control structure of a raaml!STPA instance as Graphviz DOT:
+// controllers on the upper rank, controlled processes on the lower rank,
+// control actions as solid downward edges and feedback as dashed upward edges.
+//
+// Control actions that are referenced by at least one UndesiredControlAction
+// are drawn emphasised and carry a UCA badge, so the coverage of the UCA
+// analysis is visible in the diagram itself. Control actions with no UCA are
+// drawn muted -- in the AEB case study this makes the six UCAs that never
+// populate their `controlAction` reference immediately apparent.
+//
+// Wiring: driven directly from a .picto with format="graphviz-dot"
+// (same pattern as aeb_fta.picto -> fta_tree.egl), so no EGX is required.
+// Unlike fta_tree.egl this template reads the model and hardcodes no instance
+// data, so it renders AEB and GIP -- or any other STPA model -- unchanged.
+// =============================================================================
+
+// ---- locate the STPA instance -----------------------------------------------
+var stpa;
+for (o in M.allContents()) {
+    if (o.eClass().name = "STPA" and not stpa.isDefined()) {
+        stpa = o;
+    }
+}
+
+if (not stpa.isDefined()) {
+    out.print("digraph g { label=\"No STPA instance found\"; fontname=\"Helvetica\"; }\n");
+}
+else {
+
+// ---- index: how many UCAs reference each control action ---------------------
+// ucaLinkedActions is tracked explicitly rather than read back as
+// ucaCount.keySet().size(): keySet() returns a package-private
+// LinkedHashMap$LinkedKeySet, and EOL's reflective dispatch cannot
+// setAccessible into java.util under the Java 17 module system.
+var ucaCount : new Map;
+var ucaUnlinked = 0;
+var ucaLinkedActions = 0;
+var ucaTotal = 0;
+for (u in stpa.unsafeControlActions) {
+    ucaTotal = ucaTotal + 1;
+    if (u.controlAction.isDefined()) {
+        if (ucaCount.containsKey(u.controlAction)) {
+            ucaCount.put(u.controlAction, ucaCount.get(u.controlAction) + 1);
+        }
+        else {
+            ucaCount.put(u.controlAction, 1);
+            ucaLinkedActions = ucaLinkedActions + 1;
+        }
+    }
+    else {
+        ucaUnlinked = ucaUnlinked + 1;
+    }
+}
+
+// ---- graph header -----------------------------------------------------------
+out.print("digraph STPA_ControlStructure {\n");
+out.print("  rankdir=TB;\n");
+out.print("  splines=polyline;\n");
+out.print("  nodesep=0.45;\n");
+out.print("  ranksep=0.90;\n");
+out.print("  bgcolor=\"white\";\n");
+out.print("  pad=0.15;\n");
+out.print("  size=\"11.0,7.8\";\n");
+out.print("  graph [fontname=\"Helvetica\" fontsize=8 labelloc=t labeljust=l];\n");
+out.print("  node  [fontname=\"Helvetica\" fontsize=7];\n");
+out.print("  edge  [fontname=\"Helvetica\" fontsize=6.5];\n");
+
+for (cs in stpa.controlStructures) {
+
+    // The UCA coverage summary rides in the cluster label rather than in a
+    // separate note node: a side-by-side note plus legend made the graph
+    // ~3:1 wide, which wastes the width when the diagram is placed in a
+    // paper column.
+    var cov = ucaTotal + " UCAs, " + ucaLinkedActions + " control action";
+    if (ucaLinkedActions <> 1) { cov = cov + "s"; }
+    cov = cov + " covered, " + ucaUnlinked + " with no controlAction reference";
+
+    out.print("  subgraph \"cluster_" + nid(cs) + "\" {\n");
+    out.print("    label=\"" + esc(cs.name) + "\\n" + cov + "\";\n");
+    out.print("    style=filled;\n");
+    out.print("    fillcolor=\"#f7f9fc\";\n");
+    out.print("    color=\"#1a237e\";\n");
+    out.print("    penwidth=1.4;\n");
+    out.print("    fontcolor=\"#1a237e\";\n");
+    out.print("    fontname=\"Helvetica-Bold\";\n");
+
+    // -- controllers: upper rank ---------------------------------------------
+    out.print("    { rank=same;\n");
+    for (c in cs.controllers) {
+        boxNode(nid(c), esc(c.name), "#1565c0", "#e3f2fd", "Controller");
+    }
+    out.print("    }\n");
+
+    // -- actuators and sensors, when the model uses them ----------------------
+    if (cs.actuators.size() > 0 or cs.sensors.size() > 0) {
+        out.print("    { rank=same;\n");
+        for (a in cs.actuators) {
+            boxNode(nid(a), esc(a.name), "#6a1b9a", "#f3e5f5", "Actuator");
+        }
+        for (s in cs.sensors) {
+            boxNode(nid(s), esc(s.name), "#00695c", "#e0f2f1", "Sensor");
+        }
+        out.print("    }\n");
+    }
+
+    // -- controlled processes: lower rank -------------------------------------
+    out.print("    { rank=same;\n");
+    for (p in cs.controlledProcesses) {
+        boxNode(nid(p), esc(p.name), "#e65100", "#fff3e0", "Controlled Process");
+    }
+    out.print("    }\n");
+
+    out.print("  }\n");
+
+    // -- control actions: solid, downward -------------------------------------
+    var actions : new Set;
+    for (c in cs.controllers) {
+        for (ca in c.controlActions) { actions.add(ca); }
+    }
+    for (a in cs.actuators) {
+        for (ca in a.executedActions) { actions.add(ca); }
+    }
+    for (p in cs.controlledProcesses) {
+        for (ca in p.receivedActions) { actions.add(ca); }
+    }
+
+    for (ca in actions) {
+        if (ca.sourceController.isDefined() and ca.targetProcess.isDefined()) {
+            var n = 0;
+            if (ucaCount.containsKey(ca)) { n = ucaCount.get(ca); }
+            caEdge(nid(ca.sourceController), nid(ca.targetProcess), ca, n);
+        }
+    }
+
+    // -- feedback: dashed, upward ---------------------------------------------
+    var fbs : new Set;
+    for (p in cs.controlledProcesses) {
+        for (f in p.providedFeedback) { fbs.add(f); }
+    }
+    for (s in cs.sensors) {
+        for (f in s.providedFeedback) { fbs.add(f); }
+    }
+    for (c in cs.controllers) {
+        for (f in c.feedback) { fbs.add(f); }
+    }
+
+    for (f in fbs) {
+        if (f.source.isDefined() and f.targetController.isDefined()) {
+            fbEdge(nid(f.source), nid(f.targetController), f);
+        }
+    }
+}
+
+// The standalone legend and coverage-note nodes were removed: Graphviz
+// places them beside the control structure, which stretched the graph to
+// roughly 3:1 and left the structure itself occupying a third of the
+// width. The coverage figures now ride in the cluster label, and the
+// colour semantics (red = control action with a UCA, grey = none, dashed
+// = feedback) belong in the figure caption.
+
+out.print("}\n");
+
+} // end else
+
+// =============================================================================
+// OPERATIONS
+// =============================================================================
+
+// DOT node id. Model ids (CTRL_001, CP_001, ...) are already safe; the value is
+// quoted at every use site so any other content is tolerated too.
+operation nid(o : Any) : String {
+    if (o.id.isDefined() and o.id <> "") {
+        return o.id;
+    }
+    return esc(o.name);
+}
+
+// Quote-safe label text. Descriptions in these models carry a
+// "TYPE:...|...|real text" prefix convention, so keep only the final segment.
+operation esc(s : Any) : String {
+    if (not s.isDefined()) {
+        return "";
+    }
+    var t : String = s + "";
+    if (t.indexOf("|") >= 0) {
+        t = t.substring(t.lastIndexOf("|") + 1);
+    }
+    return t.replace("\"", "'");
+}
+
+operation boxNode(id : String, label : String, colour : String,
+                  fill : String, kind : String) {
+    // Several models already carry the role in the element name, e.g.
+    // "AEB ECU (Controller)". Only annotate when it is not already there,
+    // or the node reads "AEB ECU (Controller) (Controller)".
+    var caption = label;
+    if (caption.indexOf(kind) < 0) {
+        caption = caption + "\\n(" + kind + ")";
+    }
+    out.print("      \"" + id + "\" [");
+    out.print("label=\"" + caption + "\" ");
+    out.print("shape=box ");
+    out.print("style=\"filled,rounded\" ");
+    out.print("fillcolor=\"" + fill + "\" ");
+    out.print("color=\"" + colour + "\" ");
+    out.print("penwidth=1.6 ");
+    out.print("fontcolor=\"" + colour + "\" ");
+    out.print("fontname=\"Helvetica-Bold\" ");
+    out.print("fontsize=7 ");
+    out.print("width=1.9];\n");
+}
+
+// Control action. Emphasised when at least one UCA references it, muted when
+// the UCA analysis has not reached it.
+operation caEdge(src : String, tgt : String, ca : Any, ucas : Integer) {
+    var label = esc(ca.name);
+    if (ca.type.isDefined() and ca.type <> "") {
+        label = label + "\\n[" + esc(ca.type) + "]";
+    }
+
+    out.print("  \"" + src + "\" -> \"" + tgt + "\" [");
+    out.print("label=\"" + label);
+
+    if (ucas > 0) {
+        out.print("\\n" + ucas + " UCA");
+        if (ucas > 1) { out.print("s"); }
+        out.print("\" ");
+        out.print("color=\"#b71c1c\" fontcolor=\"#b71c1c\" penwidth=1.8 ");
+    }
+    else {
+        out.print("\" ");
+        out.print("color=\"#90a4ae\" fontcolor=\"#78909c\" penwidth=1.0 ");
+    }
+
+    out.print("arrowhead=normal arrowsize=0.7];\n");
+}
+
+// Feedback. constraint=false keeps the edge from fighting the rank assignment,
+// so it renders as the upward return path of the control loop.
+operation fbEdge(src : String, tgt : String, f : Any) {
+    var label = esc(f.name);
+    if (f.type.isDefined() and f.type <> "") {
+        label = label + "\\n[" + esc(f.type) + "]";
+    }
+
+    out.print("  \"" + src + "\" -> \"" + tgt + "\" [");
+    out.print("label=\"" + label + "\" ");
+    out.print("style=dashed ");
+    out.print("color=\"#00695c\" fontcolor=\"#00695c\" ");
+    out.print("penwidth=1.0 arrowsize=0.7 constraint=false];\n");
+}
+%]

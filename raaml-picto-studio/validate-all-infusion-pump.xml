@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  validate-all-infusion-pump.xml
+  ============================================================================
+  Phase 2 validation runner: applies the EVL constraint catalog
+  (raaml-semantic-constraints.evl) to the GIP infusion-pump case study
+  models.
+
+  Same metamodel-from-file loading strategy as validate-all.xml: no
+  Eclipse plugin activation required, replication-package portable.
+  ============================================================================
+-->
+<project default="validate-all">
+
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/tasks.xml"
+             onerror="report"/>
+    <taskdef resource="org/eclipse/epsilon/workflow/tasks/emf/tasks.xml"
+             onerror="report"/>
+
+    <property name="evl.file" value="raaml-semantic-constraints.evl"/>
+    <property name="metamodel.file"
+              location="${basedir}/../edu.kit.sdq.raaml/model/raaml.ecore"/>
+    <property name="samples.dir"
+              location="${basedir}/samples-infusion-pump"/>
+
+    <macrodef name="validate-model">
+        <attribute name="model.file"/>
+        <attribute name="model.label"/>
+        <sequential>
+            <echo>============================================</echo>
+            <echo>Validating: @{model.label}</echo>
+            <echo>  File: @{model.file}</echo>
+            <echo>============================================</echo>
+
+            <epsilon.emf.loadModel name="M"
+                                   modelfile="${samples.dir}/@{model.file}"
+                                   metamodelfile="${metamodel.file}"
+                                   read="true" store="false" expand="true"/>
+
+            <epsilon.evl src="${evl.file}"
+                         failonerrors="false"
+                         failonwarnings="false">
+                <model ref="M"/>
+            </epsilon.evl>
+
+            <epsilon.disposeModels/>
+            <echo> </echo>
+        </sequential>
+    </macrodef>
+
+    <target name="validate-all"
+            description="Run EVL constraints against the GIP infusion-pump case study">
+
+        <echo>================================================================</echo>
+        <echo>GIP Infusion-Pump Case Study -- EVL Validation</echo>
+        <echo>================================================================</echo>
+
+        <validate-model model.file="gip_fmea.raaml.xmi" model.label="GIP FMEA"/>
+        <validate-model model.file="gip_stpa.raaml.xmi" model.label="GIP STPA"/>
+        <validate-model model.file="gip_hara.raaml.xmi" model.label="GIP HARA"/>
+
+        <echo>================================================================</echo>
+        <echo>Validation complete.</echo>
+        <echo>================================================================</echo>
+    </target>
+
+</project>

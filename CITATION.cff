@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use RAAML Picto Studio in academic work, please cite it as below."
+title: "RAAML Picto Studio: A Model-Driven Workbench for Multi-Technique Safety Analysis"
+abstract: >-
+  An open-source Eclipse workbench for integrated safety analysis. It provides a
+  standalone Ecore metamodel covering seven safety analysis techniques (FMEA, FTA,
+  STPA, HARA, GSN, HAZOP and safety requirements) derived from the OMG RAAML
+  standard, Epsilon Picto visualisations for each technique, a form-based FMEA
+  editor, an EVL validation catalog grounded in normative safety standards, and
+  bidirectional ETL transformations between OMG RAAML UML profile models and the
+  Ecore metamodel.
+type: software
+authors:
+  - family-names: "Minhas"
+    given-names: "Muhammad Asim"
+    affiliation: "Karlsruhe Institute of Technology (KIT), Software Design and Quality (SDQ)"
+    # TODO: add ORCID before camera-ready (required by ICSE for accepted papers)
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/masimminhas/raaml-picto-studio"
+url: "https://masimminhas.github.io/raaml-picto-studio/"
+license: EPL-2.0
+version: "1.1.0"
+# TODO: set to the actual release date when the ICSE release is tagged
+date-released: "2026-10-07"
+# TODO: add the Zenodo DOI once the GitHub release is archived
+# doi: "10.5281/zenodo.XXXXXXX"
+keywords:
+  - safety analysis
+  - model-driven engineering
+  - RAAML
+  - Ecore
+  - EMF
+  - Epsilon
+  - FMEA
+  - fault tree analysis
+  - STPA
+  - HARA
+  - GSN
+  - HAZOP
+  - ISO 26262

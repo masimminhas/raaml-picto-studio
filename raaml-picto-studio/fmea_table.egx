@@ -1,3 +1,7 @@
+// Generic FMEA Picto orchestrator -- works for any FMEA instance.
+// The title and subtitle are derived from the FMEA's own name/description
+// rather than hardcoded to a single case study, so AEB, GIP, and any
+// future case studies render with their own branding.
 rule FMEAOverview
     transform obj : M!FMEA {
 
@@ -5,7 +9,7 @@ rule FMEAOverview
 
     parameters : Map {
         "fmea"  = obj,
-        "title" = "AEB FMEA Analysis - " + obj.name,
+        "title" = obj.name,
         "icon"  = "table"
     }
 }

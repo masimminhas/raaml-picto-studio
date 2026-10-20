@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  gip_hara.raaml.xmi
+  ============================================================================
+  Generic Infusion Pump (GIP) HARA: Hazard Analysis and Risk Assessment.
+  ISO 26262 Part 3 SxExC approach applied to a medical-device hazard
+  catalogue (cross-walked from FDA Class I/II severity and ISO 14971
+  for nomenclature compatibility with the rest of RAAML Picto Studio).
+
+  6 hazardous events, 6 ASIL assignments, 5 operational situations,
+  6 malfunctioning behaviours. Each MB and OS is referenced from the
+  corresponding ASILAssignment description for traceability.
+
+  Source grounding:
+    - FDA GIP Research Project hazard catalogue
+    - ISO 14971:2019 Annex C, Annex E
+    - IEC 60601-2-24:2012 (medical electrical equipment, infusion pumps)
+  ============================================================================
+-->
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:raaml.hara="http://edu.kit.sdq/dsis/metamodels/raaml/hara"
+    xmi:id="SA_GIP_HARA_001"
+    id="SA_GIP_HARA_001"
+    name="GIP HARA Safety Analysis"
+    description="HARA for Generic Infusion Pump cross-walked to ISO 26262 Part 3 ASIL scheme.">
+
+  <analyses xsi:type="raaml.hara:ISO26262"
+      xmi:id="HARA_GIP_001" id="HARA_GIP_001"
+      name="GIP System HARA"
+      description="ISO 26262 Part 3 Hazard Analysis and Risk Assessment for the Generic Infusion Pump system. Operational situations span clinical contexts; malfunctioning behaviours span the principal failure classes; ASIL assignments derive from SxExC per ISO 26262 Part 3 Table 4.">
+
+    <!-- =============== Operational Situations =============== -->
+    <operationalSituations xsi:type="raaml.hara:OperationalSituation"
+        xmi:id="OS_001" id="OS_001"
+        name="OS-01: ICU Continuous Critical Infusion"
+        description="Intensive Care Unit; patient on continuous vasopressor or sedative infusion; high dependency on uninterrupted dose delivery. Exposure: continuous (E4). [Source: FDA GIP project clinical scenarios]"/>
+    <operationalSituations xsi:type="raaml.hara:OperationalSituation"
+        xmi:id="OS_002" id="OS_002"
+        name="OS-02: Operating Room Anaesthesia"
+        description="Operating room; anaesthetic agent infusion controlled by anaesthetist; bolus and continuous modes; clinician present and attentive. Exposure: occasional (E3). [Source: FDA GIP project]"/>
+    <operationalSituations xsi:type="raaml.hara:OperationalSituation"
+        xmi:id="OS_003" id="OS_003"
+        name="OS-03: General Ward Antibiotic Infusion"
+        description="Hospital ward; patient on intermittent antibiotic infusion; lower clinician supervision; routine schedule. Exposure: frequent (E3). [Source: FDA GIP project]"/>
+    <operationalSituations xsi:type="raaml.hara:OperationalSituation"
+        xmi:id="OS_004" id="OS_004"
+        name="OS-04: Outpatient Chemotherapy"
+        description="Outpatient infusion clinic; cytotoxic agent with narrow therapeutic index; patient at clinic for several hours. Exposure: regular (E3). [Source: FDA GIP project]"/>
+    <operationalSituations xsi:type="raaml.hara:OperationalSituation"
+        xmi:id="OS_005" id="OS_005"
+        name="OS-05: Paediatric or Neonatal Care"
+        description="Paediatric or neonatal unit; small patient weight; very low flow rates; narrow dose tolerance. Exposure: continuous in NICU (E4). [Source: FDA GIP project, ISMP paediatric safety guidance]"/>
+
+    <!-- =============== Malfunctioning Behaviours =============== -->
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="MB_001" id="MB_001"
+        name="MB-01: Overdose delivery"
+        description="Pump delivers materially more drug than prescribed. Causes: free-flow, wrong drug library, decimal misentry, motor over-pulsing. [Source: FDA MAUDE recurrent failure class]"/>
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="MB_002" id="MB_002"
+        name="MB-02: Underdose or delivery interruption"
+        description="Pump delivers materially less drug than prescribed, or infusion stops without alarm. Causes: occlusion not detected, silent battery loss, software pause. [Source: FDA GIP H-3, FDA MAUDE]"/>
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="MB_003" id="MB_003"
+        name="MB-03: Air embolism delivery"
+        description="Air bubble passes air detector and is infused into venous access. [Source: FDA GIP H-3, IEC 60601-2-24]"/>
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="MB_004" id="MB_004"
+        name="MB-04: Wrong drug delivery"
+        description="Pump delivers a drug that does not match the clinician selection due to library corruption or mis-mounted cassette. [Source: ISMP medication-safety analyses]"/>
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="MB_005" id="MB_005"
+        name="MB-05: Contaminated fluid delivery"
+        description="Reflux or back-priming during occlusion contaminates the line; subsequent infusion delivers contaminated fluid. [Source: motor-reversal class hazard]"/>
+    <malfunctioningBehaviors xsi:type="raaml.hara:MalfunctioningBehaviour"
+        xmi:id="MB_006" id="MB_006"
+        name="MB-06: Loss of clinician control"
+        description="Pump UI unresponsive: clinician cannot stop, modify, or silence the pump during an active infusion. [Source: FDA GIP H-D]"/>
+
+    <!-- =============== ASIL Assignments (HE = MB x OS, S/E/C per ISO 26262) =============== -->
+    <asilAssignments xsi:type="raaml.hara:ASILAssignment"
+        xmi:id="ASIL_HE_001" id="ASIL_HE_001"
+        name="ASIL Assignment HE-01"
+        description="HE-01: MB-01 Overdose in OS-01 ICU continuous critical infusion. S3 life-threatening (vasopressor toxicity). E4 continuous exposure. C3 patient sedated, cannot self-correct, clinician must intervene before symptom onset window. Result: ASIL D. [ISO 26262:2018 Part 3 Table 4]"
+        ASIL="D"/>
+    <asilAssignments xsi:type="raaml.hara:ASILAssignment"
+        xmi:id="ASIL_HE_002" id="ASIL_HE_002"
+        name="ASIL Assignment HE-02"
+        description="HE-02: MB-01 Overdose in OS-05 Paediatric / Neonatal care. S3 life-threatening (narrow weight-based dose tolerance). E4 continuous in NICU. C3 patient cannot self-correct. Result: ASIL D. [ISO 26262:2018 Part 3 Table 4; ISMP paediatric guidance]"
+        ASIL="D"/>
+    <asilAssignments xsi:type="raaml.hara:ASILAssignment"
+        xmi:id="ASIL_HE_003" id="ASIL_HE_003"
+        name="ASIL Assignment HE-03"
+        description="HE-03: MB-03 Air embolism in OS-02 Operating Room anaesthesia. S3 life-threatening (cerebral or pulmonary embolism). E3 frequent (any infusion). C2 anaesthetist alert and can intervene. Result: ASIL C. [ISO 26262:2018 Part 3 Table 4]"
+        ASIL="C"/>
+    <asilAssignments xsi:type="raaml.hara:ASILAssignment"
+        xmi:id="ASIL_HE_004" id="ASIL_HE_004"
+        name="ASIL Assignment HE-04"
+        description="HE-04: MB-02 Underdose interruption in OS-01 ICU continuous critical infusion. S3 life-threatening (loss of vasopressor causes hypotension). E4 continuous. C3 patient sedated. Result: ASIL D. [ISO 26262:2018 Part 3 Table 4]"
+        ASIL="D"/>
+    <asilAssignments xsi:type="raaml.hara:ASILAssignment"
+        xmi:id="ASIL_HE_005" id="ASIL_HE_005"
+        name="ASIL Assignment HE-05"
+        description="HE-05: MB-04 Wrong drug in OS-04 Outpatient chemotherapy. S3 life-threatening (cytotoxic to wrong tissue). E3 regular. C2 clinician present and verifying. Result: ASIL C. [ISO 26262:2018 Part 3 Table 4; ISMP chemotherapy safety]"
+        ASIL="C"/>
+    <asilAssignments xsi:type="raaml.hara:ASILAssignment"
+        xmi:id="ASIL_HE_006" id="ASIL_HE_006"
+        name="ASIL Assignment HE-06"
+        description="HE-06: MB-06 Loss of clinician control in OS-03 General ward antibiotic infusion. S2 severe but seldom life-threatening (overdose limited by bag volume; clinician can disconnect manually). E3 frequent. C2 clinician present and can intervene. Result: ASIL B. [ISO 26262:2018 Part 3 Table 4]"
+        ASIL="B"/>
+
+  </analyses>
+</raaml:SafetyAnalysis>

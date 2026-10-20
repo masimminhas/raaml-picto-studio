@@ -1,11 +1,11 @@
 <?nsuri picto?>
 <picto format="graphviz-dot"
-       transformation="platform:/plugin/raaml-picto-studio/fta_tree.egl"
+       transformation="platform:/resource/raaml-picto-studio/fta_tree.egl"
        standalone="true">
     <model type="EMF">
         <parameter name="name" value="M"/>
-        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml"/>
-        <parameter name="metamodelUri" value="http://edu.kit.sdq/dsis/metamodels/raaml/fta"/>
+        <parameter name="metamodelFile"
+                   value="platform:/resource/edu.kit.sdq.raaml/model/raaml.ecore"/>
         <parameter name="modelFile" value="raaml-picto-studio/aeb_fta.xmi"/>
     </model>
 </picto>

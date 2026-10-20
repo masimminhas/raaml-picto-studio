@@ -32,6 +32,8 @@ import raaml.hara.HaraPackage;
 
 import raaml.hara.impl.HaraPackageImpl;
 
+import raaml.hazop.HazopPackage;
+import raaml.hazop.impl.HazopPackageImpl;
 import raaml.library.LibraryPackage;
 
 import raaml.library.impl.LibraryPackageImpl;
@@ -121,6 +123,8 @@ public class RaamlPackageImpl extends EPackageImpl implements RaamlPackage {
 		StpaPackageImpl theStpaPackage = (StpaPackageImpl)(registeredPackage instanceof StpaPackageImpl ? registeredPackage : StpaPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(GsnPackage.eNS_URI);
 		GsnPackageImpl theGsnPackage = (GsnPackageImpl)(registeredPackage instanceof GsnPackageImpl ? registeredPackage : GsnPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HazopPackage.eNS_URI);
+		HazopPackageImpl theHazopPackage = (HazopPackageImpl)(registeredPackage instanceof HazopPackageImpl ? registeredPackage : HazopPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theRaamlPackage.createPackageContents();
@@ -132,6 +136,7 @@ public class RaamlPackageImpl extends EPackageImpl implements RaamlPackage {
 		theHaraPackage.createPackageContents();
 		theStpaPackage.createPackageContents();
 		theGsnPackage.createPackageContents();
+		theHazopPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theRaamlPackage.initializePackageContents();
@@ -143,6 +148,7 @@ public class RaamlPackageImpl extends EPackageImpl implements RaamlPackage {
 		theHaraPackage.initializePackageContents();
 		theStpaPackage.initializePackageContents();
 		theGsnPackage.initializePackageContents();
+		theHazopPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theRaamlPackage.freeze();
@@ -259,6 +265,7 @@ public class RaamlPackageImpl extends EPackageImpl implements RaamlPackage {
 		HaraPackage theHaraPackage = (HaraPackage)EPackage.Registry.INSTANCE.getEPackage(HaraPackage.eNS_URI);
 		StpaPackage theStpaPackage = (StpaPackage)EPackage.Registry.INSTANCE.getEPackage(StpaPackage.eNS_URI);
 		GsnPackage theGsnPackage = (GsnPackage)EPackage.Registry.INSTANCE.getEPackage(GsnPackage.eNS_URI);
+		HazopPackage theHazopPackage = (HazopPackage)EPackage.Registry.INSTANCE.getEPackage(HazopPackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theCorePackage);
@@ -269,6 +276,7 @@ public class RaamlPackageImpl extends EPackageImpl implements RaamlPackage {
 		getESubpackages().add(theHaraPackage);
 		getESubpackages().add(theStpaPackage);
 		getESubpackages().add(theGsnPackage);
+		getESubpackages().add(theHazopPackage);
 
 		// Create type parameters
 

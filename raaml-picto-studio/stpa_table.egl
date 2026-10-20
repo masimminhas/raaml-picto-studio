@@ -1,5 +1,5 @@
 [%
-out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>AEB STPA</title>");
+out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>" + title + "</title>");
 out.print("<style>");
 out.print("body{font-family:Arial,sans-serif;font-size:11px;margin:10px;background:#f5f5f5;}");
 out.print("h1{color:#311b92;font-size:16px;border-bottom:2px solid #311b92;padding-bottom:5px;}");
@@ -25,8 +25,13 @@ out.print(".fb-item{font-size:9px;color:#2e7d32;margin:2px 0;}");
 out.print(".arrow-down{text-align:center;font-size:20px;color:#311b92;margin:4px 0;}");
 out.print(".note{color:#78909c;font-style:italic;font-size:9px;margin-top:10px;}");
 out.print("</style></head><body>");
-out.print("<h1>AEB STPA - Systems Theoretic Process Analysis</h1>");
-out.print("<p class='sub'>Method: STPA Handbook 2018 (Leveson and Thomas) | AEB Control Loop Analysis</p>");
+out.print("<h1>" + title + "</h1>");
+out.print("<p class='sub'>Method: STPA Handbook 2018 (Leveson and Thomas)");
+if (stpaModel.description.isDefined() and stpaModel.description <> null
+    and stpaModel.description.length() > 0) {
+  out.print(" | " + stpaModel.description);
+}
+out.print("</p>");
 
 // Summary
 var ucaCount = stpaModel.unsafeControlActions.size();
@@ -141,7 +146,7 @@ for (cf in stpaModel.controlFlaws) {
 }
 out.print("</tbody></table>");
 
-out.print("<p class='note'>STPA Handbook 2018 (Leveson and Thomas) | ISO 26262:2018 | MDPI AEB Hardware 2021</p>");
+out.print("<p class='note'>STPA Handbook 2018 (Leveson and Thomas)</p>");
 out.print("</body></html>");
 
 operation extractSTPAField(desc : String, key : String) : String {

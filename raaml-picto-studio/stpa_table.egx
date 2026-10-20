@@ -5,7 +5,7 @@ rule STPAOverview
 
     parameters : Map {
         "stpaModel" = obj,
-        "title"     = "AEB STPA - " + obj.name,
+        "title"     = obj.name,
         "icon"      = "table"
     }
 }

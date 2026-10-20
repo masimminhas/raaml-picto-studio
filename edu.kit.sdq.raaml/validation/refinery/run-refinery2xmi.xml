@@ -40,7 +40,7 @@
     <!-- Metamodel namespace URIs we need available for createInstance().
          Add fta / hara / req here if you widen the validation scope. -->
     <property name="meta.uris"
-              value="http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea,http://vitruv.tools/methodologisttemplate/raaml"/>
+              value="http://edu.kit.sdq/dsis/metamodels/raaml/core,http://edu.kit.sdq/dsis/metamodels/raaml/fmea"/>
 
     <target name="bridge"
             description="Convert a .refinery partial model into fmea.ecore XMI">
@@ -65,10 +65,15 @@ validation/refinery/generated/.
         <dirname property="output.dir" file="${output}"/>
         <mkdir dir="${output.dir}"/>
 
-        <!-- Register the ecores so the namespace URIs above resolve. -->
+        <!-- Register the ecores so the namespace URIs above resolve.
+             Only core + fmea: the bridge's single createInstance() site
+             builds FMEA-package types only, and registering the combined
+             raaml.ecore here would re-declare the same /core and /fmea
+             nsURIs from a second EPackage instance (last-write-wins in the
+             EMF registry), so createInstance could resolve an EClass that
+             OUT was not loaded against. -->
         <epsilon.emf.register file="${model.dir}/core.ecore"/>
         <epsilon.emf.register file="${model.dir}/fmea.ecore"/>
-        <epsilon.emf.register file="${model.dir}/raaml (2).ecore"/>
 
         <!-- Writable, fresh output model. -->
         <epsilon.emf.loadModel name="OUT"

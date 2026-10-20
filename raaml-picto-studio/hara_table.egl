@@ -1,5 +1,5 @@
 [%
-out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>AEB HARA</title>");
+out.print("<!DOCTYPE html><html><head><meta charset='UTF-8'/><title>" + title + "</title>");
 out.print("<style>");
 out.print("body{font-family:Arial,sans-serif;font-size:11px;margin:10px;background:#f5f5f5;}");
 out.print("h1{color:#1a237e;font-size:16px;border-bottom:2px solid #1a237e;padding-bottom:5px;}");
@@ -17,8 +17,13 @@ out.print(".os{background:#e3f2fd;color:#1565c0;padding:1px 4px;border-radius:2p
 out.print(".mb{background:#fce4ec;color:#880e4f;padding:1px 4px;border-radius:2px;font-size:9px;}");
 out.print(".note{color:#78909c;font-style:italic;font-size:9px;margin-top:10px;}");
 out.print("</style></head><body>");
-out.print("<h1>AEB HARA - ISO 26262 Hazard Analysis and Risk Assessment</h1>");
-out.print("<p class='sub'>Method: ISO 26262:2018 Part 3 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1 | SAE J2980:2018</p>");
+out.print("<h1>" + title + "</h1>");
+out.print("<p class='sub'>Method: ISO 26262:2018 Part 3 Hazard Analysis and Risk Assessment");
+if (haraModel.description.isDefined() and haraModel.description <> null
+    and haraModel.description.length() > 0) {
+  out.print(" | " + haraModel.description);
+}
+out.print("</p>");
 
 out.print("<h2>Operational Situations</h2>");
 out.print("<table><thead><tr><th>ID</th><th>Operational Situation</th><th>Description</th></tr></thead><tbody>");
@@ -92,6 +97,6 @@ if (haraModel.confirmedItems.size() > 0) {
   out.print("</tbody></table>");
 }
 
-out.print("<p class='note'>ASIL: ISO 26262:2018 Part 3 Table 4 | Euro NCAP AEB C2C v4.3.1 + VRU v4.5.1 | SAE J2980:2018</p>");
+out.print("<p class='note'>ASIL determined per ISO 26262:2018 Part 3 Table 4 (S x E x C). Per-item source references are carried in each item's description.</p>");
 out.print("</body></html>");
 %]

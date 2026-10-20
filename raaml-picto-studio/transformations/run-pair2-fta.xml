@@ -25,7 +25,7 @@
 
     <!-- CHANGE this to point at your user FTA UML file -->
     <property name="user.uml.source"
-              location="${basedir}/samples/aeb_fta_usermodel.uml"/>
+              location="${basedir}/samples/fta_usermodel.uml"/>
     <property name="ecore.target"
               location="${basedir}/samples/aeb_fta_usermodel.raaml.xmi"/>
 

@@ -33,8 +33,14 @@
 </head>
 <body>
 <h1>[%=title%]</h1>
-<p class="subtitle">ISO 26262:2018 FMEA | AIAG FMEA-4 RPN Methodology |
-Data sources: Singh &amp; Gabbar (2019), MDPI AEB Hardware (2021), IEC 62380:2004</p>
+<p class="subtitle">AIAG FMEA-4 RPN methodology
+[%
+if (fmea.description.isDefined() and fmea.description <> null
+    and fmea.description.length() > 0) {
+  out.print(' | ');
+  out.print(fmea.description);
+}
+%]</p>
 
 [%
 var allItems = fmea.fmeaItems;
@@ -119,9 +125,8 @@ for (item in allItems) {
 </table>
 
 <p class="source-note">
-  Data: Singh &amp; Gabbar (2019); MDPI AEB Hardware (2021) Table 2;
-  IEC 62380:2004; ISO 26262:2018 Part 3 Table 4; SAE J2980:2018.
-  RPN thresholds per AIAG FMEA-4.
+  RPN thresholds per AIAG FMEA-4. Per-item source references are
+  carried in each item's description field.
 </p>
 </body>
 </html>

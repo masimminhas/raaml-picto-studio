@@ -446,5 +446,51 @@
       <genClasses ecoreClass="raaml.ecore#//gsn/ASILOverrideRationale"/>
       <genClasses ecoreClass="raaml.ecore#//gsn/LessonLearned"/>
     </nestedGenPackages>
+    <nestedGenPackages prefix="Hazop" disposableProviderFactory="true" ecorePackage="raaml.ecore#//hazop">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="raaml.ecore#//hazop/GuideWord">
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/NO"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/MORE"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/LESS"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/AS_WELL_AS"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/PART_OF"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/REVERSE"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/OTHER_THAN"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/EARLY"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/LATE"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/BEFORE"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/GuideWord/AFTER"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="raaml.ecore#//hazop/RiskLevel">
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/RiskLevel/LOW"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/RiskLevel/MEDIUM"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/RiskLevel/HIGH"/>
+        <genEnumLiterals ecoreEnumLiteral="raaml.ecore#//hazop/RiskLevel/CRITICAL"/>
+      </genEnums>
+      <genClasses ecoreClass="raaml.ecore#//hazop/HAZOPStudy">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/HAZOPStudy/studyDate"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/HAZOPStudy/standardReference"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference raaml.ecore#//hazop/HAZOPStudy/nodes"/>
+      </genClasses>
+      <genClasses ecoreClass="raaml.ecore#//hazop/HAZOPNode">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/HAZOPNode/subsystem"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/HAZOPNode/designIntent"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference raaml.ecore#//hazop/HAZOPNode/deviations"/>
+      </genClasses>
+      <genClasses ecoreClass="raaml.ecore#//hazop/Deviation">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/Deviation/guideWord"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/Deviation/parameter"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/Deviation/deviationText"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/Deviation/riskLevel"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute raaml.ecore#//hazop/Deviation/asil"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference raaml.ecore#//hazop/Deviation/causes"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference raaml.ecore#//hazop/Deviation/consequences"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference raaml.ecore#//hazop/Deviation/safeguards"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference raaml.ecore#//hazop/Deviation/recommendations"/>
+      </genClasses>
+      <genClasses ecoreClass="raaml.ecore#//hazop/Cause"/>
+      <genClasses ecoreClass="raaml.ecore#//hazop/Consequence"/>
+      <genClasses ecoreClass="raaml.ecore#//hazop/Safeguard"/>
+      <genClasses ecoreClass="raaml.ecore#//hazop/Recommendation"/>
+    </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

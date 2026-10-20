@@ -30,6 +30,8 @@ import raaml.hara.HaraPackage;
 
 import raaml.hara.impl.HaraPackageImpl;
 
+import raaml.hazop.HazopPackage;
+import raaml.hazop.impl.HazopPackageImpl;
 import raaml.impl.RaamlPackageImpl;
 
 import raaml.library.GeneralLibrary;
@@ -121,6 +123,8 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		StpaPackageImpl theStpaPackage = (StpaPackageImpl)(registeredPackage instanceof StpaPackageImpl ? registeredPackage : StpaPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(GsnPackage.eNS_URI);
 		GsnPackageImpl theGsnPackage = (GsnPackageImpl)(registeredPackage instanceof GsnPackageImpl ? registeredPackage : GsnPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HazopPackage.eNS_URI);
+		HazopPackageImpl theHazopPackage = (HazopPackageImpl)(registeredPackage instanceof HazopPackageImpl ? registeredPackage : HazopPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theLibraryPackage.createPackageContents();
@@ -132,6 +136,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		theHaraPackage.createPackageContents();
 		theStpaPackage.createPackageContents();
 		theGsnPackage.createPackageContents();
+		theHazopPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theLibraryPackage.initializePackageContents();
@@ -143,6 +148,7 @@ public class LibraryPackageImpl extends EPackageImpl implements LibraryPackage {
 		theHaraPackage.initializePackageContents();
 		theStpaPackage.initializePackageContents();
 		theGsnPackage.initializePackageContents();
+		theHazopPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theLibraryPackage.freeze();

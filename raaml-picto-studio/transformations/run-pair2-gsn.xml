@@ -11,7 +11,13 @@
     <property name="raaml.ecore"
               location="${workspace.dir}/edu.kit.sdq.raaml/model/raaml.ecore"/>
     <property name="user.uml.source"
-              location="${basedir}/samples/aeb_gsn_usermodel.uml"/>
+              location="${basedir}/samples/aeb_gsn_usermodel_roundtrip.uml"/>
+    <!-- The hand-authored Papyrus source for GSN was never committed; the
+         only UML form of this model in the repository is the output of
+         run-pair2-gsn-backward.xml. Pointing the forward run at it means
+         this pair demonstrates round-trip closure, backward then forward,
+         rather than starting from an externally authored profile model as
+         the FMEA, HARA, REQ and STPA pairs do. -->
     <property name="ecore.target"
               location="${basedir}/samples/aeb_gsn_usermodel.raaml.xmi"/>
 

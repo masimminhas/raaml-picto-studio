@@ -26,6 +26,7 @@ import raaml.gsn.GsnFactory;
 
 import raaml.hara.HaraFactory;
 
+import raaml.hazop.HazopFactory;
 import raaml.req.ReqFactory;
 
 import raaml.stpa.StpaFactory;
@@ -556,6 +557,36 @@ public class AnalysisItemProvider extends NamedElementItemProvider {
 			(createChildParameter
 				(CorePackage.Literals.ANALYSIS__ELEMENTS,
 				 GsnFactory.eINSTANCE.createLessonLearned()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CorePackage.Literals.ANALYSIS__ELEMENTS,
+				 HazopFactory.eINSTANCE.createHAZOPNode()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CorePackage.Literals.ANALYSIS__ELEMENTS,
+				 HazopFactory.eINSTANCE.createDeviation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CorePackage.Literals.ANALYSIS__ELEMENTS,
+				 HazopFactory.eINSTANCE.createCause()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CorePackage.Literals.ANALYSIS__ELEMENTS,
+				 HazopFactory.eINSTANCE.createConsequence()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CorePackage.Literals.ANALYSIS__ELEMENTS,
+				 HazopFactory.eINSTANCE.createSafeguard()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CorePackage.Literals.ANALYSIS__ELEMENTS,
+				 HazopFactory.eINSTANCE.createRecommendation()));
 	}
 
 }

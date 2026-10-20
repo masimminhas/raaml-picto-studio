@@ -1,0 +1,12 @@
+<?nsuri picto?>
+<picto format="graphviz-dot"
+       transformation="platform:/resource/raaml-picto-studio/stpa_controlstructure.egl"
+       standalone="true">
+    <model type="EMF">
+        <parameter name="name" value="M"/>
+        <parameter name="metamodelFile"
+                   value="platform:/resource/edu.kit.sdq.raaml/model/raaml.ecore"/>
+        <parameter name="modelFile"
+                   value="raaml-picto-studio/samples-infusion-pump/gip_stpa.raaml.xmi"/>
+    </model>
+</picto>

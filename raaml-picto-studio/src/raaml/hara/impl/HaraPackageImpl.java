@@ -48,6 +48,8 @@ import raaml.hara.SystemLevelEffect;
 import raaml.hara.VehicleLevelEffect;
 import raaml.hara.Verified;
 
+import raaml.hazop.HazopPackage;
+import raaml.hazop.impl.HazopPackageImpl;
 import raaml.impl.RaamlPackageImpl;
 
 import raaml.library.LibraryPackage;
@@ -265,6 +267,8 @@ public class HaraPackageImpl extends EPackageImpl implements HaraPackage {
 		StpaPackageImpl theStpaPackage = (StpaPackageImpl)(registeredPackage instanceof StpaPackageImpl ? registeredPackage : StpaPackage.eINSTANCE);
 		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(GsnPackage.eNS_URI);
 		GsnPackageImpl theGsnPackage = (GsnPackageImpl)(registeredPackage instanceof GsnPackageImpl ? registeredPackage : GsnPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(HazopPackage.eNS_URI);
+		HazopPackageImpl theHazopPackage = (HazopPackageImpl)(registeredPackage instanceof HazopPackageImpl ? registeredPackage : HazopPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theHaraPackage.createPackageContents();
@@ -276,6 +280,7 @@ public class HaraPackageImpl extends EPackageImpl implements HaraPackage {
 		theFmeaPackage.createPackageContents();
 		theStpaPackage.createPackageContents();
 		theGsnPackage.createPackageContents();
+		theHazopPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theHaraPackage.initializePackageContents();
@@ -287,6 +292,7 @@ public class HaraPackageImpl extends EPackageImpl implements HaraPackage {
 		theFmeaPackage.initializePackageContents();
 		theStpaPackage.initializePackageContents();
 		theGsnPackage.initializePackageContents();
+		theHazopPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theHaraPackage.freeze();

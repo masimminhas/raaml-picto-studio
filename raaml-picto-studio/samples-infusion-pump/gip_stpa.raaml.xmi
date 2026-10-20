@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  gip_stpa.raaml.xmi
+  ============================================================================
+  Generic Infusion Pump (GIP) STPA: Systems-Theoretic Process Analysis
+  of the Clinician :: Pump Controller :: Pump Mechanism :: Patient
+  control loop.
+
+  Grounded in:
+    - FDA GIP Research Project hazard catalogue
+    - Leveson, STPA Handbook 2018, ch. 8 (PCA Pump worked example)
+    - Pajic and Lee, Toward Patient Safety in Closed-Loop Medical
+      Device Systems (2010)
+    - ISO 14971 Annex C
+  ============================================================================
+-->
+<raaml:SafetyAnalysis
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:raaml="http://edu.kit.sdq/dsis/metamodels/raaml"
+    xmlns:stpa="http://edu.kit.sdq/dsis/metamodels/raaml/stpa"
+    xmi:id="SA_GIP_STPA_001"
+    id="SA_GIP_STPA_001"
+    name="GIP STPA Safety Analysis"
+    description="STPA for Generic Infusion Pump per FDA GIP project and STPA Handbook 2018 (Leveson and Thomas).">
+
+  <analyses xsi:type="stpa:STPA"
+      xmi:id="STPA_GIP_001" id="STPA_GIP_001"
+      name="GIP System STPA"
+      description="Systems-Theoretic Process Analysis covering clinician interaction, pump controller, drug delivery mechanism, and patient biological response.">
+
+    <!-- =============== Losses (organisation-level) =============== -->
+    <losses xmi:id="L_001" id="L_001"
+        name="L-01: Patient Death"
+        description="TYPE:Loss|Death of a patient caused by infusion pump failure: overdose, underdose, air embolism, or contaminated drug delivery. Highest priority loss. Aligned with FDA Class I device-failure severity."
+        category="life"/>
+    <losses xmi:id="L_002" id="L_002"
+        name="L-02: Patient Serious Injury"
+        description="TYPE:Loss|Non-fatal but serious injury: organ damage from over/under-dose, embolism morbidity, drug reaction not life-threatening. Aligned with FDA Class II severity."
+        category="injury"/>
+    <losses xmi:id="L_003" id="L_003"
+        name="L-03: Regulatory Non-Compliance"
+        description="TYPE:Loss|Documented failure to meet IEC 60601-2-24, ISO 14971, or FDA 510(k) clearance obligations, triggering recall or enforcement action."
+        category="regulatory"/>
+    <losses xmi:id="L_004" id="L_004"
+        name="L-04: Loss of Therapeutic Function"
+        description="TYPE:Loss|Pump rendered non-operational mid-infusion: missed dose may delay critical therapy. Distinct from L-02 because no patient harm yet occurred."
+        category="mission"/>
+
+    <!-- =============== Hazards (system-level states) =============== -->
+    <hazards xmi:id="H_001" id="H_001"
+        name="H-01: Pump delivers incorrect drug dose"
+        description="TYPE:Hazard|LOSSES:L-01,L-02|Pump delivers a dose materially different from the clinician-entered prescription: over-infusion (toxic), under-infusion (subtherapeutic), wrong rate, wrong drug, wrong volume. Source: FDA GIP H-A."/>
+    <hazards xmi:id="H_002" id="H_002"
+        name="H-02: Pump delivers air to patient"
+        description="TYPE:Hazard|LOSSES:L-01,L-02|Air bubble passes through tubing and is infused into the patient venous system: risk of pulmonary or cerebral air embolism. Source: FDA GIP H-B."/>
+    <hazards xmi:id="H_003" id="H_003"
+        name="H-03: Pump stops without alerting clinician"
+        description="TYPE:Hazard|LOSSES:L-02,L-04|Infusion stops (occlusion, battery, mechanical failure) and the pump fails to raise an audible or visual alarm. Clinician unaware of missed dose. Source: FDA GIP H-C."/>
+    <hazards xmi:id="H_004" id="H_004"
+        name="H-04: Pump cannot be controlled by clinician"
+        description="TYPE:Hazard|LOSSES:L-02,L-04|Clinician keypad/touchscreen unresponsive, pump ignores stop command, or display unreadable. Clinician cannot abort an in-progress infusion. Source: FDA GIP H-D."/>
+    <hazards xmi:id="H_005" id="H_005"
+        name="H-05: Pump delivers contaminated fluid"
+        description="TYPE:Hazard|LOSSES:L-01,L-02|Drug reflux into the IV set or back-priming during occlusion causes cross-contamination with patient blood. Subsequent infusion delivers contaminated fluid. Source: motor-reversal class hazard."/>
+
+    <!-- =============== Control Structure =============== -->
+    <controlStructures xmi:id="CS_001" id="CS_001"
+        name="GIP Control Structure"
+        description="TYPE:ControlStructure|Two-level control loop. Clinician (outer controller) issues high-level commands (set rate, start, stop, ack alarm) to the Pump Controller (inner controller). Pump Controller drives the Pump Mechanism (controlled process) which acts on the Patient. Feedback: Pump status display, audible alarms, patient monitoring.">
+
+      <controllers xmi:id="CTRL_001" id="CTRL_001"
+          name="Clinician"
+          description="TYPE:Controller|Human operator: nurse, physician, or pharmacist. Selects drug, enters dose, starts and stops the infusion, acknowledges alarms. Process model: patient state, drug prescription, pump display.">
+        <controlActions xmi:id="CA_001" id="CA_001"
+            name="CA-01: Set Infusion Rate"
+            description="TYPE:ControlAction|CONTROLLER:Clinician|TARGET:Pump Controller|Clinician enters numerical rate (mL/hr) and volume (mL) on the pump keypad."
+            type="command"
+            sourceController="CTRL_001" targetProcess="CP_001"/>
+        <controlActions xmi:id="CA_002" id="CA_002"
+            name="CA-02: Start Infusion"
+            description="TYPE:ControlAction|CONTROLLER:Clinician|TARGET:Pump Controller|Clinician presses Start to begin infusion at the programmed rate."
+            type="command"
+            sourceController="CTRL_001" targetProcess="CP_001"/>
+        <controlActions xmi:id="CA_003" id="CA_003"
+            name="CA-03: Stop Infusion"
+            description="TYPE:ControlAction|CONTROLLER:Clinician|TARGET:Pump Controller|Clinician presses Stop or Abort to terminate an in-progress infusion."
+            type="command"
+            sourceController="CTRL_001" targetProcess="CP_001"/>
+        <controlActions xmi:id="CA_005" id="CA_005"
+            name="CA-05: Acknowledge Alarm"
+            description="TYPE:ControlAction|CONTROLLER:Clinician|TARGET:Pump Controller|Clinician silences an active alarm after assessing its cause."
+            type="command"
+            sourceController="CTRL_001" targetProcess="CP_001"/>
+      </controllers>
+
+      <controllers xmi:id="CTRL_002" id="CTRL_002"
+          name="Pump Controller"
+          description="TYPE:Controller|Pump embedded software. Receives clinician commands and sensor data, computes pulse rate for stepper motor, monitors occlusion / air-in-line / battery, drives the alarm. Process model: programmed rate, elapsed volume, sensor readings, battery state.">
+        <controlActions xmi:id="CA_004" id="CA_004"
+            name="CA-04: Deliver Drug Pulse"
+            description="TYPE:ControlAction|CONTROLLER:Pump Controller|TARGET:Pump Mechanism|Discrete stepper-motor pulse driving the cassette plunger forward, delivering a quantum of drug volume."
+            type="command"
+            sourceController="CTRL_002" targetProcess="CP_001"/>
+      </controllers>
+
+      <controlledProcesses xmi:id="CP_001" id="CP_001"
+          name="Pump Mechanism + Patient"
+          description="TYPE:ControlledProcess|Drug-delivery system. Stepper motor advances cassette plunger, pushing drug through tubing into patient venous access. The patient biological response (cardiovascular, metabolic) closes the outer loop via clinical observation."/>
+
+    </controlStructures>
+
+    <!-- =============== Unsafe Control Actions =============== -->
+    <unsafeControlActions xmi:id="UCA_001" id="UCA_001"
+        name="UCA-01: CA-01 PROVIDED with wrong magnitude (decimal misentry)"
+        description="TYPE:UCA|HAZARD_LINK:H-01|CA:CA-01 Set Infusion Rate|UNSAFE_TYPE:Wrong Magnitude|CONTEXT:Clinician enters 100.0 mL/hr instead of 10.00 mL/hr (decimal slip), pump accepts without dose-limit check. Source: FDA GIP user-interface hazard class. CONSTRAINT:SC-01 Pump shall reject rate entries exceeding the active drug library hard-limit.|CAUSAL_FACTORS:UI lacks decimal-position emphasis; absence of hard-limit cross-check at entry time; clinician dose-entry under time pressure"
+        controlAction="CA_001"
+        unsafeType="Wrong Magnitude"/>
+
+    <unsafeControlActions xmi:id="UCA_002" id="UCA_002"
+        name="UCA-02: CA-02 PROVIDED with wrong drug library entry"
+        description="TYPE:UCA|HAZARD_LINK:H-01|CA:CA-02 Start Infusion|UNSAFE_TYPE:Provided Causes Hazard|CONTEXT:Clinician selects 'Heparin 100 U/mL' but pump library has corrupted entry treating it as 1000 U/mL. Start results in 10x overdose. CONSTRAINT:SC-02 Drug library shall be integrity-checked at every load and on every selection.|CAUSAL_FACTORS:Library version mismatch between pump and pharmacy; absence of cryptographic integrity-check on library load; no UI confirmation step for drug-specific overrides"
+        controlAction="CA_002"
+        unsafeType="Provided Causes Hazard"/>
+
+    <unsafeControlActions xmi:id="UCA_003" id="UCA_003"
+        name="UCA-03: CA-03 NOT PROVIDED when over-infusion detected"
+        description="TYPE:UCA|HAZARD_LINK:H-01|CA:CA-03 Stop Infusion|UNSAFE_TYPE:Not Provided|CONTEXT:Clinician notices wrong rate but pump Stop button stuck or display frozen, so the abort command is never issued. Infusion continues at the wrong rate. CONSTRAINT:SC-03 Pump shall provide a hardware emergency stop independent of software state.|CAUSAL_FACTORS:Software watchdog covers main loop but not user-input path; single-thread UI handler; no hardware-level abort independent of MCU"
+        controlAction="CA_003"
+        unsafeType="Not Provided"/>
+
+    <unsafeControlActions xmi:id="UCA_004" id="UCA_004"
+        name="UCA-04: CA-04 PROVIDED when occlusion present"
+        description="TYPE:UCA|HAZARD_LINK:H-01|CA:CA-04 Deliver Drug Pulse|UNSAFE_TYPE:Provided Causes Hazard|CONTEXT:Occlusion-detect signal not raised in time; pump continues pulsing drug into a blocked line, building pressure. When occlusion clears, bolus of accumulated drug delivered to patient. CONSTRAINT:SC-04 Pump shall halt motor pulses within 8 seconds of pressure exceeding occlusion threshold.|CAUSAL_FACTORS:Slow pressure-sensor response; single-channel occlusion detection without cross-validation; software trusts commanded state over measured state"
+        controlAction="CA_004"
+        unsafeType="Provided Causes Hazard"/>
+
+    <unsafeControlActions xmi:id="UCA_005" id="UCA_005"
+        name="UCA-05: CA-04 PROVIDED too late after rate change"
+        description="TYPE:UCA|HAZARD_LINK:H-01|CA:CA-04 Deliver Drug Pulse|UNSAFE_TYPE:Too Late|CONTEXT:Clinician adjusts rate downward; pump continues pulsing at old (higher) rate for several seconds before the controller updates the pulse cadence. Net effect: small over-infusion. CONSTRAINT:SC-05 Pulse-rate adjustment shall take effect within 250 ms of CA-01 completion.|CAUSAL_FACTORS:Asynchronous queues between UI thread and motor scheduler; no priority pre-emption for rate-change events; motor scheduler does not re-read setpoint each pulse"
+        controlAction="CA_004"
+        unsafeType="Too Late"/>
+
+    <unsafeControlActions xmi:id="UCA_006" id="UCA_006"
+        name="UCA-06: CA-05 PROVIDED before reading alarm context"
+        description="TYPE:UCA|HAZARD_LINK:H-03|CA:CA-05 Acknowledge Alarm|UNSAFE_TYPE:Wrong Timing|CONTEXT:Clinician silences the audible alarm reflexively without reading the display. Underlying condition (air-in-line, occlusion, battery low) goes unaddressed, infusion stops, missed dose. CONSTRAINT:SC-06 Alarm shall re-trigger if the underlying condition persists for more than 60 seconds after acknowledgment.|CAUSAL_FACTORS:Alarm-fatigue from frequent low-priority alerts; single button for both acknowledgment and silence; no requirement to read display before silence accepted"
+        controlAction="CA_005"
+        unsafeType="Wrong Timing"/>
+
+    <unsafeControlActions xmi:id="UCA_007" id="UCA_007"
+        name="UCA-07: CA-04 NOT PROVIDED when programmed"
+        description="TYPE:UCA|HAZARD_LINK:H-03|CA:CA-04 Deliver Drug Pulse|UNSAFE_TYPE:Not Provided|CONTEXT:Software state-machine bug, motor-driver failure, or battery depletion causes silent loss of pulse generation. Pump appears running on display but no fluid moves. Source: FDA MAUDE database recurrent failure mode. CONSTRAINT:SC-07 Pump shall verify motor actuation via independent rotation sensor, raise alarm within 5 seconds on mismatch.|CAUSAL_FACTORS:Motor state inferred from command rather than sensor feedback; no independent rotation encoder; alarm path shares battery with main controller"
+        controlAction="CA_004"
+        unsafeType="Not Provided"/>
+
+    <!-- =============== Control Flaws (STPA Step 4: causal analysis) =============== -->
+    <controlFlaws xmi:id="CF_001" id="CF_001"
+        name="CF-01: Inadequate clinician process model of dose limits"
+        description="TYPE:ControlFlaw|UCA:UCA-01,UCA-06|Clinician acts on a mental model of safe dose ranges that does not match the active drug library hard-limit, or silences an alarm before reading the underlying condition|CAUSE:Display layout makes hard-limit warnings easy to miss; alarm-fatigue from frequent low-priority alerts; absence of distinct visual cue for hard-limit exceedance|MITIGATION:Mandatory two-step confirmation when entered rate exceeds 90 percent of hard-limit; distinct alarm tone and colour for safety-critical conditions; require visual confirmation before silence is accepted"/>
+
+    <controlFlaws xmi:id="CF_002" id="CF_002"
+        name="CF-02: Inadequate pump process model of drug parameters"
+        description="TYPE:ControlFlaw|UCA:UCA-02|Pump applies a drug library entry whose values do not match the canonical clinical reference, e.g. wrong concentration or wrong default rate|CAUSE:Drug library file corruption during upload; library version mismatch between pump and hospital pharmacy system; absence of integrity-check on library load|MITIGATION:Cryptographic signature on library file checked at every load; UI displays library version on every drug selection; library updates pushed atomically with rollback"/>
+
+    <controlFlaws xmi:id="CF_003" id="CF_003"
+        name="CF-03: Inadequate stop-command availability"
+        description="TYPE:ControlFlaw|UCA:UCA-03|Clinician issues stop command but pump does not act on it, due to interface hang or single point-of-failure in the software stop path|CAUSE:Software watchdog covers normal operation but not the user-input path; no hardware-level abort independent of MCU state|MITIGATION:Independent hardware emergency-stop button hard-wired to motor disable; software stop additionally raises a flag that an independent monitor verifies within 100 ms"/>
+
+    <controlFlaws xmi:id="CF_004" id="CF_004"
+        name="CF-04: Inadequate occlusion / motor-actuation sensing"
+        description="TYPE:ControlFlaw|UCA:UCA-04,UCA-07|Pump controller has stale or absent sensor feedback about downstream pressure or actual motor rotation, so it issues pulses inappropriately or fails to detect that pulses are not effective|CAUSE:Single-channel pressure sensor with slow response; no independent verification of motor rotation; software trusts commanded state rather than measured state|MITIGATION:Dual-channel pressure sensing with cross-validation; independent rotary encoder feedback at the motor shaft; controller halts on any cross-channel mismatch beyond tolerance"/>
+
+    <controlFlaws xmi:id="CF_005" id="CF_005"
+        name="CF-05: Inadequate pulse-rate update latency"
+        description="TYPE:ControlFlaw|UCA:UCA-05|Pulse-rate setpoint update propagates from user-input handler to motor-pulse scheduler over multiple cycles, causing a transient continuation of the old rate after a rate change|CAUSE:Asynchronous queues between UI thread and motor scheduler; no priority pre-emption for rate-change events|MITIGATION:Bounded-latency channel for rate-change events; motor scheduler re-reads setpoint at every pulse; user-visible indicator of pending vs effective rate"/>
+
+  </analyses>
+</raaml:SafetyAnalysis>

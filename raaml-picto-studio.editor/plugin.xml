@@ -257,6 +257,34 @@
             contributorClass="raaml.gsn.presentation.GsnActionBarContributor">
       </editor>
    </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated raaml -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="raaml.hazop.presentation.HazopModelWizardID"
+            name="%_UI_HazopModelWizard_label"
+            class="raaml.hazop.presentation.HazopModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/HazopModelFile.gif">
+         <description>%_UI_HazopModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated raaml -->
+      <editor
+            id="raaml.hazop.presentation.HazopEditorID"
+            name="%_UI_HazopEditor_label"
+            icon="icons/full/obj16/HazopModelFile.gif"
+            extensions="hazop"
+            class="raaml.hazop.presentation.HazopEditor"
+            contributorClass="raaml.hazop.presentation.HazopActionBarContributor">
+      </editor>
+   </extension>
 <extension point="org.eclipse.ui.editors">
    <editor
          id="aeb.fmea.editor.FMEAFormEditor"

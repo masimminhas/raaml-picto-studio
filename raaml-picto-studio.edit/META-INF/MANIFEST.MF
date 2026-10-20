@@ -8,12 +8,13 @@ Bundle-ClassPath: .
 Bundle-Activator: raaml.provider.RaamlEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-21
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: raaml.core.provider,
  raaml.fmea.provider,
  raaml.fta.provider,
  raaml.gsn.provider,
  raaml.hara.provider,
+ raaml.hazop.provider,
  raaml.library.provider,
  raaml.provider,
  raaml.req.provider,

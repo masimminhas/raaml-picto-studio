@@ -1,0 +1,12 @@
+<?nsuri picto?>
+<picto format="egx"
+       transformation="platform:/resource/raaml-picto-studio/hara_table.egx"
+       standalone="true">
+    <model type="EMF">
+        <parameter name="name" value="M"/>
+        <parameter name="metamodelFile"
+                   value="platform:/resource/edu.kit.sdq.raaml/model/raaml.ecore"/>
+        <parameter name="modelFile"
+                   value="raaml-picto-studio/samples-infusion-pump/gip_hara.raaml.xmi"/>
+    </model>
+</picto>

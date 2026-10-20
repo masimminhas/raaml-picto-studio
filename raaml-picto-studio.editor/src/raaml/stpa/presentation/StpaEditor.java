@@ -169,6 +169,7 @@ import raaml.gsn.provider.GsnItemProviderAdapterFactory;
 
 import raaml.hara.provider.HaraItemProviderAdapterFactory;
 
+import raaml.hazop.provider.HazopItemProviderAdapterFactory;
 import raaml.library.provider.LibraryItemProviderAdapterFactory;
 
 import raaml.presentation.RaamlEditorPlugin;
@@ -737,6 +738,7 @@ public class StpaEditor
 		adapterFactory.addAdapterFactory(new HaraItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new StpaItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new GsnItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new HazopItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
 		// Create the command stack that will notify this editor as commands are executed.
