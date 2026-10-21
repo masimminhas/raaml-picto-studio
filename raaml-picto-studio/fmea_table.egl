@@ -44,11 +44,19 @@ if (fmea.description.isDefined() and fmea.description <> null
 
 [%
 var allItems = fmea.fmeaItems;
-var highRisk = allItems.select(i | i.RPN >= 200).size();
-var medRisk  = allItems.select(i | i.RPN >= 100 and i.RPN < 200).size();
-var lowRisk  = allItems.select(i | i.RPN < 100).size();
+// Same precedence as the rows below: the computed RPN wins over the
+// FMEAItem aggregate, so the summary cannot disagree with the table.
+var rpns = new Sequence;
+for (i in allItems) {
+    var c = i.rpnCalculation.first();
+    if (c <> null and c.RPN <> null) { rpns.add(c.RPN); }
+    else { rpns.add(i.RPN); }
+}
+var highRisk = rpns.select(r | r >= 200).size();
+var medRisk  = rpns.select(r | r >= 100 and r < 200).size();
+var lowRisk  = rpns.select(r | r < 100).size();
 var maxRPN   = 0;
-for (i in allItems) { if (i.RPN > maxRPN) { maxRPN = i.RPN; } }
+for (r in rpns) { if (r > maxRPN) { maxRPN = r; } }
 %]
 <div class="summary-box">
   <strong>Summary:</strong> [%=allItems.size()%] failure modes analyzed &nbsp;|&nbsp;
@@ -88,10 +96,17 @@ for (item in allItems) {
   var fm    = item.failureMode.first();
   var eff   = item.finalEffect.first();
   var cause = item.cause.first();
-  var rpn   = item.RPN;
   var rpnCalc = item.rpnCalculation.first();
+  // Prefer the computed RPN over the FMEAItem aggregate. The form editor
+  // writes RPNCalculation.RPN but not FMEAItem.RPN, so reading the
+  // aggregate shows a stale value after an edit while SEV/OCC/DET below
+  // update. FMEAItemRPNConsistency reports the underlying divergence.
+  var rpn   = item.RPN;
   var sev = 0; var occ = 0; var det = 0;
-  if (rpnCalc <> null) { sev = rpnCalc.SEV; occ = rpnCalc.OCC; det = rpnCalc.DET; }
+  if (rpnCalc <> null) {
+      sev = rpnCalc.SEV; occ = rpnCalc.OCC; det = rpnCalc.DET;
+      if (rpnCalc.RPN <> null) { rpn = rpnCalc.RPN; }
+  }
   var rpnClass = "rpn-low";
   if (rpn >= 200) { rpnClass = "rpn-high"; }
   else if (rpn >= 100) { rpnClass = "rpn-medium"; }
