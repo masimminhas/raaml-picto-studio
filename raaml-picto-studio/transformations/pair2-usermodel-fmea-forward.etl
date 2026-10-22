@@ -30,7 +30,8 @@ operation getUserFMEAItemClasses() : Sequence {
     // Pattern 2: inheritance from library FMEAItem (but not the library
     // classes themselves).
     var byInherit = UML!Class.all.select(c |
-        c.hasAncestorInSet(getFMEAItemAncestors())
+        c.eResource() == UML.getResource() // candidates must be owned by the user model itself, not by an applied profile or imported library
+        and c.hasAncestorInSet(getFMEAItemAncestors())
         and not getFMEAItemAncestors().includes(c.name));
     for (c in byInherit) {
         if (not result.includes(c)) result.add(c);

@@ -57,7 +57,7 @@ operation getFTALibraryClassNames() : Set {
 operation UML!Class findFTAAncestor() : UML!Class {
     if (getFTALibraryClassNames().includes(self.name)) return self;
     for (g in self.generalization) {
-        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+        if (g.general.isDefined() and not g.general.eIsProxy() and g.general.isKindOf(UML!Class)) { // proxy guard: an unresolved stereotype (e.g. SysML without Papyrus) has no readable properties
             var a = g.general.findFTAAncestor();
             if (a.isDefined() and a <> null) return a;
         }
@@ -120,6 +120,7 @@ operation getUserFTAClassToTypeName() : Map {
 
     // Pattern 2: inheritance from a library FTA class
     for (c in UML!Class.all) {
+        if (c.eResource() <> UML.getResource()) continue; // candidates must be owned by the user model itself, not by an applied profile or imported library
         var ancestor = c.findFTAAncestor();
         if (ancestor.isDefined() and ancestor <> null
                 and not getFTALibraryClassNames().includes(c.name)) {

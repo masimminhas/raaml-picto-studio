@@ -38,7 +38,7 @@ operation getAllReqStereos() : Set {
 operation UML!Class findReqAncestor() : UML!Class {
     if (getAllReqStereos().includes(self.name)) return self;
     for (g in self.generalization) {
-        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+        if (g.general.isDefined() and not g.general.eIsProxy() and g.general.isKindOf(UML!Class)) { // proxy guard: an unresolved stereotype (e.g. SysML without Papyrus) has no readable properties
             var a = g.general.findReqAncestor();
             if (a.isDefined() and a <> null) return a;
         }
@@ -90,6 +90,7 @@ operation getStereotypeBaseClass(stereoApp : Any) : Any {
 operation getUserReqClassToTypeName() : Map {
     var result = new Map;
     for (c in UML!Class.all) {
+        if (c.eResource() <> UML.getResource()) continue; // candidates must be owned by the user model itself, not by an applied profile or imported library
         var a = c.findReqAncestor();
         if (a.isDefined() and a <> null) { result.put(c, a.name); }
     }

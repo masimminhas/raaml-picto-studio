@@ -31,7 +31,7 @@
 operation UML!Class findAncestorInSet(names : Collection) : UML!Class {
     if (names.includes(self.name)) return self;
     for (g in self.generalization) {
-        if (g.general.isDefined() and g.general.isKindOf(UML!Class)) {
+        if (g.general.isDefined() and not g.general.eIsProxy() and g.general.isKindOf(UML!Class)) { // proxy guard: an unresolved stereotype (e.g. SysML without Papyrus) has no readable properties
             var ancestor = g.general.findAncestorInSet(names);
             if (ancestor.isDefined() and ancestor <> null) return ancestor;
         }
